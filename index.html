@@ -66,7 +66,6 @@ header>*{pointer-events:auto}
 @media (min-width:1600px){#grid{grid-template-columns:repeat(4,1fr)}}
 .cam{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0b0e16;contain:layout paint;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
 .cam.hide{display:none}
-body:not(.expanded):not(.filtered) .cam.rest{display:none}
 .morewrap{display:flex;justify-content:center;padding:14px 0 6px}
 body.expanded .morewrap,body.filtered .morewrap{display:none}
 .more{height:48px;padding:0 24px;border-radius:999px;font:inherit;font-size:15px;cursor:pointer}
@@ -80,6 +79,7 @@ body.expanded .morewrap,body.filtered .morewrap{display:none}
 .ex{position:absolute;right:6px;top:6px;z-index:3;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;padding:0}
 .ex svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
 footer{padding:8px calc(var(--sar) + 10px) calc(var(--sab) + 12px) calc(var(--sal) + 10px);text-align:center;font-size:10px;color:rgba(255,255,255,.4)}
+body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{display:none}body.tiny .ex{display:none}.cam{cursor:pointer}
 footer a{color:rgba(255,255,255,.55)}
 
 /* ---------- fullscreen viewer ---------- */
@@ -105,7 +105,6 @@ footer a{color:rgba(255,255,255,.55)}
   <nav class="chips" id="chips" aria-label="方角で絞り込み"></nav>
 </header>
 <main id="grid"></main>
-<div class="morewrap"><button class="more glass" id="more"></button></div>
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
 <div id="modal" role="dialog" aria-modal="true">
@@ -138,13 +137,14 @@ const tiles=CAMS.map((c,i)=>{
     <button class="ex glass" aria-label="${c.name}を全画面">${ICON_EX}</button>`;
   const t={c,el:d,frame:null};
   d.querySelector('.ex').onclick=e=>{e.stopPropagation();openM(t);};
+  d.querySelector('.shield').onclick=()=>openM(t);
   grid.appendChild(d);return t;});
 const byEl=new Map(tiles.map(t=>[t.el,t]));
 function load(t){if(t.frame)return;const f=document.createElement('iframe');
   f.src=embed(t.c.id);f.title=t.c.name;f.allow='autoplay; encrypted-media; picture-in-picture';
   f.setAttribute('playsinline','');f.tabIndex=-1;t.el.prepend(f);t.frame=f;}
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
-const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'150% 0px'});
+const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
 let curF='';
 function filter(f,btn){
@@ -153,12 +153,24 @@ function filter(f,btn){
   btn.scrollIntoView({inline:'nearest',block:'nearest',behavior:'smooth'});
   tiles.forEach(t=>t.el.classList.toggle('hide',!!f&&t.c.side!==f));
   document.body.classList.toggle('filtered',!!f);
-  scrollTo({top:0});
+  scrollTo({top:0});fit();
 }
 /* first view = a few popular spots; the rest appear (and start streaming as they near the screen) after "もっと見る" */
-const more=$('#more');
-more.textContent=`もっと見る（${tiles.filter(t=>!t.c.top).length}）`;
-more.onclick=()=>{document.body.classList.add('expanded');};
+/* fit every visible cam on one screen: pick the column count that gives the biggest 16:9 tiles */
+function fit(){
+  const vis=tiles.filter(t=>!t.el.classList.contains('hide')).length||1;
+  const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
+  const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
+  const H=innerHeight-document.querySelector('header').offsetHeight-document.querySelector('footer').offsetHeight-8;
+  let best=1,bw=0;
+  for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
+    const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r)*16/9);if(w>bw){bw=w;best=c;}}
+  grid.style.gridTemplateColumns=`repeat(${best},${Math.floor(bw)}px)`;
+  grid.style.justifyContent='center';
+  document.documentElement.style.setProperty('--lbs',bw<160?'none':'');
+  document.body.classList.toggle('tiny',bw<170);
+}
+addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));fit();
 
 /* ---- fullscreen viewer ---- */
 let open=null;
