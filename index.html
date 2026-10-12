@@ -561,7 +561,7 @@ const ID0={title:document.title,apt:document.querySelector('meta[name=apple-mobi
 let PWACAM=null;
 function camIdent(c){const q=s=>document.querySelector(s);
   q('meta[name=apple-mobile-web-app-title]').content=c?tName(c):ID0.apt;document.title=c?tName(c)+' – '+ID0.title:ID0.title;
-  q('link[rel=apple-touch-icon]').setAttribute('href',c?'m/'+c.id+'.jpg':ID0.ati);
+  q('link[rel=apple-touch-icon]').setAttribute('href',c?'m/'+c.id+'-192.png':ID0.ati);
   const ml=q('link[rel=manifest]');ml.setAttribute('href',c?'m/'+c.id+'.webmanifest':ID0.man);PWACAM=null;}
 addEventListener('beforeinstallprompt',()=>{PWACAM=open?open.c.id:'';});
 document.getElementById('ma').onclick=e=>{e.stopPropagation();const t=T(),c=open&&open.c;
