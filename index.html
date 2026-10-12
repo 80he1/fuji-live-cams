@@ -137,7 +137,7 @@ footer a{color:rgba(255,255,255,.55)}
 @media (orientation:landscape) and (max-height:540px){#modal{--cw:min(94vw,calc((100dvh - var(--sat) - var(--sab) - 56px) * 16 / 9))}}
 #card{position:relative;width:var(--cw);aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0e16;
   box-shadow:0 24px 60px rgba(0,0,0,.55),0 4px 14px rgba(0,0,0,.35);transform-origin:0 0;will-change:transform}
-#mv{position:absolute;inset:0}
+#mv{position:absolute;inset:0;transform-origin:0 0;will-change:transform}#modal #mv iframe{pointer-events:none}#mu{width:30px;padding:0;justify-content:center;font-size:13px}
 #modal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 #mcap .cap{font-size:12px;padding:0 12px 8px}
 .mtop{position:absolute;top:8px;right:8px;z-index:5;display:flex;gap:6px}
@@ -156,7 +156,7 @@ footer a{color:rgba(255,255,255,.55)}
 
 <div id="modal" role="dialog" aria-modal="true">
   <div class="card" id="card"><div id="mv"></div><div class="shield"></div><div id="mcap"></div>
-    <div class="mtop"><button class="pill glass" id="mx" aria-label="閉じる">✕</button></div>
+    <div class="mtop"><button class="pill glass" id="mu" aria-label="Sound">🔇</button><button class="pill glass" id="mx" aria-label="閉じる">✕</button></div>
     <span id="mt" hidden></span><span id="mw" hidden></span></div>
   <div id="mapw"><div id="mapd"></div><span id="mapn" hidden></span><a class="pill glass" id="mapl" target="_blank" rel="noopener"></a></div>
   <div class="cred">映像: 各YouTubeライブ配信者</div>
@@ -268,7 +268,7 @@ function flipFrom(t){const s=t.el.getBoundingClientRect(),r=card.getBoundingClie
 function openM(t){
   if(closing)return;open=t;
   $('#mt').textContent=tName(t.c);showMW();setMap(t.c);
-  $('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;});
+  zReset();$('#mu').textContent='🔇';$('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;});
   card.style.transform='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   card.animate([{transform:flipFrom(t),borderRadius:'0px'},{transform:'none',borderRadius:'18px'}],{duration:300,easing:FL});
   modal.animate([{backgroundColor:'rgba(0,0,0,0)'},{backgroundColor:'rgba(0,0,0,.45)'}],{duration:300,easing:'ease-out'});
@@ -279,7 +279,7 @@ function closeM(){
   const from=card.style.transform||'none';card.style.transform='';
   const an=card.animate([{transform:from,borderRadius:'18px'},{transform:flipFrom(t),borderRadius:'0px'}],{duration:260,easing:FL});
   modal.animate([{opacity:1},{opacity:0}],{duration:260,easing:'ease-in'});
-  const done=()=>{if(!closing)return;closing=false;try{t.mp&&t.mp.destroy()}catch(e){}t.mp=null;open=null;$('#mv').replaceChildren();
+  const done=()=>{if(!closing)return;closing=false;try{t.mp&&t.mp.destroy()}catch(e){}t.mp=null;open=null;$('#mv').replaceChildren();zReset();
     modal.classList.remove('open');document.documentElement.style.overflow='';};
   an.onfinish=done;setTimeout(done,400);
 }
@@ -287,11 +287,41 @@ const back=()=>{if(history.state&&history.state.m)history.back();else closeM();}
 $('#mx').onclick=back;
 addEventListener('popstate',closeM);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&open)back();});
+/* ---- popup video pinch-zoom / pan (1x–5x), double-tap 1x↔2.5x ---- */
+const mv=$('#mv'),Z={s:1,x:0,y:0};
+function zApply(anim){mv.style.transition=anim?'transform .32s cubic-bezier(.2,.8,.2,1)':'none';mv.style.transform=Z.s===1&&!Z.x&&!Z.y?'':`translate(${Z.x}px,${Z.y}px) scale(${Z.s})`;}
+function zLim(s){const W=card.clientWidth,H=card.clientHeight;return{minx:W-W*s,miny:H-H*s};}
+const rb=(v,lo,hi)=>v<lo?lo-(lo-v)*.35:v>hi?hi+(v-hi)*.35:v,cl=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+function zTo(s,px,py,anim){/* zoom to s keeping card point (px,py) fixed */const cx=(px-Z.x)/Z.s,cy=(py-Z.y)/Z.s;Z.s=s;Z.x=px-cx*s;Z.y=py-cy*s;zClamp();zApply(anim);}
+function zClamp(){if(Z.s<=1){Z.s=1;Z.x=0;Z.y=0;return;}if(Z.s>5){const W=card.clientWidth/2,H=card.clientHeight/2;const cx=(W-Z.x)/Z.s,cy=(H-Z.y)/Z.s;Z.s=5;Z.x=W-cx*5;Z.y=H-cy*5;}
+  const l=zLim(Z.s);Z.x=cl(Z.x,l.minx,0);Z.y=cl(Z.y,l.miny,0);}
+function zReset(){Z.s=1;Z.x=0;Z.y=0;zApply(false);}
+{let g=null,lastTap=0,lt={x:0,y:0};
+ const rel=t=>{const r=card.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};};
+ card.addEventListener('touchstart',e=>{if(e.target.closest('.mtop'))return;const ts=e.touches;
+  if(ts.length===2){const a=rel(ts[0]),b=rel(ts[1]);g={m:2,d0:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,s0:Z.s,x0:Z.x,y0:Z.y};}
+  else if(ts.length===1){const a=rel(ts[0]);g={m:1,sx:a.x,sy:a.y,x0:Z.x,y0:Z.y,lx:a.x,ly:a.y,lt:e.timeStamp,vx:0,vy:0,moved:false};}},{passive:true});
+ card.addEventListener('touchmove',e=>{if(!g)return;const ts=e.touches;
+  if(g.m===2&&ts.length>=2){e.preventDefault();const a=rel(ts[0]),b=rel(ts[1]),d=Math.hypot(a.x-b.x,a.y-b.y),mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+    let s=g.s0*d/g.d0;s=s<1?1-(1-s)*.4:s>5?5+(s-5)*.3:s;const cx=(g.mx-g.x0)/g.s0,cy=(g.my-g.y0)/g.s0;Z.s=s;Z.x=mx-cx*s;Z.y=my-cy*s;zApply(false);}
+  else if(g.m===1&&Z.s>1.01&&ts.length===1){e.preventDefault();const a=rel(ts[0]),dt=Math.max(1,e.timeStamp-g.lt);
+    g.vx=.7*(a.x-g.lx)/dt+.3*g.vx;g.vy=.7*(a.y-g.ly)/dt+.3*g.vy;g.lx=a.x;g.ly=a.y;g.lt=e.timeStamp;
+    if(Math.hypot(a.x-g.sx,a.y-g.sy)>6)g.moved=true;const l=zLim(Z.s);Z.x=rb(g.x0+a.x-g.sx,l.minx,0);Z.y=rb(g.y0+a.y-g.sy,l.miny,0);zApply(false);}
+  else if(g.m===1){const a=rel(ts[0]);if(Math.hypot(a.x-g.sx,a.y-g.sy)>10)g.moved=true;}},{passive:false});
+ card.addEventListener('touchend',e=>{if(!g)return;if(e.touches.length){if(g.m===2&&e.touches.length===1){const a=rel(e.touches[0]);g={m:1,sx:a.x,sy:a.y,x0:Z.x,y0:Z.y,lx:a.x,ly:a.y,lt:e.timeStamp,vx:0,vy:0,moved:true};}return;}
+  const G=g;g=null;
+  if(G.m===2){zClamp();zApply(true);return;}
+  if(!G.moved&&!e.target.closest('.mtop')){const now=Date.now(),p={x:G.sx,y:G.sy};
+    if(now-lastTap<300&&Math.hypot(p.x-lt.x,p.y-lt.y)<30){lastTap=0;if(Z.s>1.01)zTo(1,p.x,p.y,true);else zTo(2.5,p.x,p.y,true);}else{lastTap=now;lt=p;}return;}
+  if(Z.s>1.01){Z.x+=G.vx*180;Z.y+=G.vy*180;zClamp();zApply(true);}},{passive:true});
+ card.addEventListener('wheel',e=>{if(!open)return;e.preventDefault();const r=card.getBoundingClientRect();zTo(cl(Z.s*Math.exp(-e.deltaY*.002),1,5),e.clientX-r.left,e.clientY-r.top,false);},{passive:false});
+}
+$('#mu').onclick=e=>{e.stopPropagation();const p=open&&open.mp;if(!p)return;try{if(p.isMuted()){p.unMute();p.setVolume(100);$('#mu').textContent='🔊';}else{p.mute();$('#mu').textContent='🔇';}}catch(_){}};
 /* swipe down to close (on the area around the video / the top bar) */
 let sy=null,dy=0;
 modal.addEventListener('click',e=>{if(e.target.closest('.leaflet-container,#mapw'))return;if(e.target===modal||e.target.classList.contains('cred'))back();});
-card.addEventListener('touchstart',e=>{if(e.touches.length===1&&!e.target.closest('.mtop')){sy=e.touches[0].clientY;dy=0;}},{passive:true});
-card.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);card.style.transform=`translateY(${dy}px) scale(${1-Math.min(dy/1500,.1)})`;},{passive:true});
+card.addEventListener('touchstart',e=>{if(e.touches.length>1||Z.s>1.01){if(sy!==null){sy=null;card.style.transform='';}return;}if(e.touches.length===1&&!e.target.closest('.mtop')){sy=e.touches[0].clientY;dy=0;}},{passive:true});
+card.addEventListener('touchmove',e=>{if(sy===null)return;if(e.touches.length>1||Z.s>1.01){sy=null;card.style.transform='';return;}dy=Math.max(0,e.touches[0].clientY-sy);card.style.transform=`translateY(${dy}px) scale(${1-Math.min(dy/1500,.1)})`;},{passive:true});
 card.addEventListener('touchend',()=>{if(sy===null)return;sy=null;if(dy>80)back();else{card.animate([{transform:card.style.transform},{transform:'none'}],{duration:220,easing:FL});card.style.transform='';}});
 
 /* ---- finger-following pager: すべて → 北 → 南 → 東 → 西 ----
