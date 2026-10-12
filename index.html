@@ -56,8 +56,15 @@ body{min-height:100dvh;color:#fff;font:500 13px/1.3 "Zen Kaku Gothic New",-apple
 #lp button{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 12px;border:0;background:transparent;color:#fff;font:inherit;font-size:14px;text-align:start;border-radius:10px;cursor:pointer}
 #lp button[aria-checked=true]{background:rgba(255,255,255,.12)}#lp hr{border:0;height:1px;background:rgba(255,255,255,.1);margin:3px 6px}
 .chip .tl{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
-#mapw{position:relative;width:var(--cw);height:calc(var(--cw) * .42);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 14px 40px rgba(0,0,0,.45)}
-#mapf{position:absolute;inset:0;width:100%;height:100%;border:0}
+#mapw{position:relative;width:var(--cw);aspect-ratio:1/1;touch-action:none;border-radius:14px;overflow:hidden;background:#111;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+#mapd{position:absolute;inset:0;background:#111}
+#mapn,#mapl{z-index:500}
+.leaflet-container{font:inherit;background:#111}
+.mk{font-size:22px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.7))}
+.mk.cam{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 0 0 4px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.6)}
+.leaflet-control-zoom{border:0!important;border-radius:12px!important;overflow:hidden;box-shadow:none!important}
+.leaflet-control-zoom a{background:rgba(14,18,28,.55)!important;color:#fff!important;border-color:rgba(255,255,255,.15)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.leaflet-control-attribution{font-size:8px!important;background:rgba(0,0,0,.45)!important;color:rgba(255,255,255,.7)!important}.leaflet-control-attribution a{color:#fff!important}
 #mapn{position:absolute;left:8px;bottom:8px;font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(0,0,0,.55);color:#fff}
 #mapl{position:absolute;right:8px;top:8px;height:28px;font-size:11.5px}
 @media (orientation:landscape) and (max-height:540px){#mapw{display:none}}
@@ -112,7 +119,7 @@ footer a{color:rgba(255,255,255,.55)}
 #modal{position:fixed;inset:0;z-index:20;display:none;touch-action:none;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
   padding:var(--sat) var(--sar) var(--sab) var(--sal)}
 #modal.open{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-#modal{--cw:min(94vw,calc((100dvh - var(--sat) - var(--sab) - 70px) / (9/16 + .42)))}
+#modal{--cw:min(94vw,calc((100dvh - var(--sat) - var(--sab) - 64px) / (9/16 + 1)))}
 @media (orientation:landscape) and (max-height:540px){#modal{--cw:min(94vw,calc((100dvh - var(--sat) - var(--sab) - 56px) * 16 / 9))}}
 #card{position:relative;width:var(--cw);aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0e16;
   box-shadow:0 24px 60px rgba(0,0,0,.55),0 4px 14px rgba(0,0,0,.35);transform-origin:0 0;will-change:transform}
@@ -137,7 +144,7 @@ footer a{color:rgba(255,255,255,.55)}
   <div class="card" id="card"><div id="mv"></div><div class="shield"></div><div id="mcap"></div>
     <div class="mtop"><button class="pill glass" id="mx" aria-label="閉じる">✕</button></div>
     <span id="mt" hidden></span><span id="mw" hidden></span></div>
-  <div id="mapw"><iframe id="mapf" title="map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><span id="mapn" hidden></span><a class="pill glass" id="mapl" target="_blank" rel="noopener"></a></div>
+  <div id="mapw"><div id="mapd"></div><span id="mapn" hidden></span><a class="pill glass" id="mapl" target="_blank" rel="noopener"></a></div>
   <div class="cred">映像: 各YouTubeライブ配信者</div>
 </div>
 </div>
@@ -243,14 +250,14 @@ function openM(t){
   card.style.transform='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   card.animate([{transform:flipFrom(t),borderRadius:'0px'},{transform:'none',borderRadius:'18px'}],{duration:300,easing:FL});
   modal.animate([{backgroundColor:'rgba(0,0,0,0)'},{backgroundColor:'rgba(0,0,0,.45)'}],{duration:300,easing:'ease-out'});
-  history.pushState({m:1},'');
+  history.pushState({m:1},'');setTimeout(()=>{if(lmap){lmap.invalidateSize();open&&setMap(open.c);}},320);
 }
 function closeM(){
   if(!open||closing)return;const t=open;closing=true;
   const from=card.style.transform||'none';card.style.transform='';
   const an=card.animate([{transform:from,borderRadius:'18px'},{transform:flipFrom(t),borderRadius:'0px'}],{duration:260,easing:FL});
   modal.animate([{opacity:1},{opacity:0}],{duration:260,easing:'ease-in'});
-  const done=()=>{if(!closing)return;closing=false;try{t.mp&&t.mp.destroy()}catch(e){}t.mp=null;open=null;$('#mv').replaceChildren();$('#mapf').removeAttribute('src');
+  const done=()=>{if(!closing)return;closing=false;try{t.mp&&t.mp.destroy()}catch(e){}t.mp=null;open=null;$('#mv').replaceChildren();
     modal.classList.remove('open');document.documentElement.style.overflow='';};
   an.onfinish=done;setTimeout(done,400);
 }
@@ -339,12 +346,28 @@ function applyLang(l){LANG=I18N[l]?l:'en';const t=T(),rtl=LANG==='ar';needFont(L
   $('#lang').textContent=t.flag;$('#mapl').textContent='🗺 '+t.map;$('#mapn').textContent=t.approx;
   if(open){showMW();setMap(open.c);}
   fitTabs();buildLP();}
+/* popup map: Leaflet + Esri World Imagery (keyless), lazy-loaded on first open; camera + summit + sight line */
+const SUMMIT=[35.3606,138.7274];let LP=null,lmap=null,llayer=null;
+function loadLeaflet(){if(LP)return LP;LP=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);
+  const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});return LP;}
 function setMap(c){if(c.lat==null){$('#mapw').hidden=true;return;}$('#mapw').hidden=false;
-  const hl=LANG==='zh-Hans'?'zh-CN':LANG==='zh-Hant'?'zh-TW':LANG;
-  const src=`https://maps.google.com/maps?q=${c.lat},${c.lon}&t=h&z=13&output=embed&hl=${hl}`;
-  if($('#mapf').getAttribute('src')!==src)$('#mapf').src=src;
-  $('#mapl').href=`https://www.google.com/maps/@?api=1&map_action=map&center=${c.lat},${c.lon}&zoom=14&basemap=satellite`;
-  $('#mapn').hidden=!c.approx;}
+  $('#mapl').href=`https://www.google.com/maps/@?api=1&map_action=map&center=${c.lat},${c.lon}&zoom=11&basemap=satellite`;
+  $('#mapn').hidden=!c.approx;
+  loadLeaflet().then(()=>{if(open&&open.c!==c)return;
+    if(!lmap){lmap=L.map('mapd',{zoomControl:true,attributionControl:true,maxZoom:17,zoomSnap:.25});
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:17,attribution:'Imagery © Esri, Maxar, Earthstar Geographics'}).addTo(lmap);
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:17,opacity:.85}).addTo(lmap);
+      lmap.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');}
+    if(llayer)llayer.remove();
+    const cam=[c.lat,c.lon];
+    llayer=L.layerGroup([
+      L.polyline([cam,SUMMIT],{color:'#fff',weight:2,opacity:.85,dashArray:'6 6'}),
+      L.marker(SUMMIT,{icon:L.divIcon({className:'',html:'<div class="mk">🗻</div>',iconSize:[24,24],iconAnchor:[12,20]})}),
+      L.marker(cam,{icon:L.divIcon({className:'',html:'<div class="mk cam"></div>',iconSize:[14,14],iconAnchor:[7,7]})})]).addTo(lmap);
+    lmap.invalidateSize();lmap.fitBounds(L.latLngBounds([cam,SUMMIT]),{padding:[60,60],maxZoom:12,animate:false});
+  }).catch(()=>{$('#mapw').hidden=true;});}
+/* keep map gestures inside the map */
+['touchstart','touchmove','touchend','pointerdown','click'].forEach(ev=>$('#mapw').addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
 const lp=$('#lp');
 function buildLP(){const m=manual();lp.replaceChildren();
   const add=(code,label)=>{const b=document.createElement('button');b.setAttribute('role','menuitemradio');b.setAttribute('aria-checked',String(code===(m||'')));
