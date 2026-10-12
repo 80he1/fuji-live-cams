@@ -58,19 +58,13 @@ header>*{pointer-events:auto}
 .chip small{font-size:11px;opacity:.75;margin-left:3px;font-weight:600}
 
 /* ---------- grid ---------- */
-#pager{position:relative;overflow-x:clip;touch-action:pan-y}
-#ghost{position:absolute;left:0;right:0;top:0;display:grid;gap:var(--gap);justify-content:center;pointer-events:none;padding:2px calc(var(--sar) + var(--gap)) 0 calc(var(--sal) + var(--gap));will-change:transform}
+#pager{position:relative;overflow:hidden;touch-action:pan-y}html,body{overscroll-behavior:none;touch-action:pan-y;min-height:100dvh}
+#ghost{position:absolute;left:0;top:0;width:100%;pointer-events:none;will-change:transform}
 #ghost.tinyg .cap{padding:0 5px 3px;gap:3px;font-size:9.5px}#ghost.tinyg .cap i{display:none}
 #grid{will-change:transform}
-#grid{display:grid;overflow-x:clip;gap:var(--gap);grid-template-columns:1fr;
-  padding:2px calc(var(--sar) + var(--gap)) calc(var(--sab) + var(--gap)) calc(var(--sal) + var(--gap))}
-@media (orientation:landscape) and (max-height:540px){#grid{grid-template-columns:repeat(2,1fr)} :root{--gap:5px}}
-@media (min-width:700px) and (min-height:541px){#grid{grid-template-columns:repeat(2,1fr)}}
-@media (min-width:1100px){#grid{grid-template-columns:repeat(3,1fr)}}
-@media (min-width:1600px){#grid{grid-template-columns:repeat(4,1fr)}}
-.cam{position:relative;min-width:0}
-.cam .v{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0b0e16;contain:layout paint}
-.cam .v::after{content:'';position:absolute;inset:0;z-index:4;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);pointer-events:none}
+#grid{position:relative;overflow:hidden;width:100%}
+.cam{position:absolute;overflow:hidden}
+.cam .v{position:absolute;inset:0;overflow:hidden;background:#0b0e16;contain:layout paint}
 .cam iframe{opacity:0;transition:opacity .8s ease}.cam iframe.on{opacity:1}
 .cap{position:absolute;left:0;right:0;bottom:0;height:35%;z-index:3;pointer-events:none;display:flex;align-items:flex-end;gap:5px;padding:0 8px 5px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:10.5px;line-height:1.25;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .cap .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;letter-spacing:.03em}
@@ -81,7 +75,7 @@ header>*{pointer-events:auto}
 .morewrap{display:flex;justify-content:center;padding:14px 0 6px}
 body.expanded .morewrap,body.filtered .morewrap{display:none}
 .more{height:48px;padding:0 24px;border-radius:999px;font:inherit;font-size:15px;cursor:pointer}
-.cam iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.cam iframe{position:absolute;left:50%;top:50%;border:0;width:max(100%,calc(var(--h)*16/9));height:max(100%,calc(var(--w)*9/16));transform:translate(-50%,-50%)}
 .cam iframe{z-index:1;background:transparent;pointer-events:none}
 .shield{position:absolute;inset:0;z-index:2;background:transparent;touch-action:pan-y;transform:translateZ(0)}
 #modal .shield{touch-action:none}
@@ -90,7 +84,7 @@ body.expanded .morewrap,body.filtered .morewrap{display:none}
 .lb i{font-style:normal;font-weight:600;opacity:.7;margin-left:5px;font-size:10.5px}
 .ex{position:absolute;right:6px;top:6px;z-index:3;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;padding:0}
 .ex svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
-footer{padding:8px calc(var(--sar) + 10px) calc(var(--sab) + 12px) calc(var(--sal) + 10px);text-align:center;font-size:10px;color:rgba(255,255,255,.4)}
+footer{position:fixed;right:calc(var(--sar) + 6px);bottom:calc(var(--sab) + 2px);z-index:6;font-size:8px;color:rgba(255,255,255,.45);text-shadow:0 1px 2px #000;pointer-events:none}footer a{pointer-events:auto}
 body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{display:none}body.tiny .ex{display:none}.cam{cursor:pointer}
 
 #modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
@@ -138,7 +132,7 @@ footer a{color:rgba(255,255,255,.55)}
 <script>
 const CAMS=[{"id": "gxcQJ8pJF0c", "name": "ふもとっぱら", "side": "南", "viewers": 139, "subs": 31600, "fuji": "見える", "top": true, "lat": 35.42, "lon": 138.579}, {"id": "GsD9QQEKSzQ", "name": "広重の富士山（さった峠）", "side": "南", "viewers": 104, "subs": 52400, "fuji": "見える（薄霞）", "top": true, "lat": 35.079, "lon": 138.556}, {"id": "bdUbACCWmoY", "name": "河口湖・大石公園", "side": "北", "viewers": 72, "subs": 45200, "fuji": "見える（薄霞）", "top": true, "lat": 35.526, "lon": 138.738}, {"id": "maMMEh-2Bsk", "name": "芦ノ湖（大観山）", "side": "東", "viewers": 14, "subs": 9680, "fuji": "見える", "top": true, "lat": 35.195, "lon": 139.075}, {"id": "1cnReFAU04k", "name": "河口湖畔", "side": "北", "viewers": 31, "subs": 45200, "fuji": "見える（裾に雲）", "top": false, "lat": 35.511, "lon": 138.757}, {"id": "F2NbYrc-gBU", "name": "山中湖畔", "side": "北", "viewers": 21, "subs": 45200, "fuji": "見える", "top": false, "lat": 35.41, "lon": 138.866}, {"id": "Joer2U0vki4", "name": "ぐりんぱ・二合目", "side": "南", "viewers": 13, "subs": 67700, "fuji": "見える", "top": false, "lat": 35.276, "lon": 138.77}, {"id": "rZckj5mmeXc", "name": "七面山 カメラ1", "side": "西", "viewers": 13, "subs": 10200, "fuji": "見える（薄霞）", "top": false, "lat": 35.37, "lon": 138.35}, {"id": "pPW9tqTL0BU", "name": "日本平", "side": "南", "viewers": 7, "subs": 151000, "fuji": "見える（薄霞）", "top": false, "lat": 34.97, "lon": 138.466}, {"id": "4Hro9QIrsYA", "name": "十国峠", "side": "東", "viewers": 6, "subs": 67700, "fuji": "見える", "top": false, "lat": 35.146, "lon": 139.048}, {"id": "_qdu714QT1E", "name": "本栖湖", "side": "北", "viewers": 6, "subs": 29600, "fuji": "見える", "top": false, "lat": 35.468, "lon": 138.59}, {"id": "ViHMZfmURiw", "name": "富士市 4K", "side": "南", "viewers": 6, "subs": 17500, "fuji": "見える", "top": false, "lat": 35.161, "lon": 138.676}, {"id": "so_3HK9HIdg", "name": "精進湖", "side": "北", "viewers": 5, "subs": 45200, "fuji": "見える", "top": false, "lat": 35.485, "lon": 138.617}, {"id": "_6nLps25Kws", "name": "FUJIYAMAタワー", "side": "北", "viewers": 3, "subs": 67700, "fuji": "見える（雲が多め）", "top": false, "lat": 35.487, "lon": 138.779}, {"id": "tuNC0ot0j9I", "name": "葉山海岸", "side": "東", "viewers": 3, "subs": 45200, "fuji": "霞で薄い", "top": false, "lat": 35.261, "lon": 139.574}, {"id": "MHEcWrKRKh8", "name": "神奈川から見る富士山", "side": "東", "viewers": 2, "subs": 226000, "fuji": "見える", "top": false, "lat": 35.45, "lon": 139.63}, {"id": "rBwmWq48zAs", "name": "御殿場", "side": "南", "viewers": 2, "subs": 41100, "fuji": "見える", "top": false, "lat": 35.308, "lon": 138.935}, {"id": "nl4UcsGSz-s", "name": "忠霊塔", "side": "北", "viewers": 2, "subs": 3970, "fuji": "見える", "top": false, "lat": 35.503, "lon": 138.801}, {"id": "WjVH-0qSwOw", "name": "山中湖・芙蓉台", "side": "北", "viewers": 2, "subs": 1510, "fuji": "見える", "top": false, "lat": 35.433, "lon": 138.858}, {"id": "OEPdIuE2ZpU", "name": "七面山 カメラ3", "side": "西", "viewers": 1, "subs": 10200, "fuji": "見える", "top": false, "lat": 35.37, "lon": 138.35}, {"id": "nh0TUmU-Sko", "name": "忍野しのびの里", "side": "北", "viewers": 1, "subs": 67700, "fuji": "山頂付近に雲", "top": false, "lat": 35.459, "lon": 138.853}];
 const $=s=>document.querySelector(s);
-const grid=$('#grid'),modal=$('#modal');
+const grid=$('#grid'),modal=$('#modal'),pager=$('#pager');
 const phone=()=>Math.min(innerWidth,innerHeight)<600;
 const embed=(id,x='')=>`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0${x}`;
 const ICON_EX='<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
@@ -200,20 +194,25 @@ function filter(f,btn,keep){
 }
 /* first view = a few popular spots; the rest appear (and start streaming as they near the screen) after "もっと見る" */
 /* fit every visible cam on one screen: pick the column count that gives the biggest 16:9 tiles */
-function layout(vis){
-  vis=vis||1;
-  const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||0;
-  const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
-  const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
-  const H=(window.visualViewport?visualViewport.height:innerHeight)-document.querySelector('header').offsetHeight-4;
-  let best=1,bw=0;
-  for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
-    const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r-ch)*16/9);if(w>bw){bw=w;best=c;}}
-  return {cols:`repeat(${best},${Math.floor(bw)}px)`,tiny:bw<170};
+/* gapless cover layout: split n cams into r rows (counts as even as possible), every row spans the full width,
+   so there is never empty space; choose r that minimises the average crop vs 16:9 */
+function layout(n){
+  n=n||1;const W=pager.clientWidth||innerWidth;
+  const vh=window.visualViewport?visualViewport.height:innerHeight;
+  const H=Math.max(100,vh-document.querySelector('header').offsetHeight-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0));
+  let best=null;
+  for(let r=1;r<=n;r++){const base=Math.floor(n/r),extra=n%r,h=H/r;let crop=0;const rows=[];
+    for(let i=0;i<r;i++){const k=base+(i<extra?1:0);if(!k){crop=1e9;break;}rows.push(k);
+      const a=(W/k)/h/(16/9);crop+=k*Math.log(Math.max(a,1/a));}
+    if(!best||crop<best.crop)best={crop,rows,h};}
+  const rects=[];let y=0;
+  best.rows.forEach(k=>{const w=W/k;for(let i=0;i<k;i++)rects.push({x:Math.round(i*w),y:Math.round(y),w:Math.round((i+1)*w)-Math.round(i*w),h:Math.round(y+best.h)-Math.round(y)});y+=best.h;});
+  return {rects,H,tiny:Math.min(...rects.map(q=>q.w))<170};
 }
+function place(el,q){el.style.cssText=`left:${q.x}px;top:${q.y}px;width:${q.w}px;height:${q.h}px;--w:${q.w}px;--h:${q.h}px`;}
 function fit(){
-  const L=layout(tiles.filter(t=>!t.el.classList.contains('hide')).length);
-  grid.style.gridTemplateColumns=L.cols;grid.style.justifyContent='center';
+  const vis=tiles.filter(t=>!t.el.classList.contains('hide'));const L=layout(vis.length);
+  vis.forEach((t,i)=>place(t.el,L.rects[i]));grid.style.height=L.H+'px';
   document.body.classList.toggle('tiny',L.tiny);
 }
 addEventListener('resize',fit);window.visualViewport&&visualViewport.addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));fit();
@@ -244,14 +243,13 @@ modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transitio
    Each live iframe exists once (moving/duplicating iframes would reload 21 streams), so the neighbour page
    is a lightweight ghost (thumbnails + captions) that slides in with the finger; on settle the real grid swaps in. */
 const FS=sides.map(x=>x[0]);
-const pager=$('#pager');let ghost=null,gDir=0;
+let ghost=null,gDir=0;
 function mkGhost(dir){
   if(ghost&&gDir===dir)return ghost; if(ghost)ghost.remove(); ghost=null;gDir=dir;
   const j=FS.indexOf(curF)+dir; if(j<0||j>=FS.length)return null;
   const f=FS[j],list=tiles.filter(t=>!f||t.c.side===f),L=layout(list.length);
-  const g=document.createElement('div');g.id='ghost';g.className=L.tiny?'tinyg':'';
-  g.style.gridTemplateColumns=L.cols;
-  list.forEach(t=>{const d=document.createElement('div');d.className='cam';
+  const g=document.createElement('div');g.id='ghost';g.className=L.tiny?'tinyg':'';g.style.height=L.H+'px';
+  list.forEach((t,i)=>{const d=document.createElement('div');d.className='cam';place(d,L.rects[i]);
     d.innerHTML=`<div class="v" style="background:#0b0e16 url(https://i.ytimg.com/vi/${t.c.id}/mqdefault.jpg) center/cover"></div>`;
     d.firstChild.appendChild(t.el.querySelector('.cap').cloneNode(true));g.appendChild(d);});
   pager.appendChild(g);ghost=g;return g;}
@@ -269,18 +267,18 @@ function goPage(j){if(busy||open)return;const i=FS.indexOf(curF);if(j===i)return
   mkGhost(j>i?1:-1);setX(0,false);ghost&&ghost.offsetWidth;settle(true);}
 let sx=0,py=0,lx=0,lt=0,vx=0,mode=0,swiped=0; // mode 0=undecided 1=horizontal -1=vertical
 document.addEventListener('click',e=>{if(Date.now()-swiped<400){e.stopPropagation();e.preventDefault();}},true);
-pager.addEventListener('touchstart',e=>{if(open||busy||e.touches.length!==1){mode=-1;return;}
+document.addEventListener('touchstart',e=>{if(open||busy||e.touches.length!==1||e.target.closest('#chips,#modal,footer a')){mode=-1;return;}
   const t=e.touches[0];sx=lx=t.clientX;py=t.clientY;lt=e.timeStamp;vx=0;mode=0;},{passive:true});
-pager.addEventListener('touchmove',e=>{if(mode<0)return;const t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-py;
+document.addEventListener('touchmove',e=>{if(mode<0)return;const t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-py;
   if(mode===0){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;mode=Math.abs(dx)>1.5*Math.abs(dy)?1:-1;if(mode<0)return;}
   e.preventDefault();
   const dt=Math.max(1,e.timeStamp-lt);vx=.7*((t.clientX-lx)/dt)+.3*vx;lx=t.clientX;lt=e.timeStamp;
   const g=mkGhost(dx<0?1:-1);setX(g?dx:dx*.3,false);},{passive:false});
-pager.addEventListener('touchend',e=>{if(mode!==1)return;mode=0;swiped=Date.now();
+document.addEventListener('touchend',e=>{if(mode!==1)return;mode=0;swiped=Date.now();
   const dx=lx-sx,W=pager.clientWidth;
   const commit=!!ghost&&((Math.abs(vx)>.3&&Math.sign(vx)===-gDir)||Math.abs(dx)>.35*W)&&Math.sign(dx)===-gDir;
   settle(commit);},{passive:true});
-pager.addEventListener('touchcancel',()=>{if(mode===1){mode=0;settle(false);}},{passive:true});
+document.addEventListener('touchcancel',()=>{if(mode===1){mode=0;settle(false);}},{passive:true});
 
 /* ---- weather (Open-Meteo, keyless, one batched request, every 10 min; fails silently) ---- */
 const WX=new Map();
