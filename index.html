@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070d">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="富士山LIVE">
+<meta name="format-detection" content="telephone=no">
+<title>富士山ライブカメラ</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://i.ytimg.com">
+<style>
+:root{
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);
+  --gap:6px;
+  --glass-fill:rgba(255,255,255,.14);--glass-fill-on:rgba(255,255,255,.28);
+  --glass-line:rgba(255,255,255,.42);--glass-line-on:rgba(255,255,255,.9);
+  --glass-solid:rgba(28,32,44,.82);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:#05070d;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{min-height:100dvh;color:#fff;font:13px/1.3 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;overflow-x:hidden;overscroll-behavior-y:contain}
+/* soft blurred Fuji backdrop so the glass has something to read against */
+#bg{position:fixed;inset:-40px;z-index:-1;background:#05070d center/cover no-repeat;filter:blur(28px) saturate(1.3) brightness(.55);transform:translateZ(0)}
+#bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,13,.25),rgba(5,7,13,.7))}
+
+/* ---------- glass primitive: small pills only ---------- */
+.glass{
+  background:var(--glass-solid);
+  border:1px solid var(--glass-line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(255,255,255,.06),0 4px 14px rgba(0,0,0,.28);
+  color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.45);
+}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  .glass{background:var(--glass-fill);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4)}
+  /* pills sitting on live video get a faint dark tint so white text stays legible on bright skies */
+  .cam .glass,#modal .glass{background:linear-gradient(rgba(255,255,255,.14),rgba(255,255,255,.10)),rgba(12,16,26,.30)}
+}
+
+/* ---------- top bar: transparent strip holding glass pills ---------- */
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;
+  padding:calc(var(--sat) + 6px) calc(var(--sar) + 8px) 6px calc(var(--sal) + 8px);
+  background:linear-gradient(180deg,rgba(5,7,13,.55),rgba(5,7,13,0));pointer-events:none}
+header>*{pointer-events:auto}
+.title{flex:none;height:36px;display:flex;align-items:center;padding:0 14px;border-radius:999px;font-size:14px;letter-spacing:.04em;white-space:nowrap}
+.chips{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:4px 2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-width:44px;height:44px;padding:0 14px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer;scroll-snap-align:start;transition:background .2s,border-color .2s}
+.chip[aria-pressed=true]{background:var(--glass-fill-on);border-color:var(--glass-line-on);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 0 1px rgba(255,255,255,.15),0 4px 16px rgba(0,0,0,.3)}
+.chip small{font-size:11px;opacity:.75;margin-left:3px;font-weight:600}
+
+/* ---------- grid ---------- */
+#grid{display:grid;gap:var(--gap);grid-template-columns:1fr;
+  padding:2px calc(var(--sar) + var(--gap)) calc(var(--sab) + var(--gap)) calc(var(--sal) + var(--gap))}
+@media (orientation:landscape) and (max-height:540px){#grid{grid-template-columns:repeat(2,1fr)} :root{--gap:5px}}
+@media (min-width:700px) and (min-height:541px){#grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1100px){#grid{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1600px){#grid{grid-template-columns:repeat(4,1fr)}}
+.cam{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0b0e16;contain:layout paint;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cam.hide{display:none}
+body:not(.expanded):not(.filtered) .cam.rest{display:none}
+.morewrap{display:flex;justify-content:center;padding:14px 0 6px}
+body.expanded .morewrap,body.filtered .morewrap{display:none}
+.more{height:48px;padding:0 24px;border-radius:999px;font:inherit;font-size:15px;cursor:pointer}
+.cam iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.cam iframe{z-index:1;background:transparent}
+.shield{position:absolute;inset:0;z-index:2;background:transparent}
+.lb{position:absolute;left:8px;top:8px;z-index:3;pointer-events:none;max-width:calc(100% - 72px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding:4px 10px;border-radius:999px;font-size:11.5px;line-height:1.3}
+.lb i{font-style:normal;font-weight:600;opacity:.7;margin-left:5px;font-size:10.5px}
+.ex{position:absolute;right:6px;top:6px;z-index:3;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;padding:0}
+.ex svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+footer{padding:8px calc(var(--sar) + 10px) calc(var(--sab) + 12px) calc(var(--sal) + 10px);text-align:center;font-size:10px;color:rgba(255,255,255,.4)}
+footer a{color:rgba(255,255,255,.55)}
+
+/* ---------- fullscreen viewer ---------- */
+#modal{position:fixed;inset:0;z-index:20;background:#000;display:none;touch-action:none;
+  padding:var(--sat) var(--sar) var(--sab) var(--sal);transition:transform .2s ease,opacity .2s}
+#modal.open{display:flex;align-items:center;justify-content:center}
+#modal .vw{position:relative;width:100%;max-width:calc((100dvh - var(--sat) - var(--sab)) * 16 / 9);aspect-ratio:16/9}
+#mv{position:absolute;inset:0}
+#modal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#modal .bar{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:calc(var(--sat) + 10px) calc(var(--sar) + 10px) 10px calc(var(--sal) + 10px);pointer-events:none}
+#modal .bar>*{pointer-events:auto}
+#modal .mt{height:36px;display:flex;align-items:center;padding:0 14px;border-radius:999px;font-size:13px;max-width:70vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#modal .x{width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;display:grid;place-items:center}
+#modal .grab{position:absolute;left:50%;bottom:calc(var(--sab) + 10px);width:44px;height:5px;margin-left:-22px;border-radius:3px;background:rgba(255,255,255,.35)}
+@media (orientation:landscape) and (max-height:540px){#modal .bar{opacity:.85} #modal .grab{display:none}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<header>
+  <div class="title glass">🗻 富士山ライブ</div>
+  <nav class="chips" id="chips" aria-label="方角で絞り込み"></nav>
+</header>
+<main id="grid"></main>
+<div class="morewrap"><button class="more glass" id="more"></button></div>
+<footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
+
+<div id="modal" role="dialog" aria-modal="true">
+  <div class="bar"><div class="mt glass" id="mt"></div><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
+  <div class="vw"><div id="mv"></div><div class="shield"></div></div>
+  <div class="grab"></div>
+</div>
+
+<script>
+const CAMS=[{"id": "gxcQJ8pJF0c", "name": "ふもとっぱら", "side": "南", "viewers": 139, "subs": 31600, "fuji": "見える", "top": true}, {"id": "GsD9QQEKSzQ", "name": "広重の富士山（さった峠）", "side": "南", "viewers": 104, "subs": 52400, "fuji": "見える（薄霞）", "top": true}, {"id": "bdUbACCWmoY", "name": "河口湖・大石公園", "side": "北", "viewers": 72, "subs": 45200, "fuji": "見える（薄霞）", "top": true}, {"id": "maMMEh-2Bsk", "name": "芦ノ湖（大観山）", "side": "東", "viewers": 14, "subs": 9680, "fuji": "見える", "top": true}, {"id": "1cnReFAU04k", "name": "河口湖畔", "side": "北", "viewers": 31, "subs": 45200, "fuji": "見える（裾に雲）", "top": false}, {"id": "F2NbYrc-gBU", "name": "山中湖畔", "side": "北", "viewers": 21, "subs": 45200, "fuji": "見える", "top": false}, {"id": "Joer2U0vki4", "name": "ぐりんぱ・二合目", "side": "南", "viewers": 13, "subs": 67700, "fuji": "見える", "top": false}, {"id": "rZckj5mmeXc", "name": "七面山 カメラ1", "side": "西", "viewers": 13, "subs": 10200, "fuji": "見える（薄霞）", "top": false}, {"id": "pPW9tqTL0BU", "name": "日本平", "side": "南", "viewers": 7, "subs": 151000, "fuji": "見える（薄霞）", "top": false}, {"id": "4Hro9QIrsYA", "name": "十国峠", "side": "東", "viewers": 6, "subs": 67700, "fuji": "見える", "top": false}, {"id": "_qdu714QT1E", "name": "本栖湖", "side": "北", "viewers": 6, "subs": 29600, "fuji": "見える", "top": false}, {"id": "ViHMZfmURiw", "name": "富士市 4K", "side": "南", "viewers": 6, "subs": 17500, "fuji": "見える", "top": false}, {"id": "so_3HK9HIdg", "name": "精進湖", "side": "北", "viewers": 5, "subs": 45200, "fuji": "見える", "top": false}, {"id": "_6nLps25Kws", "name": "FUJIYAMAタワー", "side": "北", "viewers": 3, "subs": 67700, "fuji": "見える（雲が多め）", "top": false}, {"id": "tuNC0ot0j9I", "name": "葉山海岸", "side": "東", "viewers": 3, "subs": 45200, "fuji": "霞で薄い", "top": false}, {"id": "MHEcWrKRKh8", "name": "神奈川から見る富士山", "side": "東", "viewers": 2, "subs": 226000, "fuji": "見える", "top": false}, {"id": "rBwmWq48zAs", "name": "御殿場", "side": "南", "viewers": 2, "subs": 41100, "fuji": "見える", "top": false}, {"id": "nl4UcsGSz-s", "name": "忠霊塔", "side": "北", "viewers": 2, "subs": 3970, "fuji": "見える", "top": false}, {"id": "WjVH-0qSwOw", "name": "山中湖・芙蓉台", "side": "北", "viewers": 2, "subs": 1510, "fuji": "見える", "top": false}, {"id": "OEPdIuE2ZpU", "name": "七面山 カメラ3", "side": "西", "viewers": 1, "subs": 10200, "fuji": "見える", "top": false}, {"id": "nh0TUmU-Sko", "name": "忍野しのびの里", "side": "北", "viewers": 1, "subs": 67700, "fuji": "山頂付近に雲", "top": false}];
+const $=s=>document.querySelector(s);
+const grid=$('#grid'),modal=$('#modal');
+const phone=()=>Math.min(innerWidth,innerHeight)<600;
+const embed=(id,x='')=>`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0${x}`;
+const ICON_EX='<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+
+$('#bg').style.backgroundImage=`url(https://i.ytimg.com/vi/${CAMS[0].id}/hqdefault.jpg)`;
+
+/* ---- chips ---- */
+const sides=[['','すべて'],['北','北'],['南','南'],['東','東'],['西','西']];
+const chips=$('#chips');
+sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
+  const b=document.createElement('button');b.className='chip glass';b.dataset.f=f;b.setAttribute('aria-pressed',f===''?'true':'false');
+  b.innerHTML=`${l}<small>${n}</small>`;b.onclick=()=>filter(f,b);chips.appendChild(b);});
+
+/* ---- tiles: every cam streams continuously; iframes are added once and never removed or paused ---- */
+const tiles=CAMS.map((c,i)=>{
+  const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;
+  d.innerHTML=`<div class="shield"></div><span class="lb glass">${c.name}<i>${c.side}</i></span>
+    <button class="ex glass" aria-label="${c.name}を全画面">${ICON_EX}</button>`;
+  const t={c,el:d,frame:null};
+  d.querySelector('.ex').onclick=e=>{e.stopPropagation();openM(t);};
+  grid.appendChild(d);return t;});
+const byEl=new Map(tiles.map(t=>[t.el,t]));
+function load(t){if(t.frame)return;const f=document.createElement('iframe');
+  f.src=embed(t.c.id);f.title=t.c.name;f.allow='autoplay; encrypted-media; picture-in-picture';
+  f.setAttribute('playsinline','');f.tabIndex=-1;t.el.prepend(f);t.frame=f;}
+/* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
+const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'150% 0px'});
+tiles.forEach(t=>near.observe(t.el));
+let curF='';
+function filter(f,btn){
+  curF=f;
+  chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b===btn?'true':'false'));
+  btn.scrollIntoView({inline:'nearest',block:'nearest',behavior:'smooth'});
+  tiles.forEach(t=>t.el.classList.toggle('hide',!!f&&t.c.side!==f));
+  document.body.classList.toggle('filtered',!!f);
+  scrollTo({top:0});
+}
+/* first view = a few popular spots; the rest appear (and start streaming as they near the screen) after "もっと見る" */
+const more=$('#more');
+more.textContent=`もっと見る（${tiles.filter(t=>!t.c.top).length}）`;
+more.onclick=()=>{document.body.classList.add('expanded');};
+
+/* ---- fullscreen viewer ---- */
+let open=null;
+function openM(t){
+  open=t;
+  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;
+  const f=document.createElement('iframe');f.src=embed(t.c.id);f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+  f.allowFullscreen=true;f.setAttribute('playsinline','');$('#mv').replaceChildren(f);
+  modal.style.transform='';modal.style.opacity='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
+  history.pushState({m:1},'');
+  // Android Chrome: real fullscreen + try landscape. iOS Safari ignores this and keeps the fixed overlay.
+  if(phone()&&modal.requestFullscreen){modal.requestFullscreen({navigationUI:'hide'}).then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})).catch(()=>{});}
+}
+function closeM(){
+  if(!open)return;open=null;$('#mv').replaceChildren();modal.classList.remove('open');document.documentElement.style.overflow='';
+  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+  try{screen.orientation.unlock()}catch(e){}
+}
+const back=()=>{if(history.state&&history.state.m)history.back();else closeM();};
+$('#mx').onclick=back;
+addEventListener('popstate',closeM);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&open)back();});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&open&&phone())back();});
+/* swipe down to close (on the area around the video / the top bar) */
+let sy=null,dy=0;
+modal.addEventListener('touchstart',e=>{if(e.touches.length===1){sy=e.touches[0].clientY;dy=0;modal.style.transition='none';}},{passive:true});
+modal.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);modal.style.transform=`translateY(${dy}px)`;modal.style.opacity=String(1-Math.min(dy/500,.6));},{passive:true});
+modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transition='';if(dy>90)back();else{modal.style.transform='';modal.style.opacity='';}sy=null;});
+
+</script>
+</body>
+</html>
