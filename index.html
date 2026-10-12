@@ -189,7 +189,7 @@ const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;d.dataset.th=c.theme;
   d.innerHTML=`<div class="v"><div class="shield"></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><em class="lo" hidden>ライブのみ</em><b class="wx"></b></div></div>`;
   const t={c,el:d,v:d.querySelector('.v'),frame:null};d.setAttribute('role','button');d.setAttribute('aria-label',c.name+'を全画面');
-  d.onclick=()=>openM(t);
+  d.onclick=()=>openM(t);t.v.style.background=`#0b0e16 url(https://i.ytimg.com/vi/${c.id}/mqdefault.jpg) center/cover`;
   grid.appendChild(d);return t;});
 const byEl=new Map(tiles.map(t=>[t.el,t]));
 /* YouTube IFrame Player API: players are created once and never paused */
@@ -198,12 +198,13 @@ let ytOK=false;const ytQ=[];
 window.onYouTubeIframeAPIReady=()=>{ytOK=true;ytQ.splice(0).forEach(f=>f());};
 {const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';document.head.appendChild(sc);}
 const whenYT=f=>ytOK?f():ytQ.push(f);
-function mkPlayer(host,id,onReady){const d=document.createElement('div');host.prepend(d);
+function mkPlayer(host,id,onReady){const d=document.createElement('div');d.className='ytp';host.prepend(d);
   return new Promise(res=>whenYT(()=>{const p=new YT.Player(d,{videoId:id,playerVars:PV,
     events:{onReady:e=>{try{e.target.mute();e.target.playVideo();}catch(_){}
       const f=e.target.getIframe();f.setAttribute('playsinline','');setTimeout(()=>f.classList.add('on'),400);f.tabIndex=-1;onReady&&onReady(e.target);res(p);}}});}));}
-function load(t){if(t.frame)return;t.frame=1;
-  mkPlayer(t.v,t.c.id,p=>{t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);});}
+function unload(t){if(!t.frame)return;t.frame=0;t.gen=(t.gen||0)+1;try{t.p&&t.p.destroy()}catch(e){}t.p=null;t.v.querySelectorAll('iframe,.ytp').forEach(x=>x.remove());}
+function load(t){if(t.frame)return;t.frame=1;const g=t.gen=(t.gen||0)+1;
+  mkPlayer(t.v,t.c.id,p=>{if(t.gen!==g){try{p.destroy()}catch(e){}return;}t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);});}
 /* time shift: offset in seconds back from each player's live edge (getDuration), clamped to its DVR window */
 let OFF=0;
 function seekP(p,t,mark){try{const d=p.getDuration()||0;
@@ -219,8 +220,6 @@ tsr.addEventListener('input',tsLabel);
 tsr.addEventListener('change',()=>{OFF=-tsr.value*60;tsLabel();tiles.forEach(t=>t.p&&seekP(t.p,t));if(open&&open.mp)seekP(open.mp);});
 setInterval(tsLabel,30000);}
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
-const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
-tiles.forEach(t=>near.observe(t.el));
 let curP=0;const pageList=p=>tiles.filter(t=>t.c.theme===PG[p].th&&(!PG[p].f||t.c.side===PG[p].f));
 function moveInd(still){if(still)ind.style.transition='none';const b=chips.querySelector('[aria-pressed=true]');if(!b)return;ind.style.width=b.offsetWidth+'px';ind.style.transform=`translateX(${b.offsetLeft}px)`;if(still)requestAnimationFrame(()=>requestAnimationFrame(()=>ind.style.transition=''));}
 function setPage(p){
@@ -228,7 +227,7 @@ function setPage(p){
   if(thChange){renderChips(P.th);chips.querySelectorAll('.chip').forEach(c=>c.animate([{opacity:0,transform:`translateX(${p>from?24:-24}px)`},{opacity:1,transform:'none'}],{duration:320,easing:'cubic-bezier(.2,.8,.2,1)'}));}
   chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.p===p?'true':'false'));
   if(thChange)moveInd(true);else moveInd();
-  const vis=new Set(pageList(p));tiles.forEach(t=>t.el.classList.toggle('hide',!vis.has(t)));
+  const vis=new Set(pageList(p));tiles.forEach(t=>{const on=vis.has(t);t.el.classList.toggle('hide',!on);on?load(t):unload(t);});
   document.body.classList.toggle('filtered',true);
   scrollTo({top:0});fit();
 }
