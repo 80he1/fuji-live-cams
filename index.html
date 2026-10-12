@@ -48,7 +48,7 @@ body{min-height:100dvh;color:#fff;font:500 13px/1.3 "Zen Kaku Gothic New",-apple
 }
 
 /* ---------- top bar: transparent strip holding glass pills ---------- */
-.tabs{position:sticky;top:0;z-index:5;display:flex;align-items:stretch;isolation:isolate;overflow:hidden;padding:var(--sat) var(--sar) 0 var(--sal);
+.tabs{touch-action:none;position:sticky;top:0;z-index:5;display:flex;align-items:stretch;isolation:isolate;overflow:hidden;padding:var(--sat) var(--sar) 0 var(--sal);
   background:transparent}
 .tabs::before{display:none}
 .tabs::after{display:none}
@@ -390,6 +390,30 @@ function buildLP(){const m=manual();lp.replaceChildren();
   LORDER.forEach(k=>add(k,`<span>${I18N[k].flag}</span><span>${I18N[k].native}</span>`));}
 $('#lang').onclick=e=>{e.stopPropagation();lp.hidden=!lp.hidden;};
 document.addEventListener('click',e=>{if(!lp.hidden&&!e.target.closest('#lp,#lang'))lp.hidden=true;});
+
+/* ---- tab-bar slide: capsule follows finger across region tabs AND the flag ---- */
+(function(){const bar=document.querySelector('header.tabs'),lg=$('#lang');
+ const segs=()=>{const c0=chips.getBoundingClientRect().left;return [...chips.querySelectorAll('.chip'),lg].map(b=>{const r=b.getBoundingClientRect();return{b,l:r.left-c0,w:r.width,cx:r.left+r.width/2};});};
+ function parkFlag(anim){const s=segs().pop();ind.style.transition=anim?'':'none';ind.style.width=s.w+'px';ind.style.transform=`translateX(${s.l}px)`;}
+ window.parkFlag=parkFlag;
+ let st=null;
+ bar.addEventListener('touchstart',e=>{if(e.touches.length!==1||busy)return;st={x:e.touches[0].clientX,y:e.touches[0].clientY,drag:false};},{passive:true});
+ bar.addEventListener('touchmove',e=>{if(!st)return;const t=e.touches[0];
+  if(!st.drag){if(Math.abs(t.clientX-st.x)<8)return;st.drag=true;}
+  e.preventDefault();const S=segs(),c0=chips.getBoundingClientRect().left,x=t.clientX;
+  /* continuous: interpolate between neighbouring segment centres */
+  let L,W;if(x<=S[0].cx){L=S[0].l;W=S[0].w;}else if(x>=S[S.length-1].cx){const s=S[S.length-1];L=s.l;W=s.w;}
+  else{for(let i=0;i<S.length-1;i++){const a=S[i],b=S[i+1];if(x<=b.cx){const k=(x-a.cx)/(b.cx-a.cx);L=a.l+(b.l-a.l)*k;W=a.w+(b.w-a.w)*k;break;}}}
+  ind.style.transition='none';ind.style.width=W+'px';ind.style.transform=`translateX(${L}px)`;
+  S.forEach(s=>{if(s.b.classList.contains('chip'))s.b.style.color=Math.abs(s.cx-x)<s.w/2?'#fff':'';});st.lx=x;},{passive:false});
+ const end=e=>{if(!st)return;const d=st.drag,x=st.lx;st=null;if(!d)return;
+  e.preventDefault&&e.preventDefault();chips.querySelectorAll('.chip').forEach(c=>c.style.color='');
+  const S=segs();let best=S[0];S.forEach(s=>{if(Math.abs(s.cx-x)<Math.abs(best.cx-x))best=s;});
+  if(best.b===lg){parkFlag(true);lp.hidden=false;}else{lp.hidden=true;const i=S.indexOf(best);const f=FS[i];if(f===curF)moveInd();else goPage(i);}};
+ bar.addEventListener('touchend',end,{passive:false});bar.addEventListener('touchcancel',()=>{if(st){st=null;moveInd();}});
+ /* capsule sits on flag while menu open; returns to region tab when it closes */
+ new MutationObserver(()=>{lp.hidden?moveInd():parkFlag(true);}).observe(lp,{attributes:true,attributeFilter:['hidden']});
+})();
 addEventListener('languagechange',()=>{if(!manual())applyLang(detect());});
 applyLang(manual()||detect());
 addEventListener('resize',fitTabs);
