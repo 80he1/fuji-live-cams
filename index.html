@@ -65,10 +65,14 @@ header>*{pointer-events:auto}
 @media (min-width:1100px){#grid{grid-template-columns:repeat(3,1fr)}}
 @media (min-width:1600px){#grid{grid-template-columns:repeat(4,1fr)}}
 .cam{position:relative;min-width:0}
-.cam .v{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#0b0e16;contain:layout paint;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
-.cap{height:var(--caph);line-height:var(--caph);font-size:11px;color:rgba(255,255,255,.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
-.cap i{font-style:normal;opacity:.55;margin-left:4px;font-size:10px}.cap{display:flex;gap:4px}.cap .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.cap b{flex:none;font-weight:400}.cap b:empty{display:none}
-:root{--caph:15px}
+.cam .v{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0b0e16;contain:layout paint}
+.cam .v::after{content:'';position:absolute;inset:0;z-index:4;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);pointer-events:none}
+.cam iframe{opacity:0;transition:opacity .8s ease}.cam iframe.on{opacity:1}
+.cap{position:absolute;left:0;right:0;bottom:0;height:35%;z-index:3;pointer-events:none;display:flex;align-items:flex-end;gap:5px;padding:0 8px 5px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:10.5px;line-height:1.25;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.cap .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;letter-spacing:.03em}
+.cap i{font-style:normal;font-weight:500;font-size:8.5px;opacity:.55;margin-left:5px;letter-spacing:.08em}
+.cap b{flex:none;font-weight:300;font-variant-numeric:tabular-nums;white-space:nowrap;opacity:.92}.cap b:empty{display:none}
+:root{--caph:0px}
 .cam.hide{display:none}
 .morewrap{display:flex;justify-content:center;padding:14px 0 6px}
 body.expanded .morewrap,body.filtered .morewrap{display:none}
@@ -91,7 +95,7 @@ body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{dis
 #ts{display:flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;width:min(100%,420px);font-size:11px}
 #ts input{flex:1;min-width:0;accent-color:#fff;height:18px;margin:0}
 #tsl{flex:none;min-width:84px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.lo{flex:none;font-style:normal;font-size:9px;opacity:.6;border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:0 3px;line-height:13px;align-self:center}
+.lo{flex:none;font-style:normal;font-size:8px;opacity:.6;letter-spacing:.04em;white-space:nowrap}
 footer a{color:rgba(255,255,255,.55)}
 
 /* ---------- fullscreen viewer ---------- */
@@ -146,7 +150,7 @@ sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
 /* ---- tiles: every cam streams continuously; iframes are added once and never removed or paused ---- */
 const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;
-  d.innerHTML=`<div class="v"><div class="shield"></div></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><em class="lo" hidden>ライブのみ</em><b class="wx"></b></div>`;
+  d.innerHTML=`<div class="v"><div class="shield"></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><em class="lo" hidden>ライブのみ</em><b class="wx"></b></div></div>`;
   const t={c,el:d,v:d.querySelector('.v'),frame:null};d.setAttribute('role','button');d.setAttribute('aria-label',c.name+'を全画面');
   d.onclick=()=>openM(t);
   grid.appendChild(d);return t;});
@@ -160,7 +164,7 @@ const whenYT=f=>ytOK?f():ytQ.push(f);
 function mkPlayer(host,id,onReady){const d=document.createElement('div');host.prepend(d);
   return new Promise(res=>whenYT(()=>{const p=new YT.Player(d,{videoId:id,playerVars:PV,
     events:{onReady:e=>{try{e.target.mute();e.target.playVideo();}catch(_){}
-      const f=e.target.getIframe();f.setAttribute('playsinline','');f.tabIndex=-1;onReady&&onReady(e.target);res(p);}}});}));}
+      const f=e.target.getIframe();f.setAttribute('playsinline','');setTimeout(()=>f.classList.add('on'),400);f.tabIndex=-1;onReady&&onReady(e.target);res(p);}}});}));}
 function load(t){if(t.frame)return;t.frame=1;
   mkPlayer(t.v,t.c.id,p=>{t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);});}
 /* time shift: offset in seconds back from each player's live edge (getDuration), clamped to its DVR window */
