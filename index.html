@@ -120,7 +120,7 @@ footer a{color:rgba(255,255,255,.55)}
 
 <div id="modal" role="dialog" aria-modal="true">
   <div class="card" id="card"><div id="mv"></div><div class="shield"></div><div id="mcap"></div>
-    <div class="mtop"><a class="pill glass" id="myt" target="_blank" rel="noopener">⏪ YouTubeで巻き戻す</a><button class="pill glass" id="mx" aria-label="閉じる">✕</button></div>
+    <div class="mtop"><button class="pill glass" id="mx" aria-label="閉じる">✕</button></div>
     <span id="mt" hidden></span><span id="mw" hidden></span></div>
   <div class="cred">映像: 各YouTubeライブ配信者</div>
 </div>
@@ -181,7 +181,7 @@ setInterval(tsLabel,30000);}
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
 let curF='';
-function moveInd(){const b=chips.querySelector('[aria-pressed=true]');if(!b)return;ind.style.width=b.offsetWidth+'px';ind.style.transform=`translateX(${b.offsetLeft}px)`;}
+function moveInd(still){if(still)ind.style.transition='none';const b=chips.querySelector('[aria-pressed=true]');if(!b)return;ind.style.width=b.offsetWidth+'px';ind.style.transform=`translateX(${b.offsetLeft}px)`;if(still)requestAnimationFrame(()=>requestAnimationFrame(()=>ind.style.transition=''));}
 function filter(f,btn,keep){
   curF=f;
   chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b===btn?'true':'false'));
@@ -222,7 +222,7 @@ function flipFrom(t){const s=t.el.getBoundingClientRect(),r=card.getBoundingClie
   return `translate(${s.left-r.left}px,${s.top-r.top}px) scale(${s.width/r.width},${s.height/r.height})`;}
 function openM(t){
   if(closing)return;open=t;
-  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;$('#myt').href='https://www.youtube.com/watch?v='+t.c.id;showMW();
+  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;showMW();
   $('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;});
   card.style.transform='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   card.animate([{transform:flipFrom(t),borderRadius:'0px'},{transform:'none',borderRadius:'18px'}],{duration:300,easing:FL});
@@ -264,14 +264,21 @@ function mkGhost(dir){
     d.firstChild.appendChild(t.el.querySelector('.cap').cloneNode(true));g.appendChild(d);});
   pager.appendChild(g);ghost=g;return g;}
 const EASE='transform 280ms cubic-bezier(.2,.8,.2,1)';
-function setX(x,anim){const W=pager.clientWidth;
+function indAt(x,anim){const W=pager.clientWidth,bs=[...chips.querySelectorAll('.chip')],i=FS.indexOf(curF),a=bs[i],b=gDir?bs[i+gDir]:null;
+  const f=b?Math.min(1,Math.max(0,Math.abs(x)/W)):0,L=a.offsetLeft+((b?b.offsetLeft:a.offsetLeft)-a.offsetLeft)*f,Wd=a.offsetWidth+((b?b.offsetWidth:a.offsetWidth)-a.offsetWidth)*f;
+  ind.style.transition=anim?'transform 280ms cubic-bezier(.2,.8,.2,1),width 280ms cubic-bezier(.2,.8,.2,1)':'none';
+  ind.style.transform=`translateX(${L}px)`;ind.style.width=Wd+'px';
+  bs.forEach(c=>{c.style.transition=anim?'color 280ms,background 280ms':'none';c.style.color='';c.style.background='';});
+  if(b){const k=v=>`rgba(255,255,255,${(.62+.38*v).toFixed(3)})`,g=v=>`rgba(255,255,255,${(.07*v).toFixed(3)})`;a.style.color=k(1-f);a.style.background=g(1-f);b.style.color=k(f);b.style.background=g(f);}
+  return f;}
+function setX(x,anim){const W=pager.clientWidth;indAt(x,anim);
   grid.style.transition=ghost&&anim?EASE:(anim?EASE:'none');grid.style.transform=x?`translate3d(${x}px,0,0)`:'';
   if(ghost){ghost.style.transition=anim?EASE:'none';ghost.style.transform=`translate3d(${x+gDir*W}px,0,0)`;}}
 let busy=false;
 function settle(commit){busy=true;const W=pager.clientWidth;
   setX(commit?-gDir*W:0,true);
   setTimeout(()=>{if(commit){const f=FS[FS.indexOf(curF)+gDir];filter(f,chips.querySelector(`.chip[data-f="${f}"]`),true);}
-    grid.style.transition='none';grid.style.transform='';if(ghost){ghost.remove();ghost=null;}gDir=0;busy=false;},290);}
+    grid.style.transition='none';grid.style.transform='';if(ghost){ghost.remove();ghost=null;}gDir=0;busy=false;chips.querySelectorAll('.chip').forEach(c=>{c.style.transition='none';c.style.color='';c.style.background='';});moveInd(true);},290);}
 function goPage(j){if(busy||open)return;const i=FS.indexOf(curF);if(j===i)return;
   if(Math.abs(j-i)>1){filter(FS[j],chips.querySelector(`.chip[data-f="${FS[j]}"]`));return;}
   mkGhost(j>i?1:-1);setX(0,false);ghost&&ghost.offsetWidth;settle(true);}
