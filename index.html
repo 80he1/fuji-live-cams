@@ -48,10 +48,14 @@ body{min-height:100dvh;color:#fff;font:500 13px/1.3 "Zen Kaku Gothic New",-apple
 }
 
 /* ---------- top bar: transparent strip holding glass pills ---------- */
-.tabs{position:sticky;top:0;z-index:5;display:flex;align-items:stretch;background:#0a0d15;padding:var(--sat) var(--sar) 0 var(--sal);border-bottom:1px solid rgba(255,255,255,.06)}
+.tabs{position:sticky;top:0;z-index:5;display:flex;align-items:stretch;isolation:isolate;overflow:hidden;padding:var(--sat) var(--sar) 0 var(--sal);
+  background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);border-bottom:1px solid rgba(255,255,255,.12)}
+.tabs::before{content:'';position:absolute;inset:-30px;z-index:-1;background:var(--tbg,#0a0d15) center 30%/cover;filter:blur(22px) saturate(1.5) brightness(.55);transform:translateZ(0)}
+.tabs::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.18))}
 .tabs .title{flex:none;width:40px;height:40px;display:grid;place-items:center;font-size:17px;border-right:1px solid rgba(255,255,255,.08)}
 .chips{position:relative;flex:1;min-width:0;display:flex;direction:ltr}
-.lang{flex:none;width:44px;height:40px;border:0;margin:0;padding:0;background:transparent;font-size:19px;cursor:pointer;box-shadow:inset 1px 0 0 rgba(255,255,255,.08);-webkit-tap-highlight-color:transparent}
+.lang{flex:none;width:44px;height:40px;border:0;margin:0;padding:0;background:transparent;opacity:.95;font-size:19px;cursor:pointer;box-shadow:inset 1px 0 0 rgba(255,255,255,.08);-webkit-tap-highlight-color:transparent}
 #lp{position:fixed;z-index:30;top:calc(var(--sat) + 44px);right:calc(var(--sar) + 6px);max-height:calc(100dvh - var(--sat) - 60px);overflow:auto;border-radius:14px;padding:4px;min-width:190px;background:rgba(14,18,28,.72)}
 #lp button{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 12px;border:0;background:transparent;color:#fff;font:inherit;font-size:14px;text-align:start;border-radius:10px;cursor:pointer}
 #lp button[aria-checked=true]{background:rgba(255,255,255,.12)}#lp hr{border:0;height:1px;background:rgba(255,255,255,.1);margin:3px 6px}
@@ -71,11 +75,12 @@ body{min-height:100dvh;color:#fff;font:500 13px/1.3 "Zen Kaku Gothic New",-apple
 #mapn{position:absolute;left:8px;bottom:8px;font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(0,0,0,.55);color:#fff}
 #mapl{position:absolute;right:8px;top:8px;height:28px;font-size:11.5px}
 @media (orientation:landscape) and (max-height:540px){#mapw{display:none}}
-.chip{letter-spacing:.02em;flex:1;min-width:0;height:40px;padding:0;margin:0;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.62);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.chip{letter-spacing:.02em;flex:1;min-width:0;height:40px;padding:0;margin:0;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.7);position:relative;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:color .2s,background .2s;-webkit-tap-highlight-color:transparent}
 .chip+.chip{box-shadow:inset 1px 0 0 rgba(255,255,255,.08)}
-.chip[aria-pressed=true]{color:#fff;background:rgba(255,255,255,.07)}
+.chip .tl,.chip small{position:relative;z-index:1}
+.chip[aria-pressed=true]{color:#fff;font-weight:700}
 .chip small{font-family:Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums;font-size:10px;opacity:.6;margin-left:3px;font-weight:500}
-#ind{position:absolute;left:0;bottom:0;height:2px;background:#fff;border-radius:2px 2px 0 0;transition:transform .28s cubic-bezier(.2,.8,.2,1),width .28s;pointer-events:none}
+#ind{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.16)) 4px 5px/calc(100% - 8px) calc(100% - 10px) no-repeat,linear-gradient(#fff,#fff) 50% 100%/60% 2px no-repeat;border-radius:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),width .28s;pointer-events:none}
 
 /* ---------- grid ---------- */
 #pager{position:relative;overflow:hidden;touch-action:pan-y}html,body{overscroll-behavior:none;touch-action:pan-y;min-height:100dvh}
@@ -160,6 +165,7 @@ const phone=()=>Math.min(innerWidth,innerHeight)<600;
 const embed=(id,x='')=>`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0${x}`;
 const ICON_EX='<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 
+document.querySelector('.tabs').style.setProperty('--tbg',`url(https://i.ytimg.com/vi/${CAMS[0].id}/hqdefault.jpg)`);
 $('#bg').style.backgroundImage=`url(https://i.ytimg.com/vi/${CAMS[0].id}/hqdefault.jpg)`;
 
 /* ---- chips ---- */
@@ -270,7 +276,7 @@ addEventListener('popstate',closeM);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&open)back();});
 /* swipe down to close (on the area around the video / the top bar) */
 let sy=null,dy=0;
-modal.addEventListener('click',e=>{if(e.target===modal||e.target.classList.contains('cred'))back();});
+modal.addEventListener('click',e=>{if(e.target.closest('.leaflet-container,#mapw'))return;if(e.target===modal||e.target.classList.contains('cred'))back();});
 card.addEventListener('touchstart',e=>{if(e.touches.length===1&&!e.target.closest('.mtop')){sy=e.touches[0].clientY;dy=0;}},{passive:true});
 card.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);card.style.transform=`translateY(${dy}px) scale(${1-Math.min(dy/1500,.1)})`;},{passive:true});
 card.addEventListener('touchend',()=>{if(sy===null)return;sy=null;if(dy>80)back();else{card.animate([{transform:card.style.transform},{transform:'none'}],{duration:220,easing:FL});card.style.transform='';}});
@@ -295,7 +301,7 @@ function indAt(x,anim){const W=pager.clientWidth,bs=[...chips.querySelectorAll('
   ind.style.transition=anim?'transform 280ms cubic-bezier(.2,.8,.2,1),width 280ms cubic-bezier(.2,.8,.2,1)':'none';
   ind.style.transform=`translateX(${L}px)`;ind.style.width=Wd+'px';
   bs.forEach(c=>{c.style.transition=anim?'color 280ms,background 280ms':'none';c.style.color='';c.style.background='';});
-  if(b){const k=v=>`rgba(255,255,255,${(.62+.38*v).toFixed(3)})`,g=v=>`rgba(255,255,255,${(.07*v).toFixed(3)})`;a.style.color=k(1-f);a.style.background=g(1-f);b.style.color=k(f);b.style.background=g(f);}
+  if(b){const k=v=>`rgba(255,255,255,${(.7+.3*v).toFixed(3)})`,g=v=>'transparent';a.style.color=k(1-f);a.style.background=g(1-f);b.style.color=k(f);b.style.background=g(f);}
   return f;}
 function setX(x,anim){const W=pager.clientWidth;indAt(x,anim);
   grid.style.transition=ghost&&anim?EASE:(anim?EASE:'none');grid.style.transform=x?`translate3d(${x}px,0,0)`:'';
@@ -371,7 +377,7 @@ function setMap(c){if(c.lat==null){$('#mapw').hidden=true;return;}$('#mapw').hid
     lmap.invalidateSize();lmap.fitBounds(L.latLngBounds([cam,SUMMIT]),{padding:[60,60],maxZoom:12,animate:false});
   }).catch(()=>{$('#mapw').hidden=true;});}
 /* keep map gestures inside the map */
-['touchstart','touchmove','touchend','pointerdown','click'].forEach(ev=>$('#mapw').addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
+/* map gestures: never stop propagation (Leaflet listens on document during drags); our own handlers ignore map targets instead */
 const lp=$('#lp');
 function buildLP(){const m=manual();lp.replaceChildren();
   const add=(code,label)=>{const b=document.createElement('button');b.setAttribute('role','menuitemradio');b.setAttribute('aria-checked',String(code===(m||'')));
