@@ -91,7 +91,8 @@ body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{dis
 
 #modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
 #modal .mw:empty{display:none}
-.tsw{display:flex;justify-content:center;padding:6px calc(var(--sar) + 10px) 0 calc(var(--sal) + 10px)}
+.tsw{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;justify-content:center;padding:6px calc(var(--sar) + 10px) calc(var(--sab) + 8px) calc(var(--sal) + 10px);pointer-events:none}.tsw>*{pointer-events:auto}
+body{padding-bottom:calc(var(--sab) + 46px)}
 #ts{display:flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;width:min(100%,420px);font-size:11px}
 #ts input{flex:1;min-width:0;accent-color:#fff;height:18px;margin:0}
 #tsl{flex:none;min-width:84px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -120,10 +121,10 @@ footer a{color:rgba(255,255,255,.55)}
   <div class="title glass">🗻 富士山ライブ</div>
   <nav class="chips" id="chips" aria-label="方角で絞り込み"></nav>
 </header>
-<div class="tsw"><div id="ts" class="glass"><span>⏪</span><input id="tsr" type="range" min="0" max="720" step="10" value="0" aria-label="時間をさかのぼる"><span id="tsl">ライブ</span></div></div>
 <main id="grid"></main>
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
+<div class="tsw"><div id="ts" class="glass"><span style="opacity:.6;font-size:10px">12h前</span><input id="tsr" type="range" min="-720" max="0" step="10" value="0" aria-label="時間をさかのぼる"><span id="tsl">ライブ</span></div></div>
 <div id="modal" role="dialog" aria-modal="true">
   <div class="bar"><div class="mt glass" id="mt"></div><div class="mw glass" id="mw"></div><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
   <div class="vw"><div id="mv"></div><div class="shield"></div></div>
@@ -174,11 +175,11 @@ function seekP(p,t,mark){try{const d=p.getDuration()||0;
   if(live||!OFF){p.seekTo(d||0,true);p.playVideo();return;}
   p.seekTo(Math.max(0,d-OFF),true);p.playVideo();}catch(e){}}
 const tsr=$('#tsr'),tsl=$('#tsl');
-function tsLabel(){const m=+tsr.value;if(!m){tsl.textContent='ライブ';return;}
+function tsLabel(){const m=-tsr.value;if(!m){tsl.textContent='ライブ';return;}
   const at=new Date(Date.now()-m*60000).toLocaleTimeString('ja-JP',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'});
   const h=Math.floor(m/60),mm=m%60;tsl.textContent=`${h?h+'時間':''}${mm?mm+'分':''}前 ${at}`;}
 tsr.addEventListener('input',tsLabel);
-tsr.addEventListener('change',()=>{OFF=+tsr.value*60;tsLabel();tiles.forEach(t=>t.p&&seekP(t.p,t));if(open&&open.mp)seekP(open.mp);});
+tsr.addEventListener('change',()=>{OFF=-tsr.value*60;tsLabel();tiles.forEach(t=>t.p&&seekP(t.p,t));if(open&&open.mp)seekP(open.mp);});
 setInterval(tsLabel,30000);
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
