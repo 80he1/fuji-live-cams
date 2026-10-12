@@ -26,10 +26,10 @@
   --glass-solid:rgba(28,32,44,.82);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{background:#05070d;-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{min-height:100dvh;color:#fff;font:13px/1.3 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;overflow-x:hidden;overscroll-behavior-y:contain}
+html{background:#05070d;-webkit-text-size-adjust:100%;height:auto;overflow-y:auto}
+body{min-height:100dvh;color:#fff;font:13px/1.3 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;height:auto;overflow:visible;touch-action:manipulation}
 /* soft blurred Fuji backdrop so the glass has something to read against */
-#bg{position:fixed;inset:-40px;z-index:-1;background:#05070d center/cover no-repeat;filter:blur(28px) saturate(1.3) brightness(.55);transform:translateZ(0)}
+#bg{position:fixed;inset:0;pointer-events:none;z-index:-1;background:#05070d center/cover no-repeat;filter:blur(28px) saturate(1.3) brightness(.55);transform:scale(1.15)}
 #bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,13,.25),rgba(5,7,13,.7))}
 
 /* ---------- glass primitive: small pills only ---------- */
@@ -58,7 +58,7 @@ header>*{pointer-events:auto}
 .chip small{font-size:11px;opacity:.75;margin-left:3px;font-weight:600}
 
 /* ---------- grid ---------- */
-#grid{display:grid;gap:var(--gap);grid-template-columns:1fr;
+#grid{display:grid;overflow-x:clip;gap:var(--gap);grid-template-columns:1fr;
   padding:2px calc(var(--sar) + var(--gap)) calc(var(--sab) + var(--gap)) calc(var(--sal) + var(--gap))}
 @media (orientation:landscape) and (max-height:540px){#grid{grid-template-columns:repeat(2,1fr)} :root{--gap:5px}}
 @media (min-width:700px) and (min-height:541px){#grid{grid-template-columns:repeat(2,1fr)}}
