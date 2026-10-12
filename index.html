@@ -64,7 +64,11 @@ header>*{pointer-events:auto}
 @media (min-width:700px) and (min-height:541px){#grid{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:1100px){#grid{grid-template-columns:repeat(3,1fr)}}
 @media (min-width:1600px){#grid{grid-template-columns:repeat(4,1fr)}}
-.cam{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#0b0e16;contain:layout paint;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cam{position:relative;min-width:0}
+.cam .v{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#0b0e16;contain:layout paint;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.cap{height:var(--caph);line-height:var(--caph);font-size:11px;color:rgba(255,255,255,.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+.cap i{font-style:normal;opacity:.55;margin-left:4px;font-size:10px}.cap{display:flex;gap:4px}.cap .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.cap b{flex:none;font-weight:400}.cap b:empty{display:none}
+:root{--caph:15px}
 .cam.hide{display:none}
 .morewrap{display:flex;justify-content:center;padding:14px 0 6px}
 body.expanded .morewrap,body.filtered .morewrap{display:none}
@@ -81,9 +85,6 @@ body.expanded .morewrap,body.filtered .morewrap{display:none}
 footer{padding:8px calc(var(--sar) + 10px) calc(var(--sab) + 12px) calc(var(--sal) + 10px);text-align:center;font-size:10px;color:rgba(255,255,255,.4)}
 body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{display:none}body.tiny .ex{display:none}.cam{cursor:pointer}
 
-.wx{position:absolute;left:8px;bottom:8px;z-index:3;pointer-events:none;padding:3px 9px;border-radius:999px;font-size:11px;line-height:1.3;white-space:nowrap}
-.wx:empty{display:none}body.tiny .wx{left:3px;bottom:3px;padding:1px 4px;font-size:9px}body.tiny .wx b{display:none}
-.wx b{font-weight:600;margin-left:4px}
 #modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
 #modal .mw:empty{display:none}
 footer a{color:rgba(255,255,255,.55)}
@@ -139,17 +140,14 @@ sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
 /* ---- tiles: every cam streams continuously; iframes are added once and never removed or paused ---- */
 const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;
-  d.innerHTML=`<div class="shield"></div><span class="lb glass">${c.name}<i>${c.side}</i></span>
-    <span class="wx glass"></span>
-    <button class="ex glass" aria-label="${c.name}を全画面">${ICON_EX}</button>`;
-  const t={c,el:d,frame:null};
-  d.querySelector('.ex').onclick=e=>{e.stopPropagation();openM(t);};
-  d.querySelector('.shield').onclick=()=>openM(t);
+  d.innerHTML=`<div class="v"><div class="shield"></div></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><b class="wx"></b></div>`;
+  const t={c,el:d,v:d.querySelector('.v'),frame:null};d.setAttribute('role','button');d.setAttribute('aria-label',c.name+'を全画面');
+  d.onclick=()=>openM(t);
   grid.appendChild(d);return t;});
 const byEl=new Map(tiles.map(t=>[t.el,t]));
 function load(t){if(t.frame)return;const f=document.createElement('iframe');
   f.src=embed(t.c.id);f.title=t.c.name;f.allow='autoplay; encrypted-media; picture-in-picture';
-  f.setAttribute('playsinline','');f.tabIndex=-1;t.el.prepend(f);t.frame=f;}
+  f.setAttribute('playsinline','');f.tabIndex=-1;t.v.prepend(f);t.frame=f;}
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
@@ -166,12 +164,13 @@ function filter(f,btn){
 /* fit every visible cam on one screen: pick the column count that gives the biggest 16:9 tiles */
 function fit(){
   const vis=tiles.filter(t=>!t.el.classList.contains('hide')).length||1;
+  const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||15;
   const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
   const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
   const H=innerHeight-document.querySelector('header').offsetHeight-document.querySelector('footer').offsetHeight-8;
   let best=1,bw=0;
   for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
-    const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r)*16/9);if(w>bw){bw=w;best=c;}}
+    const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r-ch)*16/9);if(w>bw){bw=w;best=c;}}
   grid.style.gridTemplateColumns=`repeat(${best},${Math.floor(bw)}px)`;
   grid.style.justifyContent='center';
   document.documentElement.style.setProperty('--lbs',bw<160?'none':'');
@@ -217,7 +216,7 @@ async function wx(){try{
     '&current=temperature_2m,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m&timezone=Asia%2FTokyo';
   const r=await fetch(u);if(!r.ok)return;let j=await r.json();if(!Array.isArray(j))j=[j];
   q.forEach((t,i)=>{const w=j[i]&&j[i].current;if(!w)return;WX.set(t,w);
-    t.el.querySelector('.wx').innerHTML=`${wIcon(w.weather_code)}<b>${Math.round(w.temperature_2m)}° ☁${w.cloud_cover}%</b>`;});
+    t.el.querySelector('.wx').textContent=`${wIcon(w.weather_code)} ${Math.round(w.temperature_2m)}°`;});
   showMW();
 }catch(e){}}
 wx();setInterval(wx,600000);
