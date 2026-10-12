@@ -92,11 +92,12 @@ body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{dis
 #modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
 #modal .mw:empty{display:none}
 .tsw{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;justify-content:center;padding:6px calc(var(--sar) + 10px) calc(var(--sab) + 8px) calc(var(--sal) + 10px);pointer-events:none}.tsw>*{pointer-events:auto}
-body{padding-bottom:calc(var(--sab) + 46px)}
+
 #ts{display:flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;width:min(100%,420px);font-size:11px}
 #ts input{flex:1;min-width:0;accent-color:#fff;height:18px;margin:0}
 #tsl{flex:none;min-width:84px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .lo{flex:none;font-style:normal;font-size:8px;opacity:.6;letter-spacing:.04em;white-space:nowrap}
+body.tiny .cap{padding:0 5px 3px;gap:3px;font-size:9.5px}body.tiny .cap i,body.tiny .lo{display:none}body.tiny .cap .nm{letter-spacing:0}
 footer a{color:rgba(255,255,255,.55)}
 
 /* ---------- fullscreen viewer ---------- */
@@ -124,9 +125,8 @@ footer a{color:rgba(255,255,255,.55)}
 <main id="grid"></main>
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
-<div class="tsw"><div id="ts" class="glass"><span style="opacity:.6;font-size:10px">12h前</span><input id="tsr" type="range" min="-720" max="0" step="10" value="0" aria-label="時間をさかのぼる"><span id="tsl">ライブ</span></div></div>
 <div id="modal" role="dialog" aria-modal="true">
-  <div class="bar"><div class="mt glass" id="mt"></div><div class="mw glass" id="mw"></div><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
+  <div class="bar"><div class="mt glass" id="mt"></div><div class="mw glass" id="mw"></div><a class="mw glass" id="myt" target="_blank" rel="noopener" style="margin-left:0;color:#fff;text-decoration:none">⏪ YouTubeで巻き戻す</a><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
   <div class="vw"><div id="mv"></div><div class="shield"></div></div>
   <div class="grab"></div>
 </div>
@@ -174,13 +174,14 @@ function seekP(p,t,mark){try{const d=p.getDuration()||0;
   const live=d<120; if(t&&(mark||!live))t.el.querySelector('.lo').hidden=!live;
   if(live||!OFF){p.seekTo(d||0,true);p.playVideo();return;}
   p.seekTo(Math.max(0,d-OFF),true);p.playVideo();}catch(e){}}
-const tsr=$('#tsr'),tsl=$('#tsl');
+/* in-embed DVR rewind does not work on 24/7 cams (see notes); slider removed, rewind via YouTube app link in the viewer */
+if(0){const tsr=$('#tsr'),tsl=$('#tsl');
 function tsLabel(){const m=-tsr.value;if(!m){tsl.textContent='ライブ';return;}
   const at=new Date(Date.now()-m*60000).toLocaleTimeString('ja-JP',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'});
   const h=Math.floor(m/60),mm=m%60;tsl.textContent=`${h?h+'時間':''}${mm?mm+'分':''}前 ${at}`;}
 tsr.addEventListener('input',tsLabel);
 tsr.addEventListener('change',()=>{OFF=-tsr.value*60;tsLabel();tiles.forEach(t=>t.p&&seekP(t.p,t));if(open&&open.mp)seekP(open.mp);});
-setInterval(tsLabel,30000);
+setInterval(tsLabel,30000);}
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
@@ -200,7 +201,7 @@ function fit(){
   const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||15;
   const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
   const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
-  const H=innerHeight-document.querySelector('header').offsetHeight-document.querySelector('.tsw').offsetHeight-document.querySelector('footer').offsetHeight-8;
+  const H=(window.visualViewport?visualViewport.height:innerHeight)-document.querySelector('header').offsetHeight-4;
   let best=1,bw=0;
   for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
     const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r-ch)*16/9);if(w>bw){bw=w;best=c;}}
@@ -209,13 +210,13 @@ function fit(){
   document.documentElement.style.setProperty('--lbs',bw<160?'none':'');
   document.body.classList.toggle('tiny',bw<170);
 }
-addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));fit();
+addEventListener('resize',fit);window.visualViewport&&visualViewport.addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));fit();
 
 /* ---- fullscreen viewer ---- */
 let open=null;
 function openM(t){
   open=t;
-  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;showMW();
+  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;$('#myt').href='https://www.youtube.com/watch?v='+t.c.id;showMW();
   $('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;setTimeout(()=>seekP(p),1500);});
   modal.style.transform='';modal.style.opacity='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   history.pushState({m:1},'');
@@ -240,15 +241,15 @@ modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transitio
 
 /* ---- weather (Open-Meteo, keyless, one batched request, every 10 min; fails silently) ---- */
 const WX=new Map();
-const wIcon=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌧️':c<=86?'🌨️':'⛈️';
-function showMW(){const w=open&&WX.get(open);$('#mw').textContent=w?`${wIcon(w.weather_code)} ${Math.round(w.temperature_2m)}° ☁${w.cloud_cover}% 低${w.cloud_cover_low}% 💨${Math.round(w.wind_speed_10m)}km/h`:'';}
+const wIcon=(c,d=1)=>c===0?(d?'☀️':'🌙'):c<=2?(d?'🌤️':'☁️🌙'):c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌧️':c<=86?'🌨️':'⛈️';
+function showMW(){const w=open&&WX.get(open);$('#mw').textContent=w?`${wIcon(w.weather_code,w.is_day)} ${Math.round(w.temperature_2m)}° ☁${w.cloud_cover}% 低${w.cloud_cover_low}% 💨${Math.round(w.wind_speed_10m)}km/h`:'';}
 async function wx(){try{
   const q=tiles.filter(t=>t.c.lat!=null);
   const u='https://api.open-meteo.com/v1/forecast?latitude='+q.map(t=>t.c.lat).join(',')+'&longitude='+q.map(t=>t.c.lon).join(',')+
-    '&current=temperature_2m,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m&timezone=Asia%2FTokyo';
+    '&current=is_day,temperature_2m,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m&timezone=Asia%2FTokyo';
   const r=await fetch(u);if(!r.ok)return;let j=await r.json();if(!Array.isArray(j))j=[j];
   q.forEach((t,i)=>{const w=j[i]&&j[i].current;if(!w)return;WX.set(t,w);
-    t.el.querySelector('.wx').textContent=`${wIcon(w.weather_code)} ${Math.round(w.temperature_2m)}°`;});
+    t.el.querySelector('.wx').textContent=`${wIcon(w.weather_code,w.is_day)} ${Math.round(w.temperature_2m)}°`;});
   showMW();
 }catch(e){}}
 wx();setInterval(wx,600000);
