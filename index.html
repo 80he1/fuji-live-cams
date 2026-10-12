@@ -80,6 +80,12 @@ body.expanded .morewrap,body.filtered .morewrap{display:none}
 .ex svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
 footer{padding:8px calc(var(--sar) + 10px) calc(var(--sab) + 12px) calc(var(--sal) + 10px);text-align:center;font-size:10px;color:rgba(255,255,255,.4)}
 body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{display:none}body.tiny .ex{display:none}.cam{cursor:pointer}
+
+.wx{position:absolute;left:8px;bottom:8px;z-index:3;pointer-events:none;padding:3px 9px;border-radius:999px;font-size:11px;line-height:1.3;white-space:nowrap}
+.wx:empty{display:none}body.tiny .wx{left:3px;bottom:3px;padding:1px 4px;font-size:9px}body.tiny .wx b{display:none}
+.wx b{font-weight:600;margin-left:4px}
+#modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
+#modal .mw:empty{display:none}
 footer a{color:rgba(255,255,255,.55)}
 
 /* ---------- fullscreen viewer ---------- */
@@ -108,13 +114,13 @@ footer a{color:rgba(255,255,255,.55)}
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
 <div id="modal" role="dialog" aria-modal="true">
-  <div class="bar"><div class="mt glass" id="mt"></div><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
+  <div class="bar"><div class="mt glass" id="mt"></div><div class="mw glass" id="mw"></div><button class="x glass" id="mx" aria-label="閉じる">✕</button></div>
   <div class="vw"><div id="mv"></div><div class="shield"></div></div>
   <div class="grab"></div>
 </div>
 
 <script>
-const CAMS=[{"id": "gxcQJ8pJF0c", "name": "ふもとっぱら", "side": "南", "viewers": 139, "subs": 31600, "fuji": "見える", "top": true}, {"id": "GsD9QQEKSzQ", "name": "広重の富士山（さった峠）", "side": "南", "viewers": 104, "subs": 52400, "fuji": "見える（薄霞）", "top": true}, {"id": "bdUbACCWmoY", "name": "河口湖・大石公園", "side": "北", "viewers": 72, "subs": 45200, "fuji": "見える（薄霞）", "top": true}, {"id": "maMMEh-2Bsk", "name": "芦ノ湖（大観山）", "side": "東", "viewers": 14, "subs": 9680, "fuji": "見える", "top": true}, {"id": "1cnReFAU04k", "name": "河口湖畔", "side": "北", "viewers": 31, "subs": 45200, "fuji": "見える（裾に雲）", "top": false}, {"id": "F2NbYrc-gBU", "name": "山中湖畔", "side": "北", "viewers": 21, "subs": 45200, "fuji": "見える", "top": false}, {"id": "Joer2U0vki4", "name": "ぐりんぱ・二合目", "side": "南", "viewers": 13, "subs": 67700, "fuji": "見える", "top": false}, {"id": "rZckj5mmeXc", "name": "七面山 カメラ1", "side": "西", "viewers": 13, "subs": 10200, "fuji": "見える（薄霞）", "top": false}, {"id": "pPW9tqTL0BU", "name": "日本平", "side": "南", "viewers": 7, "subs": 151000, "fuji": "見える（薄霞）", "top": false}, {"id": "4Hro9QIrsYA", "name": "十国峠", "side": "東", "viewers": 6, "subs": 67700, "fuji": "見える", "top": false}, {"id": "_qdu714QT1E", "name": "本栖湖", "side": "北", "viewers": 6, "subs": 29600, "fuji": "見える", "top": false}, {"id": "ViHMZfmURiw", "name": "富士市 4K", "side": "南", "viewers": 6, "subs": 17500, "fuji": "見える", "top": false}, {"id": "so_3HK9HIdg", "name": "精進湖", "side": "北", "viewers": 5, "subs": 45200, "fuji": "見える", "top": false}, {"id": "_6nLps25Kws", "name": "FUJIYAMAタワー", "side": "北", "viewers": 3, "subs": 67700, "fuji": "見える（雲が多め）", "top": false}, {"id": "tuNC0ot0j9I", "name": "葉山海岸", "side": "東", "viewers": 3, "subs": 45200, "fuji": "霞で薄い", "top": false}, {"id": "MHEcWrKRKh8", "name": "神奈川から見る富士山", "side": "東", "viewers": 2, "subs": 226000, "fuji": "見える", "top": false}, {"id": "rBwmWq48zAs", "name": "御殿場", "side": "南", "viewers": 2, "subs": 41100, "fuji": "見える", "top": false}, {"id": "nl4UcsGSz-s", "name": "忠霊塔", "side": "北", "viewers": 2, "subs": 3970, "fuji": "見える", "top": false}, {"id": "WjVH-0qSwOw", "name": "山中湖・芙蓉台", "side": "北", "viewers": 2, "subs": 1510, "fuji": "見える", "top": false}, {"id": "OEPdIuE2ZpU", "name": "七面山 カメラ3", "side": "西", "viewers": 1, "subs": 10200, "fuji": "見える", "top": false}, {"id": "nh0TUmU-Sko", "name": "忍野しのびの里", "side": "北", "viewers": 1, "subs": 67700, "fuji": "山頂付近に雲", "top": false}];
+const CAMS=[{"id": "gxcQJ8pJF0c", "name": "ふもとっぱら", "side": "南", "viewers": 139, "subs": 31600, "fuji": "見える", "top": true, "lat": 35.42, "lon": 138.579}, {"id": "GsD9QQEKSzQ", "name": "広重の富士山（さった峠）", "side": "南", "viewers": 104, "subs": 52400, "fuji": "見える（薄霞）", "top": true, "lat": 35.079, "lon": 138.556}, {"id": "bdUbACCWmoY", "name": "河口湖・大石公園", "side": "北", "viewers": 72, "subs": 45200, "fuji": "見える（薄霞）", "top": true, "lat": 35.526, "lon": 138.738}, {"id": "maMMEh-2Bsk", "name": "芦ノ湖（大観山）", "side": "東", "viewers": 14, "subs": 9680, "fuji": "見える", "top": true, "lat": 35.195, "lon": 139.075}, {"id": "1cnReFAU04k", "name": "河口湖畔", "side": "北", "viewers": 31, "subs": 45200, "fuji": "見える（裾に雲）", "top": false, "lat": 35.511, "lon": 138.757}, {"id": "F2NbYrc-gBU", "name": "山中湖畔", "side": "北", "viewers": 21, "subs": 45200, "fuji": "見える", "top": false, "lat": 35.41, "lon": 138.866}, {"id": "Joer2U0vki4", "name": "ぐりんぱ・二合目", "side": "南", "viewers": 13, "subs": 67700, "fuji": "見える", "top": false, "lat": 35.276, "lon": 138.77}, {"id": "rZckj5mmeXc", "name": "七面山 カメラ1", "side": "西", "viewers": 13, "subs": 10200, "fuji": "見える（薄霞）", "top": false, "lat": 35.37, "lon": 138.35}, {"id": "pPW9tqTL0BU", "name": "日本平", "side": "南", "viewers": 7, "subs": 151000, "fuji": "見える（薄霞）", "top": false, "lat": 34.97, "lon": 138.466}, {"id": "4Hro9QIrsYA", "name": "十国峠", "side": "東", "viewers": 6, "subs": 67700, "fuji": "見える", "top": false, "lat": 35.146, "lon": 139.048}, {"id": "_qdu714QT1E", "name": "本栖湖", "side": "北", "viewers": 6, "subs": 29600, "fuji": "見える", "top": false, "lat": 35.468, "lon": 138.59}, {"id": "ViHMZfmURiw", "name": "富士市 4K", "side": "南", "viewers": 6, "subs": 17500, "fuji": "見える", "top": false, "lat": 35.161, "lon": 138.676}, {"id": "so_3HK9HIdg", "name": "精進湖", "side": "北", "viewers": 5, "subs": 45200, "fuji": "見える", "top": false, "lat": 35.485, "lon": 138.617}, {"id": "_6nLps25Kws", "name": "FUJIYAMAタワー", "side": "北", "viewers": 3, "subs": 67700, "fuji": "見える（雲が多め）", "top": false, "lat": 35.487, "lon": 138.779}, {"id": "tuNC0ot0j9I", "name": "葉山海岸", "side": "東", "viewers": 3, "subs": 45200, "fuji": "霞で薄い", "top": false, "lat": 35.261, "lon": 139.574}, {"id": "MHEcWrKRKh8", "name": "神奈川から見る富士山", "side": "東", "viewers": 2, "subs": 226000, "fuji": "見える", "top": false, "lat": 35.45, "lon": 139.63}, {"id": "rBwmWq48zAs", "name": "御殿場", "side": "南", "viewers": 2, "subs": 41100, "fuji": "見える", "top": false, "lat": 35.308, "lon": 138.935}, {"id": "nl4UcsGSz-s", "name": "忠霊塔", "side": "北", "viewers": 2, "subs": 3970, "fuji": "見える", "top": false, "lat": 35.503, "lon": 138.801}, {"id": "WjVH-0qSwOw", "name": "山中湖・芙蓉台", "side": "北", "viewers": 2, "subs": 1510, "fuji": "見える", "top": false, "lat": 35.433, "lon": 138.858}, {"id": "OEPdIuE2ZpU", "name": "七面山 カメラ3", "side": "西", "viewers": 1, "subs": 10200, "fuji": "見える", "top": false, "lat": 35.37, "lon": 138.35}, {"id": "nh0TUmU-Sko", "name": "忍野しのびの里", "side": "北", "viewers": 1, "subs": 67700, "fuji": "山頂付近に雲", "top": false, "lat": 35.459, "lon": 138.853}];
 const $=s=>document.querySelector(s);
 const grid=$('#grid'),modal=$('#modal');
 const phone=()=>Math.min(innerWidth,innerHeight)<600;
@@ -134,6 +140,7 @@ sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
 const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;
   d.innerHTML=`<div class="shield"></div><span class="lb glass">${c.name}<i>${c.side}</i></span>
+    <span class="wx glass"></span>
     <button class="ex glass" aria-label="${c.name}を全画面">${ICON_EX}</button>`;
   const t={c,el:d,frame:null};
   d.querySelector('.ex').onclick=e=>{e.stopPropagation();openM(t);};
@@ -176,7 +183,7 @@ addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeo
 let open=null;
 function openM(t){
   open=t;
-  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;
+  $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;showMW();
   const f=document.createElement('iframe');f.src=embed(t.c.id);f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
   f.allowFullscreen=true;f.setAttribute('playsinline','');$('#mv').replaceChildren(f);
   modal.style.transform='';modal.style.opacity='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
@@ -200,6 +207,20 @@ modal.addEventListener('touchstart',e=>{if(e.touches.length===1){sy=e.touches[0]
 modal.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);modal.style.transform=`translateY(${dy}px)`;modal.style.opacity=String(1-Math.min(dy/500,.6));},{passive:true});
 modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transition='';if(dy>90)back();else{modal.style.transform='';modal.style.opacity='';}sy=null;});
 
+/* ---- weather (Open-Meteo, keyless, one batched request, every 10 min; fails silently) ---- */
+const WX=new Map();
+const wIcon=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌧️':c<=86?'🌨️':'⛈️';
+function showMW(){const w=open&&WX.get(open);$('#mw').textContent=w?`${wIcon(w.weather_code)} ${Math.round(w.temperature_2m)}° ☁${w.cloud_cover}% 低${w.cloud_cover_low}% 💨${Math.round(w.wind_speed_10m)}km/h`:'';}
+async function wx(){try{
+  const q=tiles.filter(t=>t.c.lat!=null);
+  const u='https://api.open-meteo.com/v1/forecast?latitude='+q.map(t=>t.c.lat).join(',')+'&longitude='+q.map(t=>t.c.lon).join(',')+
+    '&current=temperature_2m,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m&timezone=Asia%2FTokyo';
+  const r=await fetch(u);if(!r.ok)return;let j=await r.json();if(!Array.isArray(j))j=[j];
+  q.forEach((t,i)=>{const w=j[i]&&j[i].current;if(!w)return;WX.set(t,w);
+    t.el.querySelector('.wx').innerHTML=`${wIcon(w.weather_code)}<b>${Math.round(w.temperature_2m)}° ☁${w.cloud_cover}%</b>`;});
+  showMW();
+}catch(e){}}
+wx();setInterval(wx,600000);
 </script>
 </body>
 </html>
