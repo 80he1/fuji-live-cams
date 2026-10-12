@@ -375,7 +375,7 @@ document.addEventListener('touchstart',e=>{mm=null;MEN=!LPE.hidden?LPE:!TPE.hidd
 document.addEventListener('touchmove',e=>{if(!mm)return;const t=e.touches[0],dx=t.clientX-mm.x,dy=t.clientY-mm.y;
   if(MEN===TPE)e.preventDefault();
   if(!mm.m){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;mm.m=(dx*MDIR>0&&Math.abs(dx)>1.5*Math.abs(dy))?1:(MEN===TPE&&Math.abs(dy)>Math.abs(dx))?2:-1;if(mm.m===2)mm.i0=tpIdx();}
-  if(mm.m===2){e.stopImmediatePropagation();tpDrag(mm.i0+(-dy)/60);return;}
+  if(mm.m===2){e.stopImmediatePropagation();tpDrag(mm.i0+dy/60);return;}
   if(mm.m<0)return;e.preventDefault();e.stopImmediatePropagation();
   const dt=Math.max(1,e.timeStamp-mm.lt);mm.vx=.7*((t.clientX-mm.lx)/dt)+.3*mm.vx;mm.lx=t.clientX;mm.lt=e.timeStamp;
   const W=innerWidth,d=Math.max(0,dx*MDIR),f=Math.min(1,d/(.5*W));menuAt(MEN===TPE?$('#thb'):$('#lang'),1-f);
