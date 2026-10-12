@@ -239,6 +239,17 @@ modal.addEventListener('touchstart',e=>{if(e.touches.length===1){sy=e.touches[0]
 modal.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);modal.style.transform=`translateY(${dy}px)`;modal.style.opacity=String(1-Math.min(dy/500,.6));},{passive:true});
 modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transition='';if(dy>90)back();else{modal.style.transform='';modal.style.opacity='';}sy=null;});
 
+/* ---- horizontal swipe between region pages: すべて → 北 → 南 → 東 → 西 ---- */
+let hx=null,hy=0,swiped=0;
+document.addEventListener('click',e=>{if(Date.now()-swiped<400){e.stopPropagation();e.preventDefault();}},true);
+document.addEventListener('touchstart',e=>{if(open||e.touches.length!==1||e.target.closest('#chips')){hx=null;return;}hx=e.touches[0].clientX;hy=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',e=>{if(hx===null||open)return;const t=e.changedTouches[0],dx=t.clientX-hx,dy=t.clientY-hy;hx=null;
+  if(Math.abs(dx)>50&&Math.abs(dx)>1.5*Math.abs(dy)){swiped=Date.now();page(dx<0?1:-1);}},{passive:true});
+function page(dir){const fs=sides.map(x=>x[0]);const i=fs.indexOf(curF),j=i+dir;if(j<0||j>=fs.length)return;
+  const btn=chips.querySelector(`.chip[data-f="${fs[j]}"]`);
+  grid.animate([{transform:'translateX(0)',opacity:1},{transform:`translateX(${-dir*40}%)`,opacity:0}],{duration:140,easing:'ease-in'}).onfinish=()=>{
+    filter(fs[j],btn);grid.animate([{transform:`translateX(${dir*40}%)`,opacity:0},{transform:'translateX(0)',opacity:1}],{duration:200,easing:'ease-out'});};}
+
 /* ---- weather (Open-Meteo, keyless, one batched request, every 10 min; fails silently) ---- */
 const WX=new Map();
 const wIcon=(c,d=1)=>c===0?(d?'☀️':'🌙'):c<=2?(d?'🌤️':'☁️🌙'):c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌧️':c<=86?'🌨️':'⛈️';
