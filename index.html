@@ -87,6 +87,11 @@ body.tiny .lb{left:3px;top:3px;padding:2px 6px;font-size:9px}body.tiny .lb i{dis
 
 #modal .mw{height:36px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:13px;white-space:nowrap;margin-left:auto}
 #modal .mw:empty{display:none}
+.tsw{display:flex;justify-content:center;padding:6px calc(var(--sar) + 10px) 0 calc(var(--sal) + 10px)}
+#ts{display:flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;width:min(100%,420px);font-size:11px}
+#ts input{flex:1;min-width:0;accent-color:#fff;height:18px;margin:0}
+#tsl{flex:none;min-width:84px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lo{flex:none;font-style:normal;font-size:9px;opacity:.6;border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:0 3px;line-height:13px;align-self:center}
 footer a{color:rgba(255,255,255,.55)}
 
 /* ---------- fullscreen viewer ---------- */
@@ -111,6 +116,7 @@ footer a{color:rgba(255,255,255,.55)}
   <div class="title glass">🗻 富士山ライブ</div>
   <nav class="chips" id="chips" aria-label="方角で絞り込み"></nav>
 </header>
+<div class="tsw"><div id="ts" class="glass"><span>⏪</span><input id="tsr" type="range" min="0" max="720" step="10" value="0" aria-label="時間をさかのぼる"><span id="tsl">ライブ</span></div></div>
 <main id="grid"></main>
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
@@ -140,14 +146,36 @@ sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
 /* ---- tiles: every cam streams continuously; iframes are added once and never removed or paused ---- */
 const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;
-  d.innerHTML=`<div class="v"><div class="shield"></div></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><b class="wx"></b></div>`;
+  d.innerHTML=`<div class="v"><div class="shield"></div></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><em class="lo" hidden>ライブのみ</em><b class="wx"></b></div>`;
   const t={c,el:d,v:d.querySelector('.v'),frame:null};d.setAttribute('role','button');d.setAttribute('aria-label',c.name+'を全画面');
   d.onclick=()=>openM(t);
   grid.appendChild(d);return t;});
 const byEl=new Map(tiles.map(t=>[t.el,t]));
-function load(t){if(t.frame)return;const f=document.createElement('iframe');
-  f.src=embed(t.c.id);f.title=t.c.name;f.allow='autoplay; encrypted-media; picture-in-picture';
-  f.setAttribute('playsinline','');f.tabIndex=-1;t.v.prepend(f);t.frame=f;}
+/* YouTube IFrame Player API: players are created once and never paused */
+const PV={autoplay:1,mute:1,playsinline:1,controls:0,modestbranding:1,rel:0,iv_load_policy:3,disablekb:1,fs:0,cc_load_policy:0,enablejsapi:1,origin:location.origin};
+let ytOK=false;const ytQ=[];
+window.onYouTubeIframeAPIReady=()=>{ytOK=true;ytQ.splice(0).forEach(f=>f());};
+{const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';document.head.appendChild(sc);}
+const whenYT=f=>ytOK?f():ytQ.push(f);
+function mkPlayer(host,id,onReady){const d=document.createElement('div');host.prepend(d);
+  return new Promise(res=>whenYT(()=>{const p=new YT.Player(d,{videoId:id,playerVars:PV,
+    events:{onReady:e=>{try{e.target.mute();e.target.playVideo();}catch(_){}
+      const f=e.target.getIframe();f.setAttribute('playsinline','');f.tabIndex=-1;onReady&&onReady(e.target);res(p);}}});}));}
+function load(t){if(t.frame)return;t.frame=1;
+  mkPlayer(t.v,t.c.id,p=>{t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);});}
+/* time shift: offset in seconds back from each player's live edge (getDuration), clamped to its DVR window */
+let OFF=0;
+function seekP(p,t,mark){try{const d=p.getDuration()||0;
+  const live=d<120; if(t&&(mark||!live))t.el.querySelector('.lo').hidden=!live;
+  if(live||!OFF){p.seekTo(d||0,true);p.playVideo();return;}
+  p.seekTo(Math.max(0,d-OFF),true);p.playVideo();}catch(e){}}
+const tsr=$('#tsr'),tsl=$('#tsl');
+function tsLabel(){const m=+tsr.value;if(!m){tsl.textContent='ライブ';return;}
+  const at=new Date(Date.now()-m*60000).toLocaleTimeString('ja-JP',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'});
+  const h=Math.floor(m/60),mm=m%60;tsl.textContent=`${h?h+'時間':''}${mm?mm+'分':''}前 ${at}`;}
+tsr.addEventListener('input',tsLabel);
+tsr.addEventListener('change',()=>{OFF=+tsr.value*60;tsLabel();tiles.forEach(t=>t.p&&seekP(t.p,t));if(open&&open.mp)seekP(open.mp);});
+setInterval(tsLabel,30000);
 /* first screen starts immediately; the rest join as they come within ~1.5 screens, then stay running */
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
@@ -167,7 +195,7 @@ function fit(){
   const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||15;
   const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
   const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
-  const H=innerHeight-document.querySelector('header').offsetHeight-document.querySelector('footer').offsetHeight-8;
+  const H=innerHeight-document.querySelector('header').offsetHeight-document.querySelector('.tsw').offsetHeight-document.querySelector('footer').offsetHeight-8;
   let best=1,bw=0;
   for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
     const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r-ch)*16/9);if(w>bw){bw=w;best=c;}}
@@ -183,15 +211,14 @@ let open=null;
 function openM(t){
   open=t;
   $('#mt').textContent=`${t.c.name}（${t.c.side}側）`;showMW();
-  const f=document.createElement('iframe');f.src=embed(t.c.id);f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
-  f.allowFullscreen=true;f.setAttribute('playsinline','');$('#mv').replaceChildren(f);
+  $('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;setTimeout(()=>seekP(p),1500);});
   modal.style.transform='';modal.style.opacity='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   history.pushState({m:1},'');
   // Android Chrome: real fullscreen + try landscape. iOS Safari ignores this and keeps the fixed overlay.
   if(phone()&&modal.requestFullscreen){modal.requestFullscreen({navigationUI:'hide'}).then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})).catch(()=>{});}
 }
 function closeM(){
-  if(!open)return;open=null;$('#mv').replaceChildren();modal.classList.remove('open');document.documentElement.style.overflow='';
+  if(!open)return;try{open.mp&&open.mp.destroy()}catch(e){}open.mp=null;open=null;$('#mv').replaceChildren();modal.classList.remove('open');document.documentElement.style.overflow='';
   if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
   try{screen.orientation.unlock()}catch(e){}
 }
