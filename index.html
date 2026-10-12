@@ -58,6 +58,10 @@ header>*{pointer-events:auto}
 .chip small{font-size:11px;opacity:.75;margin-left:3px;font-weight:600}
 
 /* ---------- grid ---------- */
+#pager{position:relative;overflow-x:clip;touch-action:pan-y}
+#ghost{position:absolute;left:0;right:0;top:0;display:grid;gap:var(--gap);justify-content:center;pointer-events:none;padding:2px calc(var(--sar) + var(--gap)) 0 calc(var(--sal) + var(--gap));will-change:transform}
+#ghost.tinyg .cap{padding:0 5px 3px;gap:3px;font-size:9.5px}#ghost.tinyg .cap i{display:none}
+#grid{will-change:transform}
 #grid{display:grid;overflow-x:clip;gap:var(--gap);grid-template-columns:1fr;
   padding:2px calc(var(--sar) + var(--gap)) calc(var(--sab) + var(--gap)) calc(var(--sal) + var(--gap))}
 @media (orientation:landscape) and (max-height:540px){#grid{grid-template-columns:repeat(2,1fr)} :root{--gap:5px}}
@@ -79,7 +83,7 @@ body.expanded .morewrap,body.filtered .morewrap{display:none}
 .more{height:48px;padding:0 24px;border-radius:999px;font:inherit;font-size:15px;cursor:pointer}
 .cam iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
 .cam iframe{z-index:1;background:transparent;pointer-events:none}
-.shield{position:absolute;inset:0;z-index:2;background:transparent;touch-action:pan-x pan-y;transform:translateZ(0)}
+.shield{position:absolute;inset:0;z-index:2;background:transparent;touch-action:pan-y;transform:translateZ(0)}
 #modal .shield{touch-action:none}
 .lb{position:absolute;left:8px;top:8px;z-index:3;pointer-events:none;max-width:calc(100% - 72px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   padding:4px 10px;border-radius:999px;font-size:11.5px;line-height:1.3}
@@ -122,7 +126,7 @@ footer a{color:rgba(255,255,255,.55)}
   <div class="title glass">🗻 富士山ライブ</div>
   <nav class="chips" id="chips" aria-label="方角で絞り込み"></nav>
 </header>
-<main id="grid"></main>
+<div id="pager"><main id="grid"></main></div>
 <footer>映像: 各YouTubeライブ配信者 ／ 一覧の出典: <a href="https://isfujivisible.com/ja/mt-fuji-live-cams" target="_blank" rel="noopener">isfujivisible.com</a></footer>
 
 <div id="modal" role="dialog" aria-modal="true">
@@ -146,7 +150,7 @@ const sides=[['','すべて'],['北','北'],['南','南'],['東','東'],['西','
 const chips=$('#chips');
 sides.forEach(([f,l])=>{const n=f?CAMS.filter(c=>c.side===f).length:CAMS.length;
   const b=document.createElement('button');b.className='chip glass';b.dataset.f=f;b.setAttribute('aria-pressed',f===''?'true':'false');
-  b.innerHTML=`${l}<small>${n}</small>`;b.onclick=()=>filter(f,b);chips.appendChild(b);});
+  b.innerHTML=`${l}<small>${n}</small>`;b.onclick=()=>goPage(FS.indexOf(f));chips.appendChild(b);});
 
 /* ---- tiles: every cam streams continuously; iframes are added once and never removed or paused ---- */
 const tiles=CAMS.map((c,i)=>{
@@ -186,29 +190,31 @@ setInterval(tsLabel,30000);}
 const near=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load(byEl.get(e.target));near.unobserve(e.target);}}),{rootMargin:'300% 0px'});
 tiles.forEach(t=>near.observe(t.el));
 let curF='';
-function filter(f,btn){
+function filter(f,btn,keep){
   curF=f;
   chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b===btn?'true':'false'));
   btn.scrollIntoView({inline:'nearest',block:'nearest',behavior:'smooth'});
   tiles.forEach(t=>t.el.classList.toggle('hide',!!f&&t.c.side!==f));
   document.body.classList.toggle('filtered',!!f);
-  scrollTo({top:0});fit();
+  if(!keep)scrollTo({top:0});else scrollTo({top:0});fit();
 }
 /* first view = a few popular spots; the rest appear (and start streaming as they near the screen) after "もっと見る" */
 /* fit every visible cam on one screen: pick the column count that gives the biggest 16:9 tiles */
-function fit(){
-  const vis=tiles.filter(t=>!t.el.classList.contains('hide')).length||1;
-  const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||15;
+function layout(vis){
+  vis=vis||1;
+  const ch=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--caph'))||0;
   const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'))||6;
   const W=grid.clientWidth-parseFloat(getComputedStyle(grid).paddingLeft)-parseFloat(getComputedStyle(grid).paddingRight);
   const H=(window.visualViewport?visualViewport.height:innerHeight)-document.querySelector('header').offsetHeight-4;
   let best=1,bw=0;
   for(let c=1;c<=vis;c++){const r=Math.ceil(vis/c);
     const w=Math.min((W-g*(c-1))/c,((H-g*(r-1))/r-ch)*16/9);if(w>bw){bw=w;best=c;}}
-  grid.style.gridTemplateColumns=`repeat(${best},${Math.floor(bw)}px)`;
-  grid.style.justifyContent='center';
-  document.documentElement.style.setProperty('--lbs',bw<160?'none':'');
-  document.body.classList.toggle('tiny',bw<170);
+  return {cols:`repeat(${best},${Math.floor(bw)}px)`,tiny:bw<170};
+}
+function fit(){
+  const L=layout(tiles.filter(t=>!t.el.classList.contains('hide')).length);
+  grid.style.gridTemplateColumns=L.cols;grid.style.justifyContent='center';
+  document.body.classList.toggle('tiny',L.tiny);
 }
 addEventListener('resize',fit);window.visualViewport&&visualViewport.addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));fit();
 
@@ -220,35 +226,61 @@ function openM(t){
   $('#mv').replaceChildren();t.mp=null;mkPlayer($('#mv'),t.c.id,p=>{if(open!==t){try{p.destroy()}catch(e){}return;}t.mp=p;setTimeout(()=>seekP(p),1500);});
   modal.style.transform='';modal.style.opacity='';modal.classList.add('open');document.documentElement.style.overflow='hidden';
   history.pushState({m:1},'');
-  // Android Chrome: real fullscreen + try landscape. iOS Safari ignores this and keeps the fixed overlay.
-  if(phone()&&modal.requestFullscreen){modal.requestFullscreen({navigationUI:'hide'}).then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})).catch(()=>{});}
 }
 function closeM(){
   if(!open)return;try{open.mp&&open.mp.destroy()}catch(e){}open.mp=null;open=null;$('#mv').replaceChildren();modal.classList.remove('open');document.documentElement.style.overflow='';
-  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
-  try{screen.orientation.unlock()}catch(e){}
 }
 const back=()=>{if(history.state&&history.state.m)history.back();else closeM();};
 $('#mx').onclick=back;
 addEventListener('popstate',closeM);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&open)back();});
-document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&open&&phone())back();});
 /* swipe down to close (on the area around the video / the top bar) */
 let sy=null,dy=0;
 modal.addEventListener('touchstart',e=>{if(e.touches.length===1){sy=e.touches[0].clientY;dy=0;modal.style.transition='none';}},{passive:true});
 modal.addEventListener('touchmove',e=>{if(sy===null)return;dy=Math.max(0,e.touches[0].clientY-sy);modal.style.transform=`translateY(${dy}px)`;modal.style.opacity=String(1-Math.min(dy/500,.6));},{passive:true});
 modal.addEventListener('touchend',()=>{if(sy===null)return;modal.style.transition='';if(dy>90)back();else{modal.style.transform='';modal.style.opacity='';}sy=null;});
 
-/* ---- horizontal swipe between region pages: すべて → 北 → 南 → 東 → 西 ---- */
-let hx=null,hy=0,swiped=0;
+/* ---- finger-following pager: すべて → 北 → 南 → 東 → 西 ----
+   Each live iframe exists once (moving/duplicating iframes would reload 21 streams), so the neighbour page
+   is a lightweight ghost (thumbnails + captions) that slides in with the finger; on settle the real grid swaps in. */
+const FS=sides.map(x=>x[0]);
+const pager=$('#pager');let ghost=null,gDir=0;
+function mkGhost(dir){
+  if(ghost&&gDir===dir)return ghost; if(ghost)ghost.remove(); ghost=null;gDir=dir;
+  const j=FS.indexOf(curF)+dir; if(j<0||j>=FS.length)return null;
+  const f=FS[j],list=tiles.filter(t=>!f||t.c.side===f),L=layout(list.length);
+  const g=document.createElement('div');g.id='ghost';g.className=L.tiny?'tinyg':'';
+  g.style.gridTemplateColumns=L.cols;
+  list.forEach(t=>{const d=document.createElement('div');d.className='cam';
+    d.innerHTML=`<div class="v" style="background:#0b0e16 url(https://i.ytimg.com/vi/${t.c.id}/mqdefault.jpg) center/cover"></div>`;
+    d.firstChild.appendChild(t.el.querySelector('.cap').cloneNode(true));g.appendChild(d);});
+  pager.appendChild(g);ghost=g;return g;}
+const EASE='transform 280ms cubic-bezier(.2,.8,.2,1)';
+function setX(x,anim){const W=pager.clientWidth;
+  grid.style.transition=ghost&&anim?EASE:(anim?EASE:'none');grid.style.transform=x?`translate3d(${x}px,0,0)`:'';
+  if(ghost){ghost.style.transition=anim?EASE:'none';ghost.style.transform=`translate3d(${x+gDir*W}px,0,0)`;}}
+let busy=false;
+function settle(commit){busy=true;const W=pager.clientWidth;
+  setX(commit?-gDir*W:0,true);
+  setTimeout(()=>{if(commit){const f=FS[FS.indexOf(curF)+gDir];filter(f,chips.querySelector(`.chip[data-f="${f}"]`),true);}
+    grid.style.transition='none';grid.style.transform='';if(ghost){ghost.remove();ghost=null;}gDir=0;busy=false;},290);}
+function goPage(j){if(busy||open)return;const i=FS.indexOf(curF);if(j===i)return;
+  if(Math.abs(j-i)>1){filter(FS[j],chips.querySelector(`.chip[data-f="${FS[j]}"]`));return;}
+  mkGhost(j>i?1:-1);setX(0,false);ghost&&ghost.offsetWidth;settle(true);}
+let sx=0,py=0,lx=0,lt=0,vx=0,mode=0,swiped=0; // mode 0=undecided 1=horizontal -1=vertical
 document.addEventListener('click',e=>{if(Date.now()-swiped<400){e.stopPropagation();e.preventDefault();}},true);
-document.addEventListener('touchstart',e=>{if(open||e.touches.length!==1||e.target.closest('#chips')){hx=null;return;}hx=e.touches[0].clientX;hy=e.touches[0].clientY;},{passive:true});
-document.addEventListener('touchend',e=>{if(hx===null||open)return;const t=e.changedTouches[0],dx=t.clientX-hx,dy=t.clientY-hy;hx=null;
-  if(Math.abs(dx)>50&&Math.abs(dx)>1.5*Math.abs(dy)){swiped=Date.now();page(dx<0?1:-1);}},{passive:true});
-function page(dir){const fs=sides.map(x=>x[0]);const i=fs.indexOf(curF),j=i+dir;if(j<0||j>=fs.length)return;
-  const btn=chips.querySelector(`.chip[data-f="${fs[j]}"]`);
-  grid.animate([{transform:'translateX(0)',opacity:1},{transform:`translateX(${-dir*40}%)`,opacity:0}],{duration:140,easing:'ease-in'}).onfinish=()=>{
-    filter(fs[j],btn);grid.animate([{transform:`translateX(${dir*40}%)`,opacity:0},{transform:'translateX(0)',opacity:1}],{duration:200,easing:'ease-out'});};}
+pager.addEventListener('touchstart',e=>{if(open||busy||e.touches.length!==1){mode=-1;return;}
+  const t=e.touches[0];sx=lx=t.clientX;py=t.clientY;lt=e.timeStamp;vx=0;mode=0;},{passive:true});
+pager.addEventListener('touchmove',e=>{if(mode<0)return;const t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-py;
+  if(mode===0){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;mode=Math.abs(dx)>1.5*Math.abs(dy)?1:-1;if(mode<0)return;}
+  e.preventDefault();
+  const dt=Math.max(1,e.timeStamp-lt);vx=.7*((t.clientX-lx)/dt)+.3*vx;lx=t.clientX;lt=e.timeStamp;
+  const g=mkGhost(dx<0?1:-1);setX(g?dx:dx*.3,false);},{passive:false});
+pager.addEventListener('touchend',e=>{if(mode!==1)return;mode=0;swiped=Date.now();
+  const dx=lx-sx,W=pager.clientWidth;
+  const commit=!!ghost&&((Math.abs(vx)>.3&&Math.sign(vx)===-gDir)||Math.abs(dx)>.35*W)&&Math.sign(dx)===-gDir;
+  settle(commit);},{passive:true});
+pager.addEventListener('touchcancel',()=>{if(mode===1){mode=0;settle(false);}},{passive:true});
 
 /* ---- weather (Open-Meteo, keyless, one batched request, every 10 min; fails silently) ---- */
 const WX=new Map();
