@@ -319,6 +319,18 @@ function goPage(j){if(busy||open)return;const i=FS.indexOf(curF);if(j===i)return
   mkGhost(j>i?1:-1);setX(0,false);ghost&&ghost.offsetWidth;settle(true);}
 let sx=0,py=0,lx=0,lt=0,vx=0,mode=0,swiped=0; // mode 0=undecided 1=horizontal -1=vertical
 document.addEventListener('click',e=>{if(Date.now()-swiped<400){e.stopPropagation();e.preventDefault();}},true);
+let mm=null;const LPE=document.getElementById('lp');
+document.addEventListener('touchstart',e=>{mm=null;if(!LPE.hidden&&!open&&e.touches.length===1&&!e.target.closest('#chips,#lang,#modal')){const t=e.touches[0];mm={x:t.clientX,y:t.clientY,lx:t.clientX,lt:e.timeStamp,vx:0,m:0};}},{passive:true,capture:true});
+document.addEventListener('touchmove',e=>{if(!mm)return;const t=e.touches[0],dx=t.clientX-mm.x,dy=t.clientY-mm.y;
+  if(!mm.m){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;mm.m=(dx>0&&Math.abs(dx)>1.5*Math.abs(dy))?1:-1;}
+  if(mm.m<0)return;e.preventDefault();e.stopImmediatePropagation();
+  const dt=Math.max(1,e.timeStamp-mm.lt);mm.vx=.7*((t.clientX-mm.lx)/dt)+.3*mm.vx;mm.lx=t.clientX;mm.lt=e.timeStamp;
+  const W=innerWidth,d=Math.max(0,dx),f=Math.min(1,d/(.5*W));langAt(1-f);
+  LPE.style.transition='none';LPE.style.opacity=String(1-f);LPE.style.transform=`translateX(${d*.6}px)`;},{passive:false,capture:true});
+document.addEventListener('touchend',e=>{if(!mm)return;const m=mm;mm=null;if(m.m!==1)return;e.stopImmediatePropagation();swiped=Date.now();
+  const dx=m.lx-m.x;LPE.style.transition='opacity .25s,transform .25s';
+  if(dx>.25*innerWidth||m.vx>.3){LPE.style.opacity='0';LPE.style.transform=`translateX(40px)`;chips.querySelectorAll('.chip').forEach(c=>c.style.color='');setTimeout(()=>{LPE.hidden=true;LPE.style.cssText='';},250);moveInd();}
+  else{LPE.style.opacity='';LPE.style.transform='';chips.querySelectorAll('.chip').forEach(c=>c.style.color='');parkFlag(true);}},{passive:true,capture:true});
 document.addEventListener('touchstart',e=>{if(open||busy||e.touches.length!==1||e.target.closest('#chips,#modal,#lang,#lp')){mode=-1;return;}
   const t=e.touches[0];sx=lx=t.clientX;py=t.clientY;lt=e.timeStamp;vx=0;mode=0;},{passive:true});
 document.addEventListener('touchmove',e=>{if(mode<0)return;const t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-py;
