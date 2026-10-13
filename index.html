@@ -240,7 +240,7 @@ function mkPlayer(host,id,onReady,onBad){const d=document.createElement('div');d
 function markDead(t,why){if(t.dead)return;t.dead=true;console.warn('[cams] hiding dead stream',t.c.id,t.c.name,why);unload(t);t.el.classList.add('hide');
   if(PG[curP].th===t.c.theme)fit();}
 function unload(t){if(!t.frame)return;t.frame=0;t.gen=(t.gen||0)+1;try{t.p&&t.p.destroy()}catch(e){}t.p=null;t.v.querySelectorAll('iframe,.ytp').forEach(x=>x.remove());}
-function load(t){if(t.frame)return;{const H=document.getElementById('home');if(H&&!H.hidden)return;}t.frame=1;const g=t.gen=(t.gen||0)+1;
+function load(t){if(t.frame)return;{const H=document.getElementById('home');if(H&&!H.hidden&&!H.classList.contains('off'))return;}t.frame=1;const g=t.gen=(t.gen||0)+1;
   mkPlayer(t.v,t.c.id,p=>{if(t.gen!==g){try{p.destroy()}catch(e){}return;}
     /* stalled check: still nothing loaded after 2 min -> treat as dead */
     setTimeout(()=>{if(t.gen!==g||t.dead)return;try{const st=p.getPlayerState();if(st===0||(st===3&&!p.getVideoLoadedFraction()))markDead(t,'stalled state '+st);}catch(_){}} ,120000);t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);},why=>{if(t.gen===g)markDead(t,why);});}
