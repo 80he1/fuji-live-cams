@@ -28,8 +28,10 @@ now=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())
 res={};blocked=0
 def cur(k):return (prev.get(k) or {}).get('v') or k
 keys=list(IDX)
-with cf.ThreadPoolExecutor(8) as ex:
+with cf.ThreadPoolExecutor(3) as ex:
   pr=dict(zip(keys,ex.map(lambda k:probe(cur(k)),keys)))
+  for k in [k for k in keys if pr[k]['blocked']]:
+    time.sleep(3);pr[k]=probe(cur(k))
   # also try the baked id if override died
   bad=[k for k in keys if not pr[k]['ok'] and cur(k)!=k]
   for k,p in zip(bad,ex.map(probe,bad)):
@@ -42,7 +44,7 @@ for k in keys:
 need={}
 for k in keys:
   if k not in res and IDX[k].get('ch'):need.setdefault(IDX[k]['ch'],[]).append(k)
-with cf.ThreadPoolExecutor(6) as ex:
+with cf.ThreadPoolExecutor(2) as ex:
   chl=dict(zip(need,ex.map(lambda c:lives(c),need)))
 used={r['v'] for r in res.values()}
 rep=0
