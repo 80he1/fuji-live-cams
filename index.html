@@ -698,7 +698,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791976455';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1791976755';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -852,7 +852,9 @@ function glDraw(ts){GL.raf=0;const cv=document.getElementById('glb');if(!cv||HOM
   c.lineWidth=dp*.6;c.strokeStyle='rgba(130,200,255,.09)';
   for(let la=-60;la<=60;la+=30){c.beginPath();let pen=0;for(let lo=-180;lo<=180;lo+=4){const q=P(la,lo);if(q[2]>0){pen?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]);pen=1}else pen=0;}c.stroke();}
   for(let lo=-180;lo<180;lo+=30){c.beginPath();let pen=0;for(let la=-88;la<=88;la+=4){const q=P(la,lo);if(q[2]>0){pen?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]);pen=1}else pen=0;}c.stroke();}
-  c.strokeStyle='rgba(140,210,255,.35)';c.lineWidth=dp;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();
+  c.strokeStyle='rgba(140,210,255,.35)';c.lineWidth=dp;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();if(GL.land){const cl=Math.cos(l0),sl=Math.sin(l0);c.beginPath();for(const v of GL.land){let pen=0;for(let i=0;i<v.length;i+=3){const x=v[i],y=v[i+1],z=v[i+2],cc=x*cl+y*sl,dz=sp0*z+cp0*cc;
+    if(dz>0){const X=cx+R*(y*cl-x*sl),Y=cy-R*(cp0*z-sp0*cc);pen?c.lineTo(X,Y):c.moveTo(X,Y);pen=1;}else pen=0;}}
+  c.lineJoin='round';c.strokeStyle='rgba(110,190,255,.10)';c.lineWidth=dp*3;c.stroke();c.strokeStyle='rgba(150,215,255,.42)';c.lineWidth=dp*.7;c.stroke();}
   const s=GL.s||(GL.s=sfStats());if(!GL.arcs)GL.arcs=glArcs(s.pts);const A=GL.arcs,o=A.o;
   const toV=(la,lo)=>{const f=la*Math.PI/180,l=lo*Math.PI/180;return[Math.cos(f)*Math.cos(l),Math.cos(f)*Math.sin(l),Math.sin(f)]};
   A.to.forEach(a=>{const v1=toV(o[0],o[1]),v2=toV(a.lat,a.lon),om=Math.acos(Math.max(-1,Math.min(1,v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])));if(om<1e-3)return;const N=40,pts=[];
@@ -885,7 +887,8 @@ function glBind(){const cv=document.getElementById('glb'),L=document.getElementB
     st=null;glKick();};
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
   cv.addEventListener('wheel',e=>{e.preventDefault();GL.z=Math.max(.8,Math.min(1.7,GL.z*(e.deltaY<0?1.06:.94)));GL.up=performance.now();glKick();},{passive:false});}
-function glStart(){GL.s=null;GL.arcs=null;if(!GL.raf)GL.raf=requestAnimationFrame(glDraw);}
+function glLand(){if(GL.land||GL.lf)return;GL.lf=1;fetch('land.json').then(r=>r.json()).then(a=>{const D=Math.PI/1800;GL.land=a.map(l=>{const v=new Float32Array(l.length/2*3);for(let i=0,j=0;i<l.length;i+=2,j+=3){const lo=l[i]*D,la=l[i+1]*D,cf=Math.cos(la);v[j]=cf*Math.cos(lo);v[j+1]=cf*Math.sin(lo);v[j+2]=Math.sin(la);}return v;});glKick();}).catch(()=>{GL.lf=0});}
+function glStart(){glLand();GL.s=null;GL.arcs=null;if(!GL.raf)GL.raf=requestAnimationFrame(glDraw);}
 function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CAMS.find(c=>c.id===HERO),sc=HOMEEL.scrollTop;
   const ifr=HOMEEL.querySelector('.hero iframe');
   const feats=[['LIVE','f1'],['TEMP','f2'],['MAP','f3'],['SORT','f4'],['SWIPE','f5'],['16 LANG','f6'],['APP','f7']];
