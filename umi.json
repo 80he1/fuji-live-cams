@@ -1,0 +1,227 @@
+[
+ {
+  "id": "XKaQ4EAJO6I",
+  "name": "利尻 沓形",
+  "side": "北日本",
+  "lat": 45.18,
+  "lon": 141.14,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DaTTD0f9NoM",
+  "name": "利尻 栄浜",
+  "side": "北日本",
+  "lat": 45.15,
+  "lon": 141.2,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "iXN8XJduFNQ",
+  "name": "釧路川河口",
+  "side": "北日本",
+  "lat": 42.98,
+  "lon": 144.38,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "7Zi1gLClPew",
+  "name": "鹿島灘 波崎",
+  "side": "関東",
+  "lat": 35.75,
+  "lon": 140.85,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cyzXvJMC3zw",
+  "name": "鴨川",
+  "side": "関東",
+  "lat": 35.11,
+  "lon": 140.1,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "9OLneCdXv3w",
+  "name": "鎌倉 七里ヶ浜",
+  "side": "関東",
+  "lat": 35.3,
+  "lon": 139.51,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "4hZVH5jBDiw",
+  "name": "小田原 相模湾",
+  "side": "関東",
+  "lat": 35.25,
+  "lon": 139.15,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "NdAyRlYxw3M",
+  "name": "お台場 東京湾",
+  "side": "関東",
+  "lat": 35.63,
+  "lon": 139.77,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "sIy0J6TeCxY",
+  "name": "お台場ビーチ",
+  "side": "関東",
+  "lat": 35.629,
+  "lon": 139.773,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "6h4IGR61eUo",
+  "name": "横浜 汽車道",
+  "side": "関東",
+  "lat": 35.452,
+  "lon": 139.636,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cWpSuoJA90E",
+  "name": "三宅島",
+  "side": "関東",
+  "lat": 34.1,
+  "lon": 139.49,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "oCatW4OZeyY",
+  "name": "御前崎 駿河湾",
+  "side": "中部・関西",
+  "lat": 34.6,
+  "lon": 138.22,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "IswdhAyqjck",
+  "name": "御前崎",
+  "side": "中部・関西",
+  "lat": 34.6,
+  "lon": 138.22,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "D0bMDv4ORxM",
+  "name": "新潟 日本海",
+  "side": "中部・関西",
+  "lat": 37.87,
+  "lon": 138.95,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "jCJ8eq6MtMY",
+  "name": "和歌山 加太",
+  "side": "中部・関西",
+  "lat": 34.27,
+  "lon": 135.07,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "uGpIM9F4OrY",
+  "name": "知多 内海",
+  "side": "中部・関西",
+  "lat": 34.73,
+  "lon": 136.86,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "PcQuKzfsTio",
+  "name": "来島海峡",
+  "side": "西日本",
+  "lat": 34.07,
+  "lon": 133.0,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_miRFIAU_Ks",
+  "name": "三豊 詫間",
+  "side": "西日本",
+  "lat": 34.23,
+  "lon": 133.69,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_bqhHBIGaT8",
+  "name": "小松島",
+  "side": "西日本",
+  "lat": 34.0,
+  "lon": 134.6,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "UbqCZqojnWI",
+  "name": "北九州 若戸大橋",
+  "side": "西日本",
+  "lat": 33.9,
+  "lon": 130.81,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DXNXCFLYiLI",
+  "name": "口永良部島",
+  "side": "西日本",
+  "lat": 30.44,
+  "lon": 130.22,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "j-7ENKFZR2s",
+  "name": "石垣 名蔵湾",
+  "side": "沖縄",
+  "lat": 24.38,
+  "lon": 124.13,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "vhb_zfzNoZg",
+  "name": "那覇港",
+  "side": "沖縄",
+  "lat": 26.22,
+  "lon": 127.67,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "aLFXFdzeIg4",
+  "name": "那覇港 いち文字",
+  "side": "沖縄",
+  "lat": 26.23,
+  "lon": 127.67,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "6rGBfwgAGG4",
+  "name": "宮古島",
+  "side": "沖縄",
+  "lat": 24.72,
+  "lon": 125.27,
+  "approx": true,
+  "top": true
+ }
+]

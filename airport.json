@@ -1,0 +1,84 @@
+[
+ {
+  "id": "Kv7g8crIddY",
+  "name": "那覇空港",
+  "en": "Naha Airport",
+  "side": "日本",
+  "lat": 26.21,
+  "lon": 127.65,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "vCJEBpm-tuA",
+  "name": "宮崎空港",
+  "en": "Miyazaki Airport",
+  "side": "日本",
+  "lat": 31.88,
+  "lon": 131.45,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TPpuWYRjU1k",
+  "name": "モントリオール",
+  "en": "Montréal–Trudeau",
+  "side": "海外",
+  "lat": 45.47,
+  "lon": -73.74,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "uDBYuEV4zjI",
+  "name": "ロンドン ヒースロー",
+  "en": "London Heathrow",
+  "side": "海外",
+  "lat": 51.47,
+  "lon": -0.45,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "DsCyt07oD0M",
+  "name": "リスボン",
+  "en": "Lisbon Airport",
+  "side": "海外",
+  "lat": 38.77,
+  "lon": -9.13,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "_yMKEzakbts",
+  "name": "香港国際空港",
+  "en": "Hong Kong Airport",
+  "side": "海外",
+  "lat": 22.31,
+  "lon": 113.92,
+  "utc": "UTC+8",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "rzC0vzNT6Hg",
+  "name": "シドニー空港",
+  "en": "Sydney Airport",
+  "side": "海外",
+  "lat": -33.94,
+  "lon": 151.18,
+  "utc": "UTC+11",
+  "approx": true,
+  "top": true,
+  "clock": true
+ }
+]

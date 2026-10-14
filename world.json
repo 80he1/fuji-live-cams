@@ -1,0 +1,233 @@
+[
+ {
+  "id": "ODt5y29FKBQ",
+  "name": "NY ブルックリン橋",
+  "en": "NYC Brooklyn Bridge",
+  "side": "アメリカ",
+  "lat": 40.7,
+  "lon": -73.99,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "CXsVBZ_1SZA",
+  "name": "NY ハーバー",
+  "en": "NYC Harbor",
+  "side": "アメリカ",
+  "lat": 40.7,
+  "lon": -74.02,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "59AJVnSe2pw",
+  "name": "NY クイーンズから",
+  "en": "NYC from Queens",
+  "side": "アメリカ",
+  "lat": 40.72,
+  "lon": -73.84,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cW_8jvgxwlQ",
+  "name": "NY プロスペクト公園",
+  "en": "Prospect Park",
+  "side": "アメリカ",
+  "lat": 40.66,
+  "lon": -73.97,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "WmRiFKyiRYI",
+  "name": "ジョージ・ワシントン橋",
+  "en": "George Washington Br.",
+  "side": "アメリカ",
+  "lat": 40.85,
+  "lon": -73.95,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "KnWu-3vrosY",
+  "name": "ラスベガス ストリップ",
+  "en": "Las Vegas Strip",
+  "side": "アメリカ",
+  "lat": 36.11,
+  "lon": -115.17,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "uaIhqF1hz0I",
+  "name": "ラスベガス フリーモント",
+  "en": "Fremont Street",
+  "side": "アメリカ",
+  "lat": 36.17,
+  "lon": -115.14,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "xqdukYhcGEU",
+  "name": "ニューオーリンズ",
+  "en": "New Orleans",
+  "side": "アメリカ",
+  "lat": 29.96,
+  "lon": -90.07,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "wyEi0OPai5g",
+  "name": "リオ コパカバーナ 6",
+  "en": "Copacabana Posto 6",
+  "side": "アメリカ",
+  "lat": -22.98,
+  "lon": -43.19,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "WEl_I5vmuSs",
+  "name": "リオ コパカバーナ 3",
+  "en": "Copacabana Posto 3",
+  "side": "アメリカ",
+  "lat": -22.97,
+  "lon": -43.18,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "YGoSu93yRV4",
+  "name": "パイクスピーク山頂",
+  "en": "Pikes Peak",
+  "side": "アメリカ",
+  "lat": 38.84,
+  "lon": -105.04,
+  "utc": "UTC-6",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "znmUEZUM9Zc",
+  "name": "ロンドン テムズ川",
+  "en": "London Thames",
+  "side": "ヨーロッパ・中東",
+  "lat": 51.507,
+  "lon": -0.09,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2A20GPyGtVo",
+  "name": "ロンドン ノッティングヒル",
+  "en": "Notting Hill",
+  "side": "ヨーロッパ・中東",
+  "lat": 51.509,
+  "lon": -0.196,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "PaILiunQLAE",
+  "name": "ラルワース・コーブ",
+  "en": "Lulworth Cove",
+  "side": "ヨーロッパ・中東",
+  "lat": 50.62,
+  "lon": -2.25,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "LMHUcDktP-w",
+  "name": "エルサレム 嘆きの壁",
+  "en": "Western Wall",
+  "side": "ヨーロッパ・中東",
+  "lat": 31.776,
+  "lon": 35.234,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TBfqlWUJXis",
+  "name": "香港 鴨脷洲",
+  "en": "Hong Kong Ap Lei Chau",
+  "side": "アジア・オセアニア",
+  "lat": 22.24,
+  "lon": 114.15,
+  "utc": "UTC+8",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "5Etkw30Sa34",
+  "name": "香港",
+  "en": "Hong Kong",
+  "side": "アジア・オセアニア",
+  "lat": 22.3,
+  "lon": 114.17,
+  "utc": "UTC+8",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "YrkP9hxmQwQ",
+  "name": "ソウル 漢江",
+  "en": "Seoul Han River",
+  "side": "アジア・オセアニア",
+  "lat": 37.52,
+  "lon": 126.96,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ueGevhUuqZc",
+  "name": "サムイ島 ビッグブッダ",
+  "en": "Koh Samui Big Buddha",
+  "side": "アジア・オセアニア",
+  "lat": 9.57,
+  "lon": 100.06,
+  "utc": "UTC+7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "w8QCbgRo6FY",
+  "name": "バンコク",
+  "en": "Bangkok",
+  "side": "アジア・オセアニア",
+  "lat": 13.8,
+  "lon": 100.56,
+  "utc": "UTC+7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "bsYMHh1Xt_4",
+  "name": "シドニー ハーバー",
+  "en": "Sydney Harbour",
+  "side": "アジア・オセアニア",
+  "lat": -33.85,
+  "lon": 151.21,
+  "utc": "UTC+11",
+  "approx": true,
+  "top": true
+ }
+]

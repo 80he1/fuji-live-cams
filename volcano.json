@@ -1,0 +1,72 @@
+[
+ {
+  "id": "DXNXCFLYiLI",
+  "name": "口永良部島",
+  "en": "Kuchinoerabu-jima",
+  "side": "日本",
+  "lat": 30.44,
+  "lon": 130.22,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cWpSuoJA90E",
+  "name": "三宅島",
+  "en": "Miyake-jima",
+  "side": "日本",
+  "lat": 34.1,
+  "lon": 139.49,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "gXKuUyKt8mc",
+  "name": "キラウエア",
+  "en": "Kīlauea",
+  "side": "海外",
+  "lat": 19.4,
+  "lon": -155.28,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "sj6TpPz3b3Y",
+  "name": "キラウエア 火口",
+  "en": "Kīlauea crater",
+  "side": "海外",
+  "lat": 19.4,
+  "lon": -155.28,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "4TfEB3edwCw",
+  "name": "エトナ",
+  "en": "Etna",
+  "side": "海外",
+  "lat": 37.69,
+  "lon": 15.13,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "WmvAU6-YNf8",
+  "name": "ポポカテペトル",
+  "en": "Popocatépetl",
+  "side": "海外",
+  "lat": 19.02,
+  "lon": -98.62,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "8UarOAqhEzM",
+  "name": "ポポカテペトル 火口",
+  "en": "Popocatépetl crater",
+  "side": "海外",
+  "lat": 19.02,
+  "lon": -98.62,
+  "approx": true,
+  "top": true
+ }
+]

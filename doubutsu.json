@@ -1,0 +1,173 @@
+[
+ {
+  "id": "YonXVFE9C3g",
+  "name": "鳥羽水族館 ラッコ",
+  "side": "動物園・水族館",
+  "lat": 34.48,
+  "lon": 136.85,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ZfZfYvtXNGw",
+  "name": "小諸 ペンギン村",
+  "side": "動物園・水族館",
+  "lat": 36.33,
+  "lon": 138.42,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "n4CKaNQU0Es",
+  "name": "旭山 サル",
+  "side": "動物園・水族館",
+  "lat": 43.77,
+  "lon": 142.48,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "K7nkUuuBnxA",
+  "name": "旭山 オオカミ",
+  "side": "動物園・水族館",
+  "lat": 43.77,
+  "lon": 142.48,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "T5TLixbxJP8",
+  "name": "旭山 アザラシ",
+  "side": "動物園・水族館",
+  "lat": 43.77,
+  "lon": 142.48,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "bCqr-febQPQ",
+  "name": "登別 子グマ",
+  "side": "動物園・水族館",
+  "lat": 42.51,
+  "lon": 141.14,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ir7JVxA8oJY",
+  "name": "やんばる 湧き水",
+  "side": "自然",
+  "lat": 26.7,
+  "lon": 128.28,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "tVcqtwLvc9s",
+  "name": "神石高原",
+  "side": "自然",
+  "lat": 34.78,
+  "lon": 133.27,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "78v9a-4KCYs",
+  "name": "秩父 子猫部屋",
+  "side": "猫・犬",
+  "lat": 35.99,
+  "lon": 139.08,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "1czMCweY6Ls",
+  "name": "ねこみんか",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "NIBuvyN01fM",
+  "name": "17猫団",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "XiBtFE-rBXg",
+  "name": "信州猫日和",
+  "side": "猫・犬",
+  "lat": 36.2,
+  "lon": 138.2,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "KoWiJb3Vs9M",
+  "name": "にゃん福",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "optKaUgQun0",
+  "name": "サビ猫あずき",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TLsHN3x0bP8",
+  "name": "ねこの森",
+  "side": "猫・犬",
+  "lat": 35.67,
+  "lon": 139.53,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "iY84Edxl9rs",
+  "name": "いかりやま 屋上猫",
+  "side": "猫・犬",
+  "lat": 33.205,
+  "lon": 131.585,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "t_QhnlYFzCE",
+  "name": "いかりやま 猫神社",
+  "side": "猫・犬",
+  "lat": 33.205,
+  "lon": 131.585,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "FMGBBjFh6_w",
+  "name": "看板猫おもち",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DA4YUm_uy4k",
+  "name": "柴犬 大河",
+  "side": "猫・犬",
+  "lat": null,
+  "lon": null,
+  "approx": true,
+  "top": true
+ }
+]

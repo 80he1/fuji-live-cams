@@ -1,0 +1,101 @@
+[
+ {
+  "name": "草津温泉 湯畑足湯",
+  "side": "関東",
+  "id": "beWd8bRGnlw",
+  "channel": "草津温泉 湯畑足湯 ライブカメラ",
+  "lat": 36.623,
+  "lon": 138.596,
+  "approx": true,
+  "note": "湯畑",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "由布院 由布岳と夜景",
+  "side": "西日本",
+  "id": "0f_V8YkIrHw",
+  "channel": "ゆふいんライブカメラch",
+  "lat": 33.26,
+  "lon": 131.36,
+  "approx": true,
+  "note": "由布岳 and basin",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "箱根湯本駅前",
+  "side": "関東",
+  "id": "46Ro2IpZrRc",
+  "channel": "地名cam",
+  "lat": 35.233,
+  "lon": 139.105,
+  "approx": true,
+  "note": "station front",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "湯原温泉 街並み",
+  "side": "西日本",
+  "id": "8aHNSc1m_7w",
+  "channel": "39K",
+  "lat": 35.17,
+  "lon": 133.7,
+  "approx": true,
+  "note": "温泉街",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "湯原温泉 砂湯入口・ダム",
+  "side": "西日本",
+  "id": "itmgrJoUygg",
+  "channel": "39K",
+  "lat": 35.17,
+  "lon": 133.7,
+  "approx": true,
+  "note": "砂湯",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "中禅寺温泉 湖上苑",
+  "side": "関東",
+  "id": "4dhqsHHqcB8",
+  "channel": "湖上苑",
+  "lat": 36.738,
+  "lon": 139.493,
+  "approx": true,
+  "note": "lake (koyo overlap)",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "東根温泉",
+  "side": "北海道・東北",
+  "id": "M_A8s4WDYjE",
+  "channel": "地名cam",
+  "lat": 38.43,
+  "lon": 140.39,
+  "approx": true,
+  "note": "温泉町",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "天童温泉方面",
+  "side": "北海道・東北",
+  "id": "DdGkKLPoYVU",
+  "channel": "地名cam",
+  "lat": 38.36,
+  "lon": 140.37,
+  "approx": true,
+  "note": "town",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "いかりやま温泉 猫神社",
+  "side": "中部?",
+  "id": "t_QhnlYFzCE",
+  "channel": "ぽかにゃん",
+  "lat": 35.0,
+  "lon": 135.0,
+  "approx": true,
+  "note": "cats (doubutsu overlap)",
+  "checked": "2026-10-13 00:25 JST"
+ }
+]

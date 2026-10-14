@@ -1,0 +1,106 @@
+{
+ "kept": [
+  {
+   "id": "CyJlrNaJ_Fw",
+   "name": "浅草 吾妻橋",
+   "en": "Asakusa Azuma Bridge",
+   "side": "日本",
+   "lat": 35.71,
+   "lon": 139.8,
+   "utc": "UTC+9",
+   "approx": true,
+   "top": true
+  },
+  {
+   "id": "IveeT28Rs3U",
+   "name": "若戸大橋",
+   "en": "Wakato Bridge",
+   "side": "日本",
+   "lat": 33.91,
+   "lon": 130.81,
+   "utc": "UTC+9",
+   "approx": true,
+   "top": true
+  },
+  {
+   "id": "aKFgDy2rbwg",
+   "name": "那覇 泊大橋",
+   "en": "Naha Tomari Bridge",
+   "side": "日本",
+   "lat": 26.23,
+   "lon": 127.68,
+   "utc": "UTC+9",
+   "approx": true,
+   "top": true
+  },
+  {
+   "id": "RTZWZLS5e0g",
+   "name": "NY ブルックリン橋",
+   "en": "Brooklyn Bridge",
+   "side": "海外",
+   "lat": 40.7,
+   "lon": -73.99,
+   "utc": "UTC-4",
+   "approx": true,
+   "top": true,
+   "clock": true
+  },
+  {
+   "id": "qXNxkwSp3eU",
+   "name": "台湾 淡江大橋",
+   "en": "Danjiang Bridge",
+   "side": "海外",
+   "lat": 25.17,
+   "lon": 121.42,
+   "utc": "UTC+8",
+   "approx": true,
+   "top": true,
+   "clock": true
+  },
+  {
+   "id": "bnM8h6wBgls",
+   "name": "ハノイ ヴィントゥイ橋",
+   "en": "Hanoi Vinh Tuy Bridge",
+   "side": "海外",
+   "lat": 21.0,
+   "lon": 105.88,
+   "utc": "UTC+7",
+   "approx": true,
+   "top": true,
+   "clock": true
+  },
+  {
+   "id": "diQ7cuoL_Qw",
+   "name": "バイユーラバトリ 跳ね橋",
+   "en": "Bayou La Batre Lift Bridge",
+   "side": "海外",
+   "lat": 30.4,
+   "lon": -88.25,
+   "utc": "UTC-5",
+   "approx": true,
+   "top": true,
+   "clock": true
+  }
+ ],
+ "dropped": {
+  "FoEXKkqRhyU": "明石海峡 - bridge not in frame",
+  "M3xoKJ0cK00": "Cincinnati - bridge not visible",
+  "kUMY1s_-xb8": "江戸川 - no clear bridge",
+  "BPUsMOe2FEA": "HK multi-view mosaic",
+  "MQEu33EtfbI": "Golden Gate - embed disabled (oEmbed 401)",
+  "IwzlJhMYe00": "釧路 幣舞橋 - embed disabled",
+  "used_elsewhere": [
+   "r1dyZ6fW9eA",
+   "4ZiucC7cvw8",
+   "bsYMHh1Xt_4",
+   "znmUEZUM9Zc",
+   "YrkP9hxmQwQ",
+   "PcQuKzfsTio",
+   "2WB7nCKjijg",
+   "6h4IGR61eUo",
+   "UbqCZqojnWI",
+   "ODt5y29FKBQ",
+   "WmRiFKyiRYI"
+  ]
+ }
+}

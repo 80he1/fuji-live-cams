@@ -1,0 +1,113 @@
+[
+ {
+  "name": "口永良部島",
+  "side": "日本",
+  "id": "DXNXCFLYiLI",
+  "channel": "KYT",
+  "lat": 30.44,
+  "lon": 130.22,
+  "approx": true,
+  "note": "island volcano",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "三宅島 伊ヶ谷漁港",
+  "side": "日本",
+  "id": "cWpSuoJA90E",
+  "channel": "伊豆・小笠原諸島港湾",
+  "lat": 34.1,
+  "lon": 139.49,
+  "approx": true,
+  "note": "harbour; volcano island, crater not in view",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Kīlauea V3cam (USGS official)",
+  "side": "World-Americas",
+  "id": "gXKuUyKt8mc",
+  "channel": "USGS",
+  "lat": 19.4,
+  "lon": -155.28,
+  "approx": true,
+  "note": "Halemaʻumaʻu crater",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Kīlauea 24/7 USGS cams + data",
+  "side": "World-Americas",
+  "id": "TC3WXsW1Yyk",
+  "channel": "Lava Watchers",
+  "lat": 19.4,
+  "lon": -155.28,
+  "approx": true,
+  "note": "multi-cam re-stream",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Kīlauea crater + jazz",
+  "side": "World-Americas",
+  "id": "sj6TpPz3b3Y",
+  "channel": "duckgoo-r4w",
+  "lat": 19.4,
+  "lon": -155.28,
+  "approx": true,
+  "note": "re-stream with music",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Etna (Santa Venerina)",
+  "side": "World-Europe",
+  "id": "4TfEB3edwCw",
+  "channel": "WebEtneo",
+  "lat": 37.69,
+  "lon": 15.13,
+  "approx": true,
+  "note": "Etna eruption cam",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Popocatépetl",
+  "side": "World-Americas",
+  "id": "WmvAU6-YNf8",
+  "channel": "webcamsdemexico",
+  "lat": 19.02,
+  "lon": -98.62,
+  "approx": true,
+  "note": "active volcano",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Popocatépetl crater (TLX observatory)",
+  "side": "World-Americas",
+  "id": "8UarOAqhEzM",
+  "channel": "POPO LIVE TLX",
+  "lat": 19.02,
+  "lon": -98.62,
+  "approx": true,
+  "note": "crater monitoring",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Semeru multi-cam",
+  "side": "World-Asia",
+  "id": "Hch0OAJKcjQ",
+  "channel": "afarTV",
+  "lat": -8.11,
+  "lon": 112.92,
+  "approx": true,
+  "note": "erupting Semeru",
+  "checked": "2026-10-13 00:25 JST"
+ },
+ {
+  "name": "Semeru 4K Cam B",
+  "side": "World-Asia",
+  "id": "csMCgAuB5gc",
+  "channel": "afarTV",
+  "lat": -8.11,
+  "lon": 112.92,
+  "approx": true,
+  "note": "REMOVED 2026-10-13 daytime: shows industrial/dam construction (afarTV), not Semeru volcano",
+  "checked": "2026-10-13 00:25 JST",
+  "removed": true
+ }
+]

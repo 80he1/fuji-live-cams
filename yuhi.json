@@ -1,0 +1,104 @@
+[
+ {
+  "id": "D0bMDv4ORxM",
+  "name": "新潟 日本海",
+  "en": "Niigata Sea of Japan",
+  "side": "日本",
+  "lat": 37.87,
+  "lon": 138.95,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "XKaQ4EAJO6I",
+  "name": "利尻 沓形",
+  "en": "Rishiri Kutsugata",
+  "side": "日本",
+  "lat": 45.18,
+  "lon": 141.14,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "9OLneCdXv3w",
+  "name": "鎌倉 七里ヶ浜",
+  "en": "Shichirigahama",
+  "side": "日本",
+  "lat": 35.3,
+  "lon": 139.51,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "uGpIM9F4OrY",
+  "name": "知多 内海",
+  "en": "Chita Utsumi",
+  "side": "日本",
+  "lat": 34.73,
+  "lon": 136.86,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Dppi-7JkGCU",
+  "name": "石垣 フサキビーチ",
+  "en": "Ishigaki Fusaki",
+  "side": "日本",
+  "lat": 24.37,
+  "lon": 124.12,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "j-7ENKFZR2s",
+  "name": "石垣 名蔵湾",
+  "en": "Ishigaki Nagura Bay",
+  "side": "日本",
+  "lat": 24.38,
+  "lon": 124.13,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "jbjEQVi12cY",
+  "name": "シエスタキー",
+  "en": "Siesta Key",
+  "side": "海外",
+  "lat": 27.27,
+  "lon": -82.55,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "ac5AU4B10ak",
+  "name": "プエルト・バジャルタ",
+  "en": "Puerto Vallarta",
+  "side": "海外",
+  "lat": 20.61,
+  "lon": -105.24,
+  "utc": "UTC-6",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "h6e8hKhZ8N4",
+  "name": "シールビーチ",
+  "en": "Seal Beach",
+  "side": "海外",
+  "lat": 33.74,
+  "lon": -118.1,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": true,
+  "clock": true
+ }
+]

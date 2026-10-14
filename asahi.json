@@ -1,0 +1,136 @@
+[
+ {
+  "id": "7Zi1gLClPew",
+  "name": "鹿島灘 波崎",
+  "en": "Kashima-nada",
+  "side": "日本",
+  "lat": 35.75,
+  "lon": 140.85,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cyzXvJMC3zw",
+  "name": "鴨川",
+  "en": "Kamogawa",
+  "side": "日本",
+  "lat": 35.11,
+  "lon": 140.1,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "4hZVH5jBDiw",
+  "name": "小田原 相模湾",
+  "en": "Odawara Sagami Bay",
+  "side": "日本",
+  "lat": 35.25,
+  "lon": 139.15,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "oCatW4OZeyY",
+  "name": "御前崎",
+  "en": "Omaezaki",
+  "side": "日本",
+  "lat": 34.6,
+  "lon": 138.22,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "RqbW15BlSkQ",
+  "name": "富士山頂",
+  "en": "Mt. Fuji Summit",
+  "side": "日本",
+  "lat": 35.36,
+  "lon": 138.73,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "IveeT28Rs3U",
+  "name": "若戸大橋",
+  "en": "Wakato Bridge",
+  "side": "日本",
+  "lat": 33.91,
+  "lon": 130.81,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "jCJ8eq6MtMY",
+  "name": "和歌山 加太",
+  "en": "Kada, Wakayama",
+  "side": "日本",
+  "lat": 34.27,
+  "lon": 135.07,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2nDATPZXjuQ",
+  "name": "松江 中海",
+  "en": "Matsue Nakaumi",
+  "side": "日本",
+  "lat": 35.43,
+  "lon": 133.18,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_miRFIAU_Ks",
+  "name": "三豊 詫間",
+  "en": "Mitoyo Takuma",
+  "side": "日本",
+  "lat": 34.23,
+  "lon": 133.69,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "6rGBfwgAGG4",
+  "name": "宮古島",
+  "en": "Miyakojima",
+  "side": "日本",
+  "lat": 24.72,
+  "lon": 125.27,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2WmTS_bBwyM",
+  "name": "アトランティックシティ",
+  "en": "Atlantic City",
+  "side": "海外",
+  "lat": 39.36,
+  "lon": -74.42,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true,
+  "clock": true
+ },
+ {
+  "id": "wyEi0OPai5g",
+  "name": "リオ コパカバーナ",
+  "en": "Rio Copacabana",
+  "side": "海外",
+  "lat": -22.98,
+  "lon": -43.19,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true,
+  "clock": true
+ }
+]

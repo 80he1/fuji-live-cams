@@ -1,0 +1,123 @@
+[
+ {
+  "id": "augCXu3BkhM",
+  "name": "日光 神橋（二荒山神社）",
+  "en": "Nikko Shinkyo Bridge",
+  "side": "北海道・関東",
+  "lat": 36.7535,
+  "lon": 139.6037,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "4dhqsHHqcB8",
+  "name": "中禅寺湖（湖上苑・湖側）",
+  "en": "Lake Chuzenji (lake view)",
+  "side": "北海道・関東",
+  "lat": 36.738,
+  "lon": 139.493,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "ik6DiQTB5Sk",
+  "name": "中禅寺湖（湖上苑・道路側）",
+  "en": "Lake Chuzenji (road view)",
+  "side": "北海道・関東",
+  "lat": 36.738,
+  "lon": 139.493,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "2WB7nCKjijg",
+  "name": "嵯峨嵐山 渡月橋",
+  "en": "Arashiyama Togetsukyo",
+  "side": "関西・西日本",
+  "lat": 35.013,
+  "lon": 135.6777,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ukdzwQx1JJc",
+  "name": "札幌 藻岩山",
+  "en": "Sapporo Mt. Moiwa",
+  "side": "北海道・関東",
+  "lat": 43.022,
+  "lon": 141.322,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "wL2i45IZfvs",
+  "name": "利尻島 姫沼",
+  "en": "Rishiri Himenuma Pond",
+  "side": "北海道・関東",
+  "lat": 45.21,
+  "lon": 141.24,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "j-6GdZEh42s",
+  "name": "立山 山頂 東",
+  "en": "Tateyama Summit East",
+  "side": "中部",
+  "lat": 36.575,
+  "lon": 137.62,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "aLECCRckeIw",
+  "name": "新穂高ロープウェイ",
+  "en": "Shinhotaka Ropeway",
+  "side": "中部",
+  "lat": 36.287,
+  "lon": 137.58,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "v9VsY721RSs",
+  "name": "巌立峡（がんだて公園）",
+  "en": "Gandate Gorge",
+  "side": "中部",
+  "lat": 35.93,
+  "lon": 137.33,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "0ocbzuEhp4I",
+  "name": "八千穂高原 駒出池",
+  "en": "Yachiho Komadeike Pond",
+  "side": "中部",
+  "lat": 36.1,
+  "lon": 138.42,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "8aHNSc1m_7w",
+  "name": "湯原温泉",
+  "en": "Yubara Onsen",
+  "side": "関西・西日本",
+  "lat": 35.17,
+  "lon": 133.7,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": false
+ }
+]

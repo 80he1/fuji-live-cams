@@ -1,0 +1,200 @@
+[
+ {
+  "id": "Kv7g8crIddY",
+  "name": "那覇空港",
+  "side": "那覇",
+  "lat": 26.206,
+  "lon": 127.646,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "U-YVc74r7HY",
+  "name": "那覇新港",
+  "side": "那覇",
+  "lat": 26.236,
+  "lon": 127.672,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ETCBKJtol_Q",
+  "name": "新港・滑走路北端",
+  "side": "那覇",
+  "lat": 26.237,
+  "lon": 127.67,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "GXJRIeEa7wQ",
+  "name": "新港・空港北側",
+  "side": "那覇",
+  "lat": 26.235,
+  "lon": 127.668,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cmkszqKXcKc",
+  "name": "那覇新港入口",
+  "side": "那覇",
+  "lat": 26.232,
+  "lon": 127.676,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "aLFXFdzeIg4",
+  "name": "那覇港いち文字",
+  "side": "那覇",
+  "lat": 26.222,
+  "lon": 127.666,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "vhb_zfzNoZg",
+  "name": "泊港・波の上",
+  "side": "那覇",
+  "lat": 26.224,
+  "lon": 127.672,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_4DyJ1rCGao",
+  "name": "泊大橋",
+  "side": "那覇",
+  "lat": 26.229,
+  "lon": 127.676,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "g1kiB4Ve4yQ",
+  "name": "国際通り",
+  "side": "那覇",
+  "lat": 26.215,
+  "lon": 127.686,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "JyGZdp08Dss",
+  "name": "国際通り 牧志",
+  "side": "那覇",
+  "lat": 26.216,
+  "lon": 127.691,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "h8XSV6gCmOo",
+  "name": "首里 汀良",
+  "side": "那覇",
+  "lat": 26.222,
+  "lon": 127.728,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "7kvfCV6Hlpc",
+  "name": "識名",
+  "side": "那覇",
+  "lat": 26.203,
+  "lon": 127.713,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ir7JVxA8oJY",
+  "name": "やんばる 安波",
+  "side": "本島",
+  "lat": 26.718,
+  "lon": 128.263,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "lah4sZF5Jjg",
+  "name": "糸満 西崎",
+  "side": "本島",
+  "lat": 26.13,
+  "lon": 127.66,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "hqDoHl28GKE",
+  "name": "与那原",
+  "side": "本島",
+  "lat": 26.199,
+  "lon": 127.755,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "olSNp497f8I",
+  "name": "島尻郡",
+  "side": "本島",
+  "lat": 26.17,
+  "lon": 127.77,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "j-7ENKFZR2s",
+  "name": "石垣 名蔵湾",
+  "side": "離島",
+  "lat": 24.383,
+  "lon": 124.133,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TZDfH8LXyPs",
+  "name": "川平湾 星空",
+  "side": "離島",
+  "lat": 24.457,
+  "lon": 124.146,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "kQplq4ko7tg",
+  "name": "石垣島天文台",
+  "side": "離島",
+  "lat": 24.373,
+  "lon": 124.139,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Eu0TVtZYOYw",
+  "name": "石垣 離島ターミナル",
+  "side": "離島",
+  "lat": 24.338,
+  "lon": 124.155,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "y9HfKgMyB9E",
+  "name": "石垣 730交差点",
+  "side": "離島",
+  "lat": 24.34,
+  "lon": 124.157,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "6rGBfwgAGG4",
+  "name": "宮古島 エメラルドコースト",
+  "side": "離島",
+  "lat": 24.72,
+  "lon": 125.264,
+  "approx": true,
+  "top": true
+ }
+]

@@ -1,0 +1,83 @@
+[
+ {
+  "id": "beWd8bRGnlw",
+  "name": "草津 湯畑",
+  "side": "東日本",
+  "lat": 36.623,
+  "lon": 138.596,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "0f_V8YkIrHw",
+  "name": "由布院",
+  "side": "西日本",
+  "lat": 33.26,
+  "lon": 131.36,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "46Ro2IpZrRc",
+  "name": "箱根湯本",
+  "side": "東日本",
+  "lat": 35.233,
+  "lon": 139.105,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "8aHNSc1m_7w",
+  "name": "湯原 街並み",
+  "side": "西日本",
+  "lat": 35.17,
+  "lon": 133.7,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "itmgrJoUygg",
+  "name": "湯原 砂湯",
+  "side": "西日本",
+  "lat": 35.17,
+  "lon": 133.7,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "4dhqsHHqcB8",
+  "name": "中禅寺温泉",
+  "side": "東日本",
+  "lat": 36.738,
+  "lon": 139.493,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "M_A8s4WDYjE",
+  "name": "東根温泉",
+  "side": "東日本",
+  "lat": 38.43,
+  "lon": 140.39,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DdGkKLPoYVU",
+  "name": "天童温泉",
+  "side": "東日本",
+  "lat": 38.36,
+  "lon": 140.37,
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "t_QhnlYFzCE",
+  "name": "いかりやま温泉",
+  "side": "西日本",
+  "lat": 33.205,
+  "lon": 131.585,
+  "approx": true,
+  "top": true
+ }
+]

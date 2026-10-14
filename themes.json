@@ -1,0 +1,168 @@
+[
+ {
+  "id": "fuji",
+  "file": "cams.final.json",
+  "subs": [
+   "",
+   "北",
+   "南",
+   "東",
+   "西"
+  ],
+  "summit": [
+   35.3606,
+   138.7274
+  ],
+  "icon": "🗻"
+ },
+ {
+  "id": "koyo",
+  "file": "koyo.json",
+  "subs": [
+   "",
+   "北海道・関東",
+   "中部",
+   "関西・西日本"
+  ],
+  "icon": "🍁"
+ },
+ {
+  "id": "okinawa",
+  "file": "okinawa.json",
+  "subs": [
+   "",
+   "那覇",
+   "本島",
+   "離島"
+  ],
+  "icon": "🌺"
+ },
+ {
+  "id": "yakei",
+  "file": "yakei.json",
+  "subs": [
+   "",
+   "東日本",
+   "西日本"
+  ],
+  "icon": "🌃"
+ },
+ {
+  "id": "umi",
+  "file": "umi.json",
+  "subs": [
+   "",
+   "北日本",
+   "関東",
+   "中部・関西",
+   "西日本",
+   "沖縄"
+  ],
+  "icon": "🌊"
+ },
+ {
+  "id": "doubutsu",
+  "file": "doubutsu.json",
+  "subs": [
+   "",
+   "動物園・水族館",
+   "猫・犬",
+   "自然"
+  ],
+  "icon": "🐾"
+ },
+ {
+  "id": "world",
+  "file": "world.json",
+  "subs": [
+   "",
+   "アメリカ",
+   "ヨーロッパ・中東",
+   "アジア・オセアニア"
+  ],
+  "icon": "🗼",
+  "clock": true
+ },
+ {
+  "id": "volcano",
+  "file": "volcano.json",
+  "subs": [
+   "",
+   "日本",
+   "海外"
+  ],
+  "icon": "🌋"
+ },
+ {
+  "id": "onsen",
+  "file": "onsen.json",
+  "subs": [
+   "",
+   "東日本",
+   "西日本"
+  ],
+  "icon": "♨️"
+ },
+ {
+  "id": "sakana",
+  "file": "sakana.json",
+  "subs": [
+   "",
+   "水族館・海",
+   "水槽"
+  ],
+  "icon": "🐟"
+ },
+ {
+  "id": "airport",
+  "file": "airport.json",
+  "subs": [
+   "",
+   "日本",
+   "海外"
+  ],
+  "icon": "✈️"
+ },
+ {
+  "id": "train",
+  "file": "train.json",
+  "subs": [
+   "",
+   "新幹線",
+   "関東",
+   "関西・西日本",
+   "海外"
+  ],
+  "icon": "🚃"
+ },
+ {
+  "id": "bridge",
+  "file": "bridge.json",
+  "subs": [
+   "",
+   "日本",
+   "海外"
+  ],
+  "icon": "🌉"
+ },
+ {
+  "id": "asahi",
+  "file": "asahi.json",
+  "subs": [
+   "",
+   "日本",
+   "海外"
+  ],
+  "icon": "🌅"
+ },
+ {
+  "id": "yuhi",
+  "file": "yuhi.json",
+  "subs": [
+   "",
+   "日本",
+   "海外"
+  ],
+  "icon": "🌇"
+ }
+]
