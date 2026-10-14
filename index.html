@@ -769,7 +769,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791983960';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1791984209';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -911,6 +911,18 @@ let SFT=0;function sfLoop(){clearInterval(SFT);SFT=setInterval(()=>{if(HOMEEL.hi
 let GL={raf:0,last:0,arcs:null};
 function glArcs(pts){const o=GEO.ok?[GEO.lat,GEO.lon]:[35.68,139.76];const far=pts.filter(x=>hav(o[0],o[1],x.c.lat,x.c.lon)>1500).sort((a,b)=>a.c.lon-b.c.lon);const near=pts.filter(x=>{const d=hav(o[0],o[1],x.c.lat,x.c.lon);return d>150&&d<=1500});
   const pick=(a,n)=>a.length<=n?a:Array.from({length:n},(_,i)=>a[Math.floor(i*a.length/n)]);return{o,to:pick(far,9).concat(pick(near,5)).map((x,i)=>({lat:x.c.lat,lon:x.c.lon,ph:i*0.137%1}))};}
+
+const CLD={a:null,at:0,busy:0};
+async function cldLoad(){if(CLD.busy||(CLD.a&&Date.now()-CLD.at<27e5))return;CLD.busy=1;try{const W=512,H=256,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d',{willReadFrequently:true});
+  const A=new Uint8Array(W*H),F=new Uint8Array(W*H),Ls=['VIIRS_NOAA20_CorrectedReflectance_TrueColor','VIIRS_SNPP_CorrectedReflectance_TrueColor','MODIS_Aqua_CorrectedReflectance_TrueColor','MODIS_Terra_CorrectedReflectance_TrueColor'],ds=[0,1,2].map(n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10));
+  const jobs=[];ds.forEach(d=>Ls.forEach(l=>jobs.push(`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=${l}&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=${W}&HEIGHT=${H}&FORMAT=image/jpeg&TIME=${d}`)));
+  const imgs=await Promise.all(jobs.map(u=>fetch(u).then(r=>r.ok?r.blob():null).then(b=>b&&createImageBitmap(b)).catch(()=>null)));let n=0;
+  for(const im of imgs){if(!im)continue;x.clearRect(0,0,W,H);x.drawImage(im,0,0,W,H);const p=x.getImageData(0,0,W,H).data;
+    for(let i=0;i<W*H;i++){if(F[i])continue;const r=p[i*4],g=p[i*4+1],b=p[i*4+2];if(r+g+b<24)continue;F[i]=1;n++;const mn=Math.min(r,g,b),mx=Math.max(r,g,b),sat=mx?(mx-mn)/mx:0,la=90-(i/W|0)/H*180,
+      f=Math.max(0,Math.min(1,(mn-95)/120))*Math.max(0,1-sat*2.2)*(Math.abs(la)>62?Math.max(0,(80-Math.abs(la))/18):1);A[i]=Math.round(f*f*(3-2*f)*255);}
+    if(n>=W*H*.97)break;}
+  if(n>W*H*.3){for(let k=0;k<2;k++){const B=A.slice();for(let y=1;y<H-1;y++)for(let i=1;i<W-1;i++){const q=y*W+i;A[q]=(B[q]*4+B[q-1]+B[q+1]+B[q-W]+B[q+W])>>3;}}CLD.a=A;CLD.w=W;CLD.h=H;CLD.at=Date.now();}}catch(_){}CLD.busy=0;}
+setInterval(()=>{if(!HOMEEL.hidden&&!document.hidden)cldLoad();},6e5);setTimeout(()=>{if(!HOMEEL.hidden)cldLoad();},2500);
 function glDraw(ts){GL.raf=0;if(window.GZON&&!GZ.closing)return;const cv=document.getElementById('glb');if(!cv||HOMEEL.hidden){GL.raf=0;return;}
   const red=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!red)GL.raf=requestAnimationFrame(glDraw);if(ts-GL.last<33&&!red)return;GL.last=ts;
   if(document.hidden)return;const r=cv.getBoundingClientRect(),dp=Math.min(2,devicePixelRatio||1),W=r.width*dp,H=r.height*dp;if(!W)return;if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
@@ -928,6 +940,11 @@ function glDraw(ts){GL.raf=0;if(window.GZON&&!GZ.closing)return;const cv=documen
   {const N=96,oc=GL.oc||(GL.oc=document.createElement('canvas'));if(oc.width!==N){oc.width=oc.height=N;}const ox=oc.getContext('2d'),im=GL.im||(GL.im=ox.createImageData(N,N)),d=im.data;
    for(let j=0;j<N;j++){const v=1-2*(j+.5)/N;for(let i=0;i<N;i++){const u=2*(i+.5)/N-1,r2=u*u+v*v,k=(j*N+i)*4;if(r2>1){d[k+3]=0;continue;}const w=Math.sqrt(1-r2),L=u*sx+v*sy+w*sz,f=Math.max(0,Math.min(1,(L+.17)/.27)),s=f*f*(3-2*f),rim=.55+.45*w;
      d[k]=Math.round(12+s*(225-12));d[k+1]=Math.round(18+s*(232-18));d[k+2]=Math.round(34+s*(245-34));d[k+3]=Math.round(rim*(s*48+(1-s)*120));}}
+   ox.putImageData(im,0,0);c.save();c.beginPath();c.arc(cx,cy,R,0,7);c.clip();c.imageSmoothingEnabled=true;c.drawImage(oc,cx-R,cy-R,2*R,2*R);c.restore();}
+  if(CLD.a){const N=128,oc=CLD.oc||(CLD.oc=document.createElement('canvas'));if(oc.width!==N){oc.width=oc.height=N;}const ox=oc.getContext('2d'),im=CLD.im||(CLD.im=ox.createImageData(N,N)),d=im.data,A=CLD.a,CW=CLD.w,CH=CLD.h,dr=(red?0:tt*.25)+(Date.now()-CLD.at)/36e5*1.2;
+   for(let j=0;j<N;j++){const v=1-2*(j+.5)/N;for(let i=0;i<N;i++){const u=2*(i+.5)/N-1,r2=u*u+v*v,k=(j*N+i)*4;if(r2>1){d[k+3]=0;continue;}const w=Math.sqrt(1-r2),sf=cp0*v+sp0*w,cc=cp0*w-sp0*v;
+     const la=Math.asin(sf),lo=GL.lon-dr+Math.atan2(u,cc)*57.29578,X=((((lo+180)%360)+360)%360)/360*CW|0,Y=Math.min(CH-1,(90-la*57.29578)/180*CH|0),a=A[Y*CW+X];if(!a){d[k+3]=0;continue;}
+     const L=u*sx+v*sy+w*sz,f=Math.max(0,Math.min(1,(L+.12)/.3)),s=f*f*(3-2*f),b=Math.round(120+s*135);d[k]=b;d[k+1]=b;d[k+2]=Math.round(b*1.04>255?255:b*1.04);d[k+3]=Math.round(a*(.18+.5*s)*(.6+.4*w));}}
    ox.putImageData(im,0,0);c.save();c.beginPath();c.arc(cx,cy,R,0,7);c.clip();c.imageSmoothingEnabled=true;c.drawImage(oc,cx-R,cy-R,2*R,2*R);c.restore();}
   if(sz<.98){const m=Math.hypot(sx,sy)||1,fr=sz>0,X=cx+R*(fr?sx:sx/m*1.04),Y=cy-R*(fr?sy:sy/m*1.04);const gg=c.createRadialGradient(X,Y,0,X,Y,R*.35);gg.addColorStop(0,'rgba(255,236,200,'+(fr?.32:.22)+')');gg.addColorStop(1,'rgba(255,236,200,0)');c.fillStyle=gg;c.beginPath();c.arc(X,Y,R*.35,0,7);c.fill();
     c.fillStyle='rgba(255,240,215,.9)';c.beginPath();c.arc(X,Y,dp*2.2,0,7);c.fill();}
@@ -1160,7 +1177,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   <div class="sh">FEATURES</div><div class="sh2">${t.sfFeatT}</div><div class="fc">${feats.map(([e,k],i)=>`<div><em>0${i+1} · ${e}</em><b>${t[k+'t']}</b><p>${t[k+'d']}</p></div>`).join('')}</div>
   <div class="sh" id="ctrl">CONTROLS</div><div class="sh2">${t.cT}</div><div class="gl">${gs.map(([k,a,b])=>`<div>${gd(k)}<div><b>${a}</b>${b?`<small>${b}</small>`:''}</div></div>`).join('')}</div>
   <button class="rp" id="tutr">↻ ${t.cReplay}</button>
-  <footer><a href="about.html">${t.hAbout}</a><a href="privacy.html">${t.hPriv}</a></footer></div>`;
+  <footer><a href="about.html">${t.hAbout}</a><a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">☁ NASA GIBS</a><a href="privacy.html">${t.hPriv}</a></footer></div>`;
   HOMEEL.dir=LANG==='ar'?'rtl':'auto';HOMEEL.scrollTop=sc;
   const hv=HOMEEL.querySelector('.hero');if(ifr)hv.appendChild(ifr);else{const f=document.createElement('iframe');f.src=`https://www.youtube-nocookie.com/embed/${HERO}?autoplay=1&mute=1&playsinline=1&rel=0`;f.allow="autoplay; encrypted-media; picture-in-picture";f.referrerPolicy="strict-origin-when-cross-origin";f.title=hero?tName(hero):'live';f.loading='lazy';hv.appendChild(f);}
   HOMEEL.querySelectorAll('button[data-t]').forEach(b=>b.onclick=()=>goTheme(b.dataset.t));
@@ -1184,7 +1201,7 @@ function tutShow(force){let el=document.getElementById('tut');if(!el){el=documen
 function tutHide(){const el=document.getElementById('tut');window.TUTON=false;window.TUTPEND=false;try{localStorage.setItem('tutDone','1')}catch(_){}if(!el)return;el.classList.remove('on');setTimeout(()=>{el.hidden=true},300);}
 if(window.TUTPEND)setTimeout(()=>{if(!HOMEEL.hidden&&!open)tutShow();else window.TUTPEND=false;},1200);
 
-function showHome(){tiles.forEach(unload);HOMEEL.hidden=false;HOMEEL.classList.remove('off');renderHome();}
+function showHome(){tiles.forEach(unload);HOMEEL.hidden=false;HOMEEL.classList.remove('off');renderHome();setTimeout(cldLoad,1500);}
 function hideHome(){if(HOMEEL.hidden)return;HOMEEL.classList.add('off');const f=HOMEEL.querySelector('.hero iframe');f&&f.remove();setTimeout(()=>{HOMEEL.hidden=true;},280);}
 /* swipe left on home -> last (or first) theme */
 {let x0=null,y0=0;HOMEEL.addEventListener('touchstart',e=>{if(e.touches.length===1){x0=e.touches[0].clientX;y0=e.touches[0].clientY;}},{passive:true});
