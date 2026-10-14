@@ -183,6 +183,7 @@ body:not(.geo) .dist{display:none}
 #gload{position:fixed;z-index:44;left:50%;top:calc(var(--sat) + 52px);transform:translateX(-50%);height:30px;display:flex;align-items:center;padding:0 14px;border-radius:999px;background:rgba(14,18,28,.62);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}#gload.on{opacity:1}
 #sp{position:fixed;z-index:35;min-width:180px;padding:4px;border-radius:14px;background:rgba(14,18,28,.72);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);opacity:0;transition:opacity .22s ease}#sp.on{opacity:1}#sp[hidden]{display:none}#sp .tt{padding:6px 12px 4px;font-size:11px;opacity:.55}#sp button{display:flex;align-items:center;justify-content:space-between;width:100%;height:38px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#fff;font:inherit;font-size:13.5px;cursor:pointer}#sp button[aria-checked=true]{background:rgba(120,190,255,.16)}
 #tp .tt .hsel,#sp button.hsel{background:rgba(255,255,255,.22)!important}
+.mk.me{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#bfe6ff 0 35%,rgba(120,200,255,.55) 36% 60%,rgba(120,200,255,0) 61%);box-shadow:0 0 10px rgba(120,200,255,.6)}
 </style>
 </head>
 <body>
@@ -480,6 +481,14 @@ function applyLang(l){window.LREADY=1;LANG=I18N[l]?l:'en';const t=T(),rtl=LANG==
 let LP=null,lmap=null,llayer=null;
 function loadLeaflet(){if(LP)return LP;LP=new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);
   const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});return LP;}
+/* great-circle path from the cam to the user, longitudes unwrapped so it never jumps across the antimeridian */
+function geoLine(a,b){const r=Math.PI/180,[p1,l1]=[a[0]*r,a[1]*r],[p2,l2]=[b[0]*r,b[1]*r];
+  const d=2*Math.asin(Math.sqrt(Math.sin((p2-p1)/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin((l2-l1)/2)**2));if(d<1e-6)return[a,b];
+  const n=Math.max(2,Math.min(96,Math.ceil(d/r/2))),out=[];let prev=a[1];
+  for(let i=0;i<=n;i++){const f=i/n,A=Math.sin((1-f)*d)/Math.sin(d),B=Math.sin(f*d)/Math.sin(d);
+    const x=A*Math.cos(p1)*Math.cos(l1)+B*Math.cos(p2)*Math.cos(l2),y=A*Math.cos(p1)*Math.sin(l1)+B*Math.cos(p2)*Math.sin(l2),z=A*Math.sin(p1)+B*Math.sin(p2);
+    let lat=Math.atan2(z,Math.hypot(x,y))/r,lon=Math.atan2(y,x)/r;while(lon-prev>180)lon-=360;while(lon-prev<-180)lon+=360;prev=lon;out.push([lat,lon]);}
+  return out;}
 function setMap(c){window.distText&&($('#mdist').textContent=distText(c)?'📍 '+distText(c):'',$('#mdist').hidden=!distText(c));if(c.lat==null){$('#mapw').hidden=true;return;}$('#mapw').hidden=false;
   $('#mapl').href=`https://www.google.com/maps/@?api=1&map_action=map&center=${c.lat},${c.lon}&zoom=11&basemap=satellite`;
   $('#mapn').hidden=!c.approx;
@@ -490,14 +499,15 @@ function setMap(c){window.distText&&($('#mdist').textContent=distText(c)?'📍 '
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:17,opacity:.85,keepBuffer:4,updateWhenZooming:false}).addTo(lmap);
       lmap.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');}
     if(llayer)llayer.remove();
-    const cam=[c.lat,c.lon],SUMMIT=thOf(c.theme).summit;
-    if(!SUMMIT){llayer=L.layerGroup([L.marker(cam,{icon:L.divIcon({className:'',html:'<div class="mk cam"></div>',iconSize:[14,14],iconAnchor:[7,7]})})]).addTo(lmap);
-      lmap.invalidateSize();lmap.setView(cam,11.5,{animate:false});return;}
-    llayer=L.layerGroup([
-      L.polyline([cam,SUMMIT],{color:'#fff',weight:2,opacity:.85,dashArray:'6 6'}),
-      L.marker(SUMMIT,{icon:L.divIcon({className:'',html:`<div class="sp"></div><span class="spl">${T().fuji}</span>`,iconSize:[16,16],iconAnchor:[8,8]})}),
-      L.marker(cam,{icon:L.divIcon({className:'',html:'<div class="mk cam"></div>',iconSize:[14,14],iconAnchor:[7,7]})})]).addTo(lmap);
-    lmap.invalidateSize();lmap.fitBounds(L.latLngBounds([cam,SUMMIT]),{padding:[60,60],maxZoom:12,animate:false});
+    const cam=[c.lat,c.lon],SUMMIT=thOf(c.theme).summit,camM=L.marker(cam,{icon:L.divIcon({className:'',html:'<div class="mk cam"></div>',iconSize:[14,14],iconAnchor:[7,7]})});
+    const L0=[],pts=[cam];
+    if(SUMMIT){L0.push(L.polyline([cam,SUMMIT],{color:'#fff',weight:2,opacity:.85,dashArray:'6 6'}),L.marker(SUMMIT,{icon:L.divIcon({className:'',html:`<div class="sp"></div><span class="spl">${T().fuji}</span>`,iconSize:[16,16],iconAnchor:[8,8]})}));pts.push(SUMMIT);}
+    if(typeof GEO!=='undefined'&&GEO.ok&&(c.lat||c.lon)){const g=geoLine(cam,[GEO.lat,GEO.lon]),me=g[g.length-1];
+      L0.push(L.polyline(g,{color:'#8fd0ff',weight:2.5,opacity:.9,dashArray:'2 7',lineCap:'round'}),
+        L.marker(me,{interactive:false,icon:L.divIcon({className:'',html:'<div class="mk me"></div>',iconSize:[14,14],iconAnchor:[7,7]})}));pts.push(me);}
+    llayer=L.layerGroup([...L0,camM]).addTo(lmap);lmap.invalidateSize();
+    if(pts.length===1){lmap.setView(cam,11.5,{animate:false});return;}
+    lmap.fitBounds(L.latLngBounds(pts),{padding:[50,50],maxZoom:12,animate:false});
   }).catch(()=>{$('#mapw').hidden=true;});}
 /* keep map gestures inside the map */
 /* map gestures: never stop propagation (Leaflet listens on document during drags); our own handlers ignore map targets instead */
@@ -635,8 +645,8 @@ function fmtDist(km){const l=LANG,mi=l==='en'&&/^en-(US|LR|MM)/i.test(navigator.
   if(km<1)return nf(Math.max(10,Math.round(km*100)*10),0)+'m';if(km<100)return nf(km,1)+'km';
   const man={ja:'万','zh-Hans':'万','zh-Hant':'萬',ko:'만'}[l];if(km>=10000&&man)return nf(km/10000,1)+man+'km';return nf(Math.round(km),0)+'km';}
 function distText(c){if(!GEO.ok||c.lat==null||(!c.lat&&!c.lon))return '';return fmtDist(hav(GEO.lat,GEO.lon,c.lat,c.lon));}
-function geoPaint(){document.body.classList.toggle('geo',GEO.ok);if(!GEO.ok)return;tiles.forEach(x=>{const s=x.el.querySelector('.dist');if(s){const d=distText(x.c);s.textContent=d;s.hidden=!d;}});
-  if(open){const d=distText(open.c);$('#mdist').textContent=d?'📍 '+d:'';$('#mdist').hidden=!d;}}
+function geoPaint(){document.body.classList.toggle('geo',GEO.ok);if(!GEO.ok){if(open)try{setMap(open.c)}catch(_){}return;}tiles.forEach(x=>{const s=x.el.querySelector('.dist');if(s){const d=distText(x.c);s.textContent=d;s.hidden=!d;}});
+  if(open){const d=distText(open.c);$('#mdist').textContent=d?'📍 '+d:'';$('#mdist').hidden=!d;try{setMap(open.c)}catch(_){}}}
 function geoLoading(on){const g=document.getElementById('gload');if(!g)return;if(on)g.textContent='📍 '+T().gLoad;g.classList.toggle('on',!!on);}
 function geoRefine(){navigator.geolocation.getCurrentPosition(p=>{geoSave(p.coords.latitude,p.coords.longitude);geoPaint();if(SORTM==='near')sortApply();},()=>{},{enableHighAccuracy:true,maximumAge:0,timeout:20000});}
 function geoAsk(quiet){if(!navigator.geolocation)return;if(!quiet)geoLoading(true);navigator.geolocation.getCurrentPosition(p=>{geoLoading(false);if(!quiet&&p.coords.accuracy>2000)geoRefine();try{localStorage.removeItem('geoNo')}catch(_){}geoSave(p.coords.latitude,p.coords.longitude);if(window.SORTWANT==='near'){window.SORTWANT=null;SORTM='near';SORTN=true;try{localStorage.setItem('sortMode','near')}catch(_){}}geoPaint();if(SORTM==='near')sortApply();try{buildTP();renderHome()}catch(_){}},
