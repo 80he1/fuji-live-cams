@@ -17,7 +17,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://www.youtube.com">
-<link rel="preconnect" href="https://i.ytimg.com">
+
 <style>
 :root{
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
@@ -214,8 +214,8 @@ const phone=()=>Math.min(innerWidth,innerHeight)<600;
 const embed=(id,x='')=>`https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0${x}`;
 const ICON_EX='<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 
-document.querySelector('.tabs').style.setProperty('--tbg',`url(https://i.ytimg.com/vi/${CAMS[0].id}/hqdefault.jpg)`);
-$('#bg').style.backgroundImage=`url(https://i.ytimg.com/vi/${CAMS[0].id}/hqdefault.jpg)`;
+
+
 
 /* ---- chips ---- */
 const sides=[['','すべて'],['北','北'],['南','南'],['東','東'],['西','西']];
@@ -233,7 +233,7 @@ const tiles=CAMS.map((c,i)=>{
   const d=document.createElement('div');d.className='cam'+(c.top?'':' rest');d.dataset.side=c.side;d.dataset.th=c.theme;
   d.innerHTML=`<div class="v"><div class="shield"></div><div class="cap"><span class="nm">${c.name}<i>${c.side}</i></span><em class="lo" hidden>ライブのみ</em><b class="wx"></b></div><span class="dist"></span></div>`;
   const t={c,el:d,v:d.querySelector('.v'),frame:null};d.setAttribute('role','button');d.setAttribute('aria-label',c.name+'を全画面');
-  d.onclick=()=>openM(t);t.v.style.background=`#0b0e16 url(https://i.ytimg.com/vi/${c.id}/mqdefault.jpg) center/cover`;
+  d.onclick=()=>openM(t);t.v.style.background='radial-gradient(120% 90% at 50% 30%,#141c2c 0%,#0b0e16 70%)';
   grid.appendChild(d);return t;});
 const byEl=new Map(tiles.map(t=>[t.el,t]));
 /* YouTube IFrame Player API: players are created once and never paused */
@@ -245,8 +245,8 @@ const whenYT=f=>ytOK?f():ytQ.push(f);
 function mkPlayer(host,id,onReady,onBad){const d=document.createElement('div');d.className='ytp';host.prepend(d);
   return new Promise(res=>whenYT(()=>{const p=new YT.Player(d,{videoId:id,playerVars:PV,
     events:{onReady:e=>{try{e.target.mute();e.target.playVideo();}catch(_){}
-      const f=e.target.getIframe();f.setAttribute('playsinline','');setTimeout(()=>f.classList.add('on'),400);f.tabIndex=-1;onReady&&onReady(e.target);res(p);},
-      onError:e=>{onBad&&onBad('error '+e.data);},onStateChange:e=>{if(e.data===0)onBad&&onBad('ended');}}});}));}
+      const f=e.target.getIframe();f.setAttribute('playsinline','');if(e.target.getPlayerState()===1)f.classList.add('on');f.tabIndex=-1;onReady&&onReady(e.target);res(p);},
+      onError:e=>{onBad&&onBad('error '+e.data);},onStateChange:e=>{if(e.data===1){try{e.target.getIframe().classList.add('on')}catch(_){}}if(e.data===0)onBad&&onBad('ended');}}});}));}
 /* dead stream: hide its tile and re-layout so no hole is left */
 function markDead(t,why){if(t.dead)return;t.dead=true;console.warn('[cams] hiding dead stream',t.c.id,t.c.name,why);unload(t);t.el.classList.add('hide');
   if(PG[curP].th===t.c.theme)fit();}
@@ -257,9 +257,11 @@ function load(t){if(t.frame)return;{const H=document.getElementById('home');if(H
     setTimeout(()=>{if(t.gen!==g||t.dead)return;try{const st=p.getPlayerState();if(st===0||(st===3&&!p.getVideoLoadedFraction()))markDead(t,'stalled state '+st);}catch(_){}} ,120000);t.p=p;setTimeout(()=>seekP(p,t),1500);setTimeout(()=>seekP(p,t,1),8000);},why=>{if(t.gen===g)markDead(t,why);});}
 /* time shift: offset in seconds back from each player's live edge (getDuration), clamped to its DVR window */
 let OFF=0;
+/* if a grid player started far behind the live edge (old, e.g. daytime footage), reload it at the live edge */
+function liveFix(p,t,n){try{const lag=p.getDuration()-p.getCurrentTime();if(lag>4000&&p.getVideoLoadedFraction()>0.005&&n<2&&t.p===p){p.loadVideoById(t.c.id);setTimeout(()=>liveFix(p,t,n+1),9000);}}catch(_){}}
 function seekP(p,t,mark){try{const d=p.getDuration()||0;
   const live=d<120; if(t&&(mark||!live))t.el.querySelector('.lo').hidden=!live;
-  if(live||!OFF){p.seekTo(d||0,true);p.playVideo();return;}
+  if(live||!OFF){p.playVideo();if(mark&&t)liveFix(p,t,0);return;} /* no blind seek: early getDuration() is stale and jumped to old DVR footage */
   p.seekTo(Math.max(0,d-OFF),true);p.playVideo();}catch(e){}}
 /* in-embed DVR rewind does not work on 24/7 cams (see notes); slider removed, rewind via YouTube app link in the viewer */
 if(0){const tsr=$('#tsr'),tsl=$('#tsl');
@@ -387,7 +389,7 @@ function mkGhost(dir){
   const list=pageList(j),L=layout(list.length);
   const g=document.createElement('div');g.id='ghost';g.className=L.tiny?'tinyg':'';g.style.height=L.H+'px';
   list.forEach((t,i)=>{const d=document.createElement('div');d.className='cam';place(d,L.rects[i]);
-    d.innerHTML=`<div class="v" style="background:#0b0e16 url(https://i.ytimg.com/vi/${t.c.id}/mqdefault.jpg) center/cover"></div>`;
+    d.innerHTML=`<div class="v" style="background:radial-gradient(120% 90% at 50% 30%,#141c2c 0%,#0b0e16 70%)"></div>`;
     d.firstChild.appendChild(t.el.querySelector('.cap').cloneNode(true));g.appendChild(d);});
   pager.appendChild(g);ghost=g;return g;}
 const EASE='transform 280ms cubic-bezier(.2,.8,.2,1)';
