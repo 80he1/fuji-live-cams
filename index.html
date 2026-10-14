@@ -778,7 +778,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791985048';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1791985393';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -1040,8 +1040,8 @@ function xtLab(o){const t=T();if(o.k==='np')return{f:'🧭',n:t.xNP};if(o.k==='s
   const co=o.ci!=null?G.countries[o.ci]:null,f=co&&co[0]?flag(co[0]):(o.cur?flag(o.cur[0]):'');if(best>=0)return{f,n:t.xNear.replace('{c}',G.cities[best][li])};return{f,n:co?co[1+li]:`${o.lat.toFixed(1)}°, ${o.lon.toFixed(1)}°`};}
 function sfXt(){const t=T(),w=HOMEEL.querySelector('#sfw'),c=HOMEEL.querySelector('#sfc');if(!w||!c)return;const ok=XT&&XT.hi&&XT.lo;
   const f=(o)=>{const L2=xtLab(o);return `${Math.round(o.v)}° ${L2.f} ${L2.n}`;};
-  w.innerHTML=`${t.gHot}<b>${ok?f(XT.hi):t.xWait}</b>`;c.innerHTML=`${t.gCold}<b>${ok?f(XT.lo):t.xWait}</b>`;
-  [[w,'hi'],[c,'lo']].forEach(([e,k])=>{e.style.pointerEvents=ok?'auto':'none';e.style.cursor='pointer';e.onclick=ev=>{ev.stopPropagation();if(XT&&XT[k])xtGo(XT[k]);};});}
+  w.innerHTML=`${t.gCold}<b>${ok?f(XT.lo):t.xWait}</b>`;c.innerHTML=`${t.gHot}<b>${ok?f(XT.hi):t.xWait}</b>`;
+  [[w,'lo'],[c,'hi']].forEach(([e,k])=>{e.style.pointerEvents=ok?'auto':'none';e.style.cursor='pointer';e.onclick=ev=>{ev.stopPropagation();if(XT&&XT[k])xtGo(XT[k]);};});}
 function xtName(o){return xtLab(o).n;}
 function xtTime(o){const d=new Date(Date.now()+(o.off||0)*1000);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
 function xtPaint(){sfXt();const el=HOMEEL.querySelector('#xt');if(!el)return;const t=T();if(!XT||!XT.lo){el.innerHTML='';return;}if(!XT_G){xtG().then(xtPaint).catch(()=>{});}
