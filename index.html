@@ -735,6 +735,13 @@ function hideHome(){if(HOMEEL.hidden)return;HOMEEL.classList.add('off');const f=
 if(window.HOME0)showHome();
 
 gsAuto();
+
+/* tap outside an open menu closes it (sort list first); the tap is consumed so nothing underneath reacts */
+function menuFade(M){M.style.transition='opacity .2s ease';M.style.opacity='0';chips.querySelectorAll('.chip').forEach(c=>c.style.color='');setTimeout(()=>{M.hidden=true;M.style.cssText='';try{moveInd()}catch(_){}},200);}
+addEventListener('click',e=>{const sp=document.getElementById('sp'),tg=e.target;
+  if(tg.closest&&tg.closest('#gs,#pwa,#gload'))return;
+  if(sp&&!sp.hidden&&sp.classList.contains('on')&&!tg.closest('#sp,.stog')){e.stopImmediatePropagation();e.preventDefault();spHide();return;}
+  for(const M of [TPE,LPE]){if(M&&!M.hidden&&!M.contains(tg)&&!tg.closest('#thb,#lang,#sp')){e.stopImmediatePropagation();e.preventDefault();menuFade(M);return;}}},true);
 </script>
 </body>
 </html>
