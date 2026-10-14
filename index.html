@@ -182,6 +182,7 @@ body:not(.geo) .dist{display:none}
 #gs a{display:block;text-align:center;margin-top:12px;font-size:11.5px;color:rgba(255,255,255,.45);text-decoration:none}
 #gload{position:fixed;z-index:44;left:50%;top:calc(var(--sat) + 52px);transform:translateX(-50%);height:30px;display:flex;align-items:center;padding:0 14px;border-radius:999px;background:rgba(14,18,28,.62);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:#fff;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s ease}#gload.on{opacity:1}
 #sp{position:fixed;z-index:35;min-width:180px;padding:4px;border-radius:14px;background:rgba(14,18,28,.72);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);opacity:0;transition:opacity .22s ease}#sp.on{opacity:1}#sp[hidden]{display:none}#sp .tt{padding:6px 12px 4px;font-size:11px;opacity:.55}#sp button{display:flex;align-items:center;justify-content:space-between;width:100%;height:38px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#fff;font:inherit;font-size:13.5px;cursor:pointer}#sp button[aria-checked=true]{background:rgba(120,190,255,.16)}
+#tp .tt .hsel,#sp button.hsel{background:rgba(255,255,255,.22)!important}
 </style>
 </head>
 <body>
@@ -516,10 +517,25 @@ const tpBtns=()=>[...tp.querySelectorAll('button')];
 const tpIdx=()=>Math.max(0,THEMES.findIndex(t=>t.id===PG[curP].th));
 function tpPos(fi,anim){const bs=tpBtns(),c=tp.querySelector('.tpc');if(!bs.length||!c)return;const a=bs[0].offsetTop,st=bs.length>1?bs[1].offsetTop-a:38;
   c.style.transition=anim?'':'none';c.style.top=(a+fi*st)+'px';}
-function tpDrag(fi){const n=THEMES.length;fi=Math.max(-.3,Math.min(n-.7,fi));tpPos(fi,false);const i=Math.max(0,Math.min(n-1,Math.round(fi)));
+function tpDrag(fi){if(tpHead(fi))return;const n=THEMES.length;fi=Math.max(-.3,Math.min(n-.7,fi));tpPos(fi,false);const i=Math.max(0,Math.min(n-1,Math.round(fi)));
   if(i!==tpIdx()){const th=THEMES[i];try{localStorage.setItem('theme',th.id)}catch(_){}window.LDEF=1;setPage(PG.findIndex(p=>p.th===th.id));window.LDEF=0;
     parkOn($('#thb'),false);tpBtns().forEach((b,k)=>b.setAttribute('aria-checked',String(k===i)));try{navigator.vibrate&&navigator.vibrate(5)}catch(_){}}}
-function tpSnap(){tpPos(tpIdx(),true);}
+/* header row (📍 / ↕ / 🏠) as the top of the same vertical picker: swipe up past the first theme, then sideways; release = tap */
+let LASTX=0;addEventListener('touchmove',e=>{if(e.touches[0])LASTX=e.touches[0].clientX;},{passive:true,capture:true});
+addEventListener('touchstart',e=>{if(e.touches[0])LASTX=e.touches[0].clientX;},{passive:true,capture:true});
+const HS={on:false,x0:0,el:null};
+function tpHeadItems(){return[...tp.querySelectorAll('.tt .dtog,.tt .thome')];}
+function tpHead(fi){const c=tp.querySelector('.tpc');
+  if(fi>-.6){if(HS.on){HS.on=false;HS.el&&HS.el.classList.remove('hsel');HS.el=null;if(c)c.style.opacity='';}return false;}
+  const it=tpHeadItems();if(!it.length)return false;
+  if(!HS.on){HS.on=true;HS.x0=LASTX;if(c)c.style.opacity='0';if(tpIdx()!==0){/* keep theme list on first item while in header */}try{navigator.vibrate&&navigator.vibrate(5)}catch(_){}}
+  const k=Math.max(0,Math.min(it.length-1,Math.round((LASTX-HS.x0)/70)));
+  if(HS.el!==it[k]){HS.el&&HS.el.classList.remove('hsel');HS.el=it[k];HS.el.classList.add('hsel');}
+  return true;}
+addEventListener('click',e=>{if(Date.now()-(HS.t||0)<450){e.stopImmediatePropagation();e.preventDefault();}},true);
+function tpSnap(){if(HS.on){const el=HS.el;HS.t=Date.now();HS.on=false;el&&el.classList.remove('hsel');HS.el=null;const c=tp.querySelector('.tpc');if(c)c.style.opacity='';tpPos(tpIdx(),true);
+    if(el){const f=()=>{if(el.classList.contains('stog'))spShow(el,true);else{const h=el.onclick;h&&h({stopPropagation(){},preventDefault(){}});}};f();}return;}
+  tpPos(tpIdx(),true);}
 $('#thb').onclick=e=>{e.stopPropagation();if(tp.hidden)buildTP();tp.hidden=!tp.hidden;};
 document.addEventListener('click',e=>{if(!tp.hidden&&!e.target.closest('#tp,#thb'))tp.hidden=true;});
 new MutationObserver(()=>{if(!tp.hidden)buildTP();document.documentElement.style.overflow=tp.hidden?'':'hidden';}).observe(tp,{attributes:true,attributeFilter:['hidden']});
@@ -676,6 +692,13 @@ function spShow(anchor){let s=document.getElementById('sp');if(!s){s=document.cr
   SPL().forEach(([m,l])=>{const b=document.createElement('button');b.setAttribute('role','menuitemradio');b.setAttribute('aria-checked',String(m===SORTM));b.innerHTML=`<span>${l}</span>${m==='near'&&!GEO.ok?'<small>📍</small>':''}`;
     b.onclick=e=>{e.stopPropagation();if(m==='near'&&!GEO.ok){spHide();window.SORTWANT='near';geoEnable();return;}sortSet(m);};s.appendChild(b);});
   const r=anchor.getBoundingClientRect();s.style.top=(r.bottom+6)+'px';s.style.left=Math.min(r.left,innerWidth-200)+'px';s.hidden=false;requestAnimationFrame(()=>s.classList.add('on'));}
+/* while the sort list is open: vertical swipe anywhere moves the highlight, release chooses */
+{let S=null;const btns=()=>[...document.querySelectorAll('#sp button')];
+ addEventListener('touchstart',e=>{const s=document.getElementById('sp');if(!s||s.hidden||e.touches.length!==1)return;const b=btns();const i0=Math.max(0,b.findIndex(x=>x.getAttribute('aria-checked')==='true'));
+   S={y:e.touches[0].clientY,i0,i:i0,m:false};},{passive:true,capture:true});
+ addEventListener('touchmove',e=>{if(!S)return;const dy=e.touches[0].clientY-S.y;if(!S.m&&Math.abs(dy)<8)return;S.m=true;e.preventDefault();e.stopImmediatePropagation();
+   const b=btns();const i=Math.max(0,Math.min(b.length-1,S.i0+Math.round(dy/44)));if(i!==S.i){S.i=i;try{navigator.vibrate&&navigator.vibrate(5)}catch(_){}}b.forEach((x,k)=>x.classList.toggle('hsel',k===S.i));},{passive:false,capture:true});
+ addEventListener('touchend',e=>{if(!S)return;const s=S;S=null;if(!s.m)return;e.stopImmediatePropagation();e.preventDefault();const b=btns();b.forEach(x=>x.classList.remove('hsel'));b[s.i]&&b[s.i].click();},{passive:false,capture:true});}
 function sortTogEl(){const s=document.createElement('span');s.className='dtog stog';s.setAttribute('aria-haspopup','true');const cur=SPL().find(x=>x[0]===SORTM);
   s.textContent='↕ '+(SORTM==='std'?T().sTitle:cur[1]);s.onclick=e=>{e.stopPropagation();const p=document.getElementById('sp');p&&!p.hidden?spHide():spShow(s);};return s;}
 if(SORTM!=='std'){sortSnap();try{fit()}catch(_){}}
