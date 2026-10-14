@@ -292,6 +292,11 @@ body:not(.geo) #mdist{display:none!important}
 #warp.on .wr{opacity:.8}#warp.in .wr{opacity:0;transform:scale(14)}
 #toast{position:fixed;left:50%;bottom:calc(var(--sab) + 26px);z-index:85;transform:translateX(-50%);max-width:86vw;padding:9px 16px;border-radius:999px;background:rgba(10,18,32,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#eaf5ff;font:500 12.5px Inter,"Zen Kaku Gothic New",sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;pointer-events:none;transition:opacity .4s ease}
 #toast.on{opacity:1}
+
+#home .gold{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:0 14px 2px;touch-action:pan-x pan-y}#home .gold::-webkit-scrollbar{display:none}
+#home .gold button{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:132px;max-width:170px;padding:10px 12px;border:0;border-radius:16px;color:#fff;font:inherit;cursor:pointer;text-align:start;background:radial-gradient(120% 100% at 0% 0%,rgba(255,180,100,.22),rgba(255,160,90,.04) 70%)}
+#home .gold i{font-style:normal;font-size:16px}#home .gold b{font-size:12.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#home .gold small{font:500 10.5px Inter,"Zen Kaku Gothic New",sans-serif;color:rgba(255,225,190,.75)}
+#home .gold p{margin:0;font-size:12px;color:rgba(220,235,255,.55)}
 </style>
 </head>
 <body>
@@ -727,7 +732,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791978910';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1791979053';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -863,7 +868,7 @@ function sfHud(){if(HOMEEL.hidden)return;const t=T(),s=sfStats(),q=k=>HOMEEL.que
   q('#sfn').textContent=s.live;q('#sfclk').textContent=new Date().toLocaleTimeString('en-GB');
   q('#sfw').innerHTML=s.hot?`${t.sfWarm}<b>${Math.round(s.hot.v)}° ${tName(s.hot.x.c)}</b>`:'';q('#sfc').innerHTML=s.cold?`${t.sfCold}<b>${Math.round(s.cold.v)}° ${tName(s.cold.x.c)}</b>`:'';
   const nr=q('#sfnr');if(s.near){const h=`${t.sfNear}<b>${fmtDist(s.near.d)} <i class="nar">›</i></b><small class="nnm">${tName(s.near.x.c)}</small>`;if(nr.dataset.h!==h){nr.innerHTML=h;nr.dataset.h=h;}}}
-let SFT=0;function sfLoop(){clearInterval(SFT);SFT=setInterval(()=>{if(HOMEEL.hidden||document.hidden)return;sfHud();const k=HOMEEL.querySelector('.tick div');if(k&&Date.now()%60000<1000)k.innerHTML=sfClk()+sfClk();},1000);}
+let SFT=0;function sfLoop(){clearInterval(SFT);SFT=setInterval(()=>{if(HOMEEL.hidden||document.hidden)return;sfHud();const k=HOMEEL.querySelector('.tick div');if(Date.now()%60000<1000){if(k)k.innerHTML=sfClk()+sfClk();goldPaint();}},1000);}
 /* globe */
 let GL={raf:0,last:0,arcs:null};
 function glArcs(pts){const o=GEO.ok?[GEO.lat,GEO.lon]:[35.68,139.76];const far=pts.filter(x=>hav(o[0],o[1],x.c.lat,x.c.lon)>1500).sort((a,b)=>a.c.lon-b.c.lon);const near=pts.filter(x=>{const d=hav(o[0],o[1],x.c.lat,x.c.lon);return d>150&&d<=1500});
@@ -899,7 +904,7 @@ function glDraw(ts){GL.raf=0;const cv=document.getElementById('glb');if(!cv||HOM
       const la=Math.asin(z)*180/Math.PI,lo=Math.atan2(y,x)*180/Math.PI,q=P(la,lo);pts.push([cx+(q[0]-cx)*h,cy+(q[1]-cy)*h,q[2]]);}
     c.lineWidth=dp*.8;c.strokeStyle='rgba(120,200,255,.38)';c.beginPath();let pen=0;pts.forEach(q=>{if(q[2]>-0.05){pen?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]);pen=1}else pen=0});c.stroke();
     const hd=((tt*0.18+a.ph)%1)*N|0,q=pts[hd];if(q&&q[2]>0){c.fillStyle='rgba(200,235,255,.9)';c.beginPath();c.arc(q[0],q[1],dp*1.6,0,7);c.fill();}});
-  s.pts.forEach(x=>{const q=P(x.c.lat,x.c.lon);if(q[2]<=0)return;GL.hit.push([q[0]/dp,q[1]/dp,x]);if(GL.sel===x){c.strokeStyle='rgba(200,240,255,.95)';c.lineWidth=dp;c.beginPath();c.arc(q[0],q[1],dp*7,0,7);c.stroke();}const w=WX.get(x),col=w&&w.temperature_2m!=null?tcol(w.temperature_2m):'rgba(130,205,255,1)',a=.35+.65*q[2],pu=.6+.4*Math.sin(tt*2+x.c.lat);
+  goldList();s.pts.forEach(x=>{const q=P(x.c.lat,x.c.lon);if(q[2]<=0)return;if(GL.goldS&&GL.goldS.has(x)){const gw=.6+.4*Math.sin(tt*1.6+x.c.lon);const g2=c.createRadialGradient(q[0],q[1],0,q[0],q[1],dp*11);g2.addColorStop(0,'rgba(255,190,110,'+(.55*gw)+')');g2.addColorStop(1,'rgba(255,170,90,0)');c.fillStyle=g2;c.beginPath();c.arc(q[0],q[1],dp*11,0,7);c.fill();}GL.hit.push([q[0]/dp,q[1]/dp,x]);if(GL.sel===x){c.strokeStyle='rgba(200,240,255,.95)';c.lineWidth=dp;c.beginPath();c.arc(q[0],q[1],dp*7,0,7);c.stroke();}const w=WX.get(x),col=w&&w.temperature_2m!=null?tcol(w.temperature_2m):'rgba(130,205,255,1)',a=.35+.65*q[2],pu=.6+.4*Math.sin(tt*2+x.c.lat);
     {const vv=Math.cos(x.c.lat*Math.PI/180),ni=vv*Math.cos(x.c.lon*Math.PI/180)*SV[0]+vv*Math.sin(x.c.lon*Math.PI/180)*SV[1]+Math.sin(x.c.lat*Math.PI/180)*SV[2]<-0.1;if(ni){const tw=.55+.45*Math.sin(tt*3.1+x.c.lon*7);c.globalAlpha=a*.35*tw;c.fillStyle='rgba(255,205,130,1)';c.beginPath();c.arc(q[0],q[1],dp*3.2,0,7);c.fill();}}c.globalAlpha=a*.22*pu;c.fillStyle=col;c.beginPath();c.arc(q[0],q[1],dp*5,0,7);c.fill();c.globalAlpha=a;c.beginPath();c.arc(q[0],q[1],dp*1.5,0,7);c.fill();c.globalAlpha=1;});
   const q=P(o[0],o[1]);if(q[2]>0){c.strokeStyle='rgba(160,220,255,.8)';c.lineWidth=dp;c.beginPath();c.arc(q[0],q[1],dp*(4+3*((tt*.6)%1)),0,7);c.stroke();}glLab();if(!GL.booted){GL.booted=1;const bt=document.getElementById('boot'),sv=bt&&bt.querySelector('svg');if(bt){const r=cv.getBoundingClientRect(),RR=Math.min(r.width,r.height)*.43*GL.z,cyy=r.top+r.height/2+r.height*.02,S=RR*2.5;sv.style.cssText=`top:${cyy}px;width:${S}px;height:${S}px;margin:${-S/2}px 0 0 ${-S/2}px`;requestAnimationFrame(()=>{bt.classList.add('off');setTimeout(()=>bt.remove(),600);});}}}
 function glLab(){const L=document.getElementById('glab');if(!L)return;const h=GL.sel&&GL.hit.find(a=>a[2]===GL.sel);if(!h){L.classList.remove('on');return;}
@@ -929,13 +934,24 @@ function subsolar(dt){const d=(dt||new Date())/864e5-10957.5,R=Math.PI/180,g=(35
   let lon=-15*(ut-12+eot/60);lon=((lon+540)%360)-180;return{lat:dec/R,lon,eot};}
 function sunVec(){const n=Date.now();if(!GL.sun||n-GL.sunT>60000||GL.sunFix){const s=GL.sunFix||subsolar();GL.sun=s;GL.sunT=n;const f=s.lat*Math.PI/180,l=s.lon*Math.PI/180;GL.svg=[Math.cos(f)*Math.cos(l),Math.cos(f)*Math.sin(l),Math.sin(f)];}return GL.svg;}
 
+
+/* ---- golden hour ---- */
+function locTime(x){let off=x.off!=null?x.off:parseOff(x.c.utc);if(off==null)off=32400;const d=new Date(Date.now()+off*1000);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
+function sunAlt(c){const S=sunVec(),f=c.lat*Math.PI/180,l=c.lon*Math.PI/180;return Math.asin(Math.max(-1,Math.min(1,Math.cos(f)*Math.cos(l)*S[0]+Math.cos(f)*Math.sin(l)*S[1]+Math.sin(f)*S[2])))*180/Math.PI;}
+function goldPaint(){const el=HOMEEL.querySelector('#gold');if(!el)return;const t=T(),g=goldList();
+  el.innerHTML=g.length?g.slice(0,10).map((o,i)=>`<button data-i="${i}"><i>${o.set?'🌇':'🌅'}</i><b>${tName(o.x.c)}</b><small>${o.set?t.gdSet:t.gdRise} · ${locTime(o.x)}</small></button>`).join(''):`<p>${t.gdNone}</p>`;
+  el.querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();const o=g[+b.dataset.i];warpTo(o.x,`${o.set?'🌇 '+t.gdSet:'🌅 '+t.gdRise} · ${t.rndLocal} ${locTime(o.x)}`);});}
+function goldList(){const n=Date.now();if(GL.gold&&n-GL.goldT<60000)return GL.gold;const seen=new Set(),out=[];const s=GL.sun||subsolar();
+  tiles.forEach(x=>{const c=x.c;if(seen.has(c.id)||c.lat==null||(c.lat===0&&c.lon===0)||c.indoor||c.theme==='sakana'||x.dead)return;seen.add(c.id);const a=sunAlt(c);if(a<-4||a>8)return;
+    const H=((c.lon-s.lon)%360+540)%360-180;out.push({x,a,set:H>0});});
+  out.sort((p,q)=>Math.abs(p.a-2)-Math.abs(q.a-2));GL.gold=out;GL.goldT=n;GL.goldS=new Set(out.map(o=>o.x));return out;}
 /* ---- warp: zoom from globe into a cam ---- */
 const WP={on:false};
 function warpEl(){let w=document.getElementById('warp');if(!w){w=document.createElement('div');w.id='warp';w.innerHTML='<div class="wr"></div><div class="wl"></div>';document.body.appendChild(w);
   w.addEventListener('click',e=>{e.stopPropagation();warpEnd(true);});w.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});}return w;}
 function warpTo(x,note){if(!x||WP.on)return;const red=matchMedia('(prefers-reduced-motion: reduce)').matches;WP.on=true;WP.x=x;WP.note=note;
   const w=warpEl();w.querySelector('.wl').innerHTML=`<b>${tName(x.c)}</b>${note?`<span>${note}</span>`:''}`;w.hidden=false;
-  const home=!HOMEEL.hidden&&document.getElementById('glb');
+  const home=!HOMEEL.hidden&&HOMEEL.scrollTop<150&&document.getElementById('glb');
   if(red){w.classList.add('on','in');WP.tm=setTimeout(()=>warpEnd(),350);return;}
   requestAnimationFrame(()=>w.classList.add('on'));
   if(home){GL.sel=x;const L0=GL.lon,P0=GL.lat,Z0=GL.z,dL=((x.c.lon-L0)%360+540)%360-180,dP=x.c.lat-P0,t0=performance.now(),D=1250;GL.warp=true;GL.vx=GL.vy=0;
@@ -952,7 +968,7 @@ function glLand(){if(GL.land||GL.lf)return;GL.lf=1;fetch('land.json').then(r=>r.
 function glStart(){glLand();GL.s=null;GL.arcs=null;if(!GL.raf)GL.raf=requestAnimationFrame(glDraw);}
 function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CAMS.find(c=>c.id===HERO),sc=HOMEEL.scrollTop;
   const ifr=HOMEEL.querySelector('.hero iframe');
-  const feats=[['LIVE','f1'],['TEMP','f2'],['MAP','f3'],['SORT','f4'],['SWIPE','f5'],['16 LANG','f6'],['APP','f7']];
+  const feats=[['LIVE','f1'],['GOLDEN','f8'],['TEMP','f2'],['MAP','f3'],['SORT','f4'],['SWIPE','f5'],['16 LANG','f6'],['APP','f7']];
   const gs=[['gl',t.c8,t.c8b],['tap',t.c9,t.c9b],['sx',t.c1,t.c1b],['v',t.c2,t.c2b],['rel',t.c3,''],['out',t.c4,''],['tap',t.c5,''],['pin',t.c6,''],['dn',t.c7,'']];
   HOMEEL.innerHTML=`<div class="stars"></div><div class="sf1"><div class="hb"><img src="icon-192.png" alt=""><h1>${t.hBrand||'ライブカメラ'}</h1><button id="hlang" aria-label="Language">${t.flag}</button></div>
   <p class="tag">${t.hTag}</p>
@@ -962,7 +978,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   <div class="sec">${t.hRec}</div><div class="rec">${recIds().map(id=>`<button data-t="${id}"><img src="ti/${id}-192.png" alt=""><span>${tnm(id)}</span></button>`).join('')}</div>
   <div class="tg">${THEMES.map(th=>`<button data-t="${th.id}" class="${th.id===lt?'last':''}"><img src="ti/${th.id}-192.png" alt=""><b>${tnm(th.id)}</b><small><i></i>${camCount(th.id)}</small></button>`).join('')}</div>
   <div class="scr">⌄ ${t.sfScroll}</div></div>
-  <div class="sf2"><div class="sh">LIVE FEED</div><div class="hero"></div><div class="hcap"><span class="dot"></span><span>${t.hFeat} · ${hero?tName(hero):''}</span></div>
+  <div class="sf2"><div class="sh">GOLDEN HOUR</div><div class="sh2">${t.gdT}</div><div class="gold" id="gold"></div><div class="sh">LIVE FEED</div><div class="hero"></div><div class="hcap"><span class="dot"></span><span>${t.hFeat} · ${hero?tName(hero):''}</span></div>
   <div class="sh">FEATURES</div><div class="sh2">${t.sfFeatT}</div><div class="fc">${feats.map(([e,k],i)=>`<div><em>0${i+1} · ${e}</em><b>${t[k+'t']}</b><p>${t[k+'d']}</p></div>`).join('')}</div>
   <div class="sh" id="ctrl">CONTROLS</div><div class="sh2">${t.cT}</div><div class="gl">${gs.map(([k,a,b])=>`<div>${gd(k)}<div><b>${a}</b>${b?`<small>${b}</small>`:''}</div></div>`).join('')}</div>
   <button class="rp" id="tutr">↻ ${t.cReplay}</button>
@@ -974,7 +990,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   HOMEEL.querySelector('#tutr').onclick=e=>{e.stopPropagation();tutShow(true);};
   const s=sfStats();HOMEEL.querySelector('#sfn2').dataset.n=s.live;const red=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();
   const cu=[...HOMEEL.querySelectorAll('.cu')];(function st(n){const k=red?1:Math.min(1,(n-t0)/1400),e=1-Math.pow(1-k,3);cu.forEach(b=>b.textContent=Math.round(+b.dataset.n*e));if(k<1)requestAnimationFrame(st);})(t0);
-  sfHud();sfLoop();GL.sel=null;glBind();glStart();}
+  goldPaint();sfHud();sfLoop();GL.sel=null;glBind();glStart();}
 /* tutorial */
 const TUTS=[['sx','t1'],['edge','t2'],['v','t3'],['tap','t4']];let TI=0;window.TUTON=false;
 try{window.TUTPEND=!localStorage.getItem('tutDone')&&!new URLSearchParams(location.search).has('cam');}catch(_){window.TUTPEND=false}
