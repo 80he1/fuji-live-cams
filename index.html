@@ -297,6 +297,13 @@ body:not(.geo) #mdist{display:none!important}
 #home .gold button{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:132px;max-width:170px;padding:10px 12px;border:0;border-radius:16px;color:#fff;font:inherit;cursor:pointer;text-align:start;background:radial-gradient(120% 100% at 0% 0%,rgba(255,180,100,.22),rgba(255,160,90,.04) 70%)}
 #home .gold i{font-style:normal;font-size:16px}#home .gold b{font-size:12.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#home .gold small{font:500 10.5px Inter,"Zen Kaku Gothic New",sans-serif;color:rgba(255,225,190,.75)}
 #home .gold p{margin:0;font-size:12px;color:rgba(220,235,255,.55)}
+
+#home .fxc .fxr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}#home .fxc .fxr:first-child{grid-template-columns:1fr 1fr}
+#home .fxc .fxr div{padding:8px 10px;border-radius:14px;background:linear-gradient(rgba(120,190,255,.09),rgba(120,190,255,.02))}
+#home .fxc small{display:block;font-size:10.5px;color:rgba(200,225,255,.65)}#home .fxc b{display:block;font:600 20px/1.2 Inter,sans-serif;font-variant-numeric:tabular-nums}#home .fxc .big b{font-size:30px}
+#home .fxc i{display:block;height:3px;border-radius:2px;margin-top:5px;background:linear-gradient(90deg,var(--c) var(--v),rgba(255,255,255,.08) var(--v))}
+#home .fxc p{margin:4px 2px 0;font-size:10.5px;color:rgba(210,230,255,.5)}
+#mact #mfx{background:transparent;flex:0 0 auto;padding:0 4px;font-family:Inter,sans-serif;font-weight:600;color:#cfeedd}#mact #mfx[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -320,7 +327,7 @@ body:not(.geo) #mdist{display:none!important}
   <div class="card" id="card"><div id="mv"></div><div class="shield"></div><div id="mcap"></div>
     
     <span id="mt" hidden></span><span id="mw" hidden></span></div>
-  <div id="mact" role="toolbar"><span class="ac" id="mdist"></span><button class="ac" id="mu" aria-label="Sound"></button><button class="ac" id="ma" aria-label="Add to Home Screen"></button><a class="ac" id="mapl" target="_blank" rel="noopener"></a><a class="ac" id="myt" target="_blank" rel="noopener"></a><button class="ac" id="mx" aria-label="close"></button></div>
+  <div id="mact" role="toolbar"><span class="ac" id="mdist"></span><span class="ac" id="mfx" hidden></span><button class="ac" id="mu" aria-label="Sound"></button><button class="ac" id="ma" aria-label="Add to Home Screen"></button><a class="ac" id="mapl" target="_blank" rel="noopener"></a><a class="ac" id="myt" target="_blank" rel="noopener"></a><button class="ac" id="mx" aria-label="close"></button></div>
   <div id="mapw"><div id="mapd"></div><span id="mapn" hidden></span></div>
   <div class="cred">映像: 各YouTubeライブ配信者</div>
 </div>
@@ -732,7 +739,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791979053';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1791979212';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -935,6 +942,26 @@ function subsolar(dt){const d=(dt||new Date())/864e5-10957.5,R=Math.PI/180,g=(35
 function sunVec(){const n=Date.now();if(!GL.sun||n-GL.sunT>60000||GL.sunFix){const s=GL.sunFix||subsolar();GL.sun=s;GL.sunT=n;const f=s.lat*Math.PI/180,l=s.lon*Math.PI/180;GL.svg=[Math.cos(f)*Math.cos(l),Math.cos(f)*Math.sin(l),Math.sin(f)];}return GL.svg;}
 
 
+
+/* ---- Fuji clarity index (estimate) ---- */
+const FXP=[[35.3606,138.7274],[35.5005,138.7600],[35.3080,138.9340],[35.2220,138.6210]];let FX=null;
+function fxScore(lo,mi,hi,rh,vis){return Math.round(Math.max(0,Math.min(100,100-.55*lo-.30*mi-.08*hi-Math.max(0,rh-65)*.6-Math.max(0,30-vis)*.8)));}
+function fxCalc(j){const H=j[0].hourly.time,out=[];for(let i=0;i<H.length;i++){const v=[1,2,3].map(k=>j[k].hourly);const av=f=>v.reduce((s,h)=>s+(h[f][i]||0),0)/3;
+  const vis=Math.min(...v.map(h=>(h.visibility[i]??30000)/1000));out.push({t:H[i],s:fxScore(av('cloud_cover_low'),j[0].hourly.cloud_cover_mid[i]||0,j[0].hourly.cloud_cover_high[i]||0,av('relative_humidity_2m'),vis)});}return out;}
+async function fxLoad(){try{const c=JSON.parse(localStorage.getItem('fx')||'null');if(c&&Date.now()-c.at<36e5){FX=c.h;return FX;}}catch(_){}
+  try{const u='https://api.open-meteo.com/v1/forecast?latitude='+FXP.map(p=>p[0]).join(',')+'&longitude='+FXP.map(p=>p[1]).join(',')+'&hourly=cloud_cover_low,cloud_cover_mid,cloud_cover_high,relative_humidity_2m,visibility&forecast_days=4&timezone=Asia%2FTokyo';
+    const r=await fetch(u);if(!r.ok)return null;let j=await r.json();if(!Array.isArray(j))return null;FX=fxCalc(j);try{localStorage.setItem('fx',JSON.stringify({at:Date.now(),h:FX}))}catch(_){}return FX;}catch(_){return null}}
+function fxSum(){if(!FX)return null;const jst=new Date(Date.now()+9*3600e3),day=d=>new Date(jst.getTime()+d*864e5).toISOString().slice(0,10),hr=jst.toISOString().slice(0,13);
+  const now=FX.find(h=>h.t.slice(0,13)===hr);const avg=a=>a.length?Math.round(a.reduce((s,h)=>s+h.s,0)/a.length):null;
+  const pick=(d,a,b)=>FX.filter(h=>h.t.slice(0,10)===day(d)&&+h.t.slice(11,13)>=a&&+h.t.slice(11,13)<=b);
+  return{now:now?now.s:null,tm:avg(pick(1,6,9)),days:[1,2,3].map(d=>({d:day(d),s:avg(pick(d,6,17))}))};}
+function fxCol(s){return s>=70?'#9fe3b5':s>=45?'#ffe08a':'#ff9f8a';}
+function fxPaint(){fxChip();const el=HOMEEL.querySelector('#fxc');if(!el)return;const t=T(),s=fxSum();if(!s){el.innerHTML='';return;}
+  const wd=d=>{try{return new Date(d+'T12:00:00+09:00').toLocaleDateString(LANG,{weekday:'short',timeZone:'Asia/Tokyo'})}catch(_){return d.slice(5)}};
+  const cell=(l,v,big)=>`<div class="${big?'big':''}"><small>${l}</small><b style="color:${v==null?'#fff':fxCol(v)}">${v==null?'—':v}</b><i style="--v:${v||0}%;--c:${v==null?'#888':fxCol(v)}"></i></div>`;
+  el.innerHTML=`<div class="fxr">${cell(t.fxNow,s.now,1)}${cell(t.fxTm,s.tm,1)}</div><div class="fxr">${s.days.map(d=>cell(wd(d.d),d.s)).join('')}</div><p>ⓘ ${t.fxEst}</p>`;
+}
+function fxChip(){const m=document.getElementById('mfx'),s=fxSum();if(!m)return;if(open&&open.c.theme==='fuji'&&s&&s.now!=null){m.hidden=false;m.textContent=`🗻 ${s.now}`;m.title=T().fxT;}else m.hidden=true;}
 /* ---- golden hour ---- */
 function locTime(x){let off=x.off!=null?x.off:parseOff(x.c.utc);if(off==null)off=32400;const d=new Date(Date.now()+off*1000);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
 function sunAlt(c){const S=sunVec(),f=c.lat*Math.PI/180,l=c.lon*Math.PI/180;return Math.asin(Math.max(-1,Math.min(1,Math.cos(f)*Math.cos(l)*S[0]+Math.cos(f)*Math.sin(l)*S[1]+Math.sin(f)*S[2])))*180/Math.PI;}
@@ -963,12 +990,13 @@ function warpEnd(skip){if(!WP.on)return;WP.on=false;clearTimeout(WP.tm);const x=
     setTimeout(()=>{if(!open)openM(x);if(WP.note)toast(`${tName(x.c)} · ${WP.note}`);setTimeout(()=>{w.classList.remove('on','in');setTimeout(()=>{w.hidden=true;GL.z=1;GL.sel=null;},500);},250);},skip?60:200);};
   go();}
 function toast(s){let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el);}el.textContent=s;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),4200);}
+{const _oM=openM;openM=function(x){const r=_oM.apply(this,arguments);try{const m=document.getElementById('mfx');m.hidden=true;if(x&&x.c.theme==='fuji'){if(FX)fxChip();else fxLoad().then(fxChip);}}catch(_){}return r;};if(open&&open.c.theme==='fuji')fxLoad().then(fxChip);else setTimeout(()=>{if(open&&open.c.theme==='fuji')fxLoad().then(fxChip);},1500);}
 function nearGo(x){goTheme(x.c.theme);setTimeout(()=>{if(!open)openM(x);},380);}
 function glLand(){if(GL.land||GL.lf)return;GL.lf=1;fetch('land.json').then(r=>r.json()).then(a=>{const D=Math.PI/1800;GL.land=a.map(l=>{const v=new Float32Array(l.length/2*3);for(let i=0,j=0;i<l.length;i+=2,j+=3){const lo=l[i]*D,la=l[i+1]*D,cf=Math.cos(la);v[j]=cf*Math.cos(lo);v[j+1]=cf*Math.sin(lo);v[j+2]=Math.sin(la);}return v;});glKick();}).catch(()=>{GL.lf=0});}
 function glStart(){glLand();GL.s=null;GL.arcs=null;if(!GL.raf)GL.raf=requestAnimationFrame(glDraw);}
 function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CAMS.find(c=>c.id===HERO),sc=HOMEEL.scrollTop;
   const ifr=HOMEEL.querySelector('.hero iframe');
-  const feats=[['LIVE','f1'],['GOLDEN','f8'],['TEMP','f2'],['MAP','f3'],['SORT','f4'],['SWIPE','f5'],['16 LANG','f6'],['APP','f7']];
+  const feats=[['LIVE','f1'],['GOLDEN','f8'],['FUJI','f9'],['TEMP','f2'],['MAP','f3'],['SORT','f4'],['SWIPE','f5'],['16 LANG','f6'],['APP','f7']];
   const gs=[['gl',t.c8,t.c8b],['tap',t.c9,t.c9b],['sx',t.c1,t.c1b],['v',t.c2,t.c2b],['rel',t.c3,''],['out',t.c4,''],['tap',t.c5,''],['pin',t.c6,''],['dn',t.c7,'']];
   HOMEEL.innerHTML=`<div class="stars"></div><div class="sf1"><div class="hb"><img src="icon-192.png" alt=""><h1>${t.hBrand||'ライブカメラ'}</h1><button id="hlang" aria-label="Language">${t.flag}</button></div>
   <p class="tag">${t.hTag}</p>
@@ -978,7 +1006,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   <div class="sec">${t.hRec}</div><div class="rec">${recIds().map(id=>`<button data-t="${id}"><img src="ti/${id}-192.png" alt=""><span>${tnm(id)}</span></button>`).join('')}</div>
   <div class="tg">${THEMES.map(th=>`<button data-t="${th.id}" class="${th.id===lt?'last':''}"><img src="ti/${th.id}-192.png" alt=""><b>${tnm(th.id)}</b><small><i></i>${camCount(th.id)}</small></button>`).join('')}</div>
   <div class="scr">⌄ ${t.sfScroll}</div></div>
-  <div class="sf2"><div class="sh">GOLDEN HOUR</div><div class="sh2">${t.gdT}</div><div class="gold" id="gold"></div><div class="sh">LIVE FEED</div><div class="hero"></div><div class="hcap"><span class="dot"></span><span>${t.hFeat} · ${hero?tName(hero):''}</span></div>
+  <div class="sf2"><div class="sh">GOLDEN HOUR</div><div class="sh2">${t.gdT}</div><div class="gold" id="gold"></div><div class="sh">FUJI · ESTIMATE</div><div class="sh2">🗻 ${t.fxT}</div><div class="fxc" id="fxc"></div><div class="sh">LIVE FEED</div><div class="hero"></div><div class="hcap"><span class="dot"></span><span>${t.hFeat} · ${hero?tName(hero):''}</span></div>
   <div class="sh">FEATURES</div><div class="sh2">${t.sfFeatT}</div><div class="fc">${feats.map(([e,k],i)=>`<div><em>0${i+1} · ${e}</em><b>${t[k+'t']}</b><p>${t[k+'d']}</p></div>`).join('')}</div>
   <div class="sh" id="ctrl">CONTROLS</div><div class="sh2">${t.cT}</div><div class="gl">${gs.map(([k,a,b])=>`<div>${gd(k)}<div><b>${a}</b>${b?`<small>${b}</small>`:''}</div></div>`).join('')}</div>
   <button class="rp" id="tutr">↻ ${t.cReplay}</button>
@@ -990,7 +1018,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   HOMEEL.querySelector('#tutr').onclick=e=>{e.stopPropagation();tutShow(true);};
   const s=sfStats();HOMEEL.querySelector('#sfn2').dataset.n=s.live;const red=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();
   const cu=[...HOMEEL.querySelectorAll('.cu')];(function st(n){const k=red?1:Math.min(1,(n-t0)/1400),e=1-Math.pow(1-k,3);cu.forEach(b=>b.textContent=Math.round(+b.dataset.n*e));if(k<1)requestAnimationFrame(st);})(t0);
-  goldPaint();sfHud();sfLoop();GL.sel=null;glBind();glStart();}
+  goldPaint();fxPaint();if(!FX)fxLoad().then(fxPaint);sfHud();sfLoop();GL.sel=null;glBind();glStart();}
 /* tutorial */
 const TUTS=[['sx','t1'],['edge','t2'],['v','t3'],['tap','t4']];let TI=0;window.TUTON=false;
 try{window.TUTPEND=!localStorage.getItem('tutDone')&&!new URLSearchParams(location.search).has('cam');}catch(_){window.TUTPEND=false}
