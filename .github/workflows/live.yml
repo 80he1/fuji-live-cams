@@ -1,0 +1,24 @@
+name: live-ids
+on:
+  schedule:
+    - cron: '7,37 * * * *'        # every 30 min
+    - cron: '*/10 20-22 * * *'    # every 10 min 05:00-07:59 JST (stream restarts)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: live-ids, cancel-in-progress: false }
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q -U yt-dlp
+      - run: python3 tools/check_live.py camidx.json live.json
+      - name: commit if changed
+        run: |
+          git config user.name 80he1; git config user.email 80he1@users.noreply.github.com
+          git add live.json
+          git diff --cached --quiet || (git commit -qm "live.json auto-update" && git pull -q --rebase && git push -q)
