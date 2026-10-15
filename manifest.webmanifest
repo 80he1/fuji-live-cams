@@ -1,6 +1,6 @@
 {
-  "name": "ライブカメラ",
-  "short_name": "ライブカメラ",
+  "name": "WorldSeer – 世界のライブカメラ",
+  "short_name": "WorldSeer",
   "id": "/fuji-live-cams/",
   "start_url": "/fuji-live-cams/",
   "scope": "/fuji-live-cams/",
