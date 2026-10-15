@@ -149,6 +149,7 @@
   "id": "asahi",
   "file": "asahi.json",
   "subs": [
+   "*now",
    "",
    "日本",
    "海外"
@@ -159,6 +160,7 @@
   "id": "yuhi",
   "file": "yuhi.json",
   "subs": [
+   "*now",
    "",
    "日本",
    "海外"

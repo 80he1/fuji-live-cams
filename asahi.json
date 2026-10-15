@@ -132,5 +132,203 @@
   "approx": true,
   "top": true,
   "clock": true
+ },
+ {
+  "id": "qzpnliHc-x4",
+  "name": "デイトナビーチ",
+  "en": "Daytona Beach",
+  "side": "海外",
+  "lat": 29.21,
+  "lon": -81.02,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "GkBMgHwSIV0",
+  "name": "マイアミ スカイライン",
+  "en": "Miami Skyline",
+  "side": "海外",
+  "lat": 25.77,
+  "lon": -80.17,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "ZHZuvjhR9RI",
+  "name": "アラハル・ド・カボ",
+  "en": "Arraial do Cabo",
+  "side": "海外",
+  "lat": -22.97,
+  "lon": -42.02,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "Qh68QRsy7hU",
+  "name": "マルタ",
+  "en": "Malta",
+  "side": "海外",
+  "lat": 35.9,
+  "lon": 14.51,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "4JS4vSkTS7I",
+  "name": "シドニー湾 マクマホンズ・ポイント",
+  "en": "Sydney Harbour McMahons Pt",
+  "side": "海外",
+  "lat": -33.84,
+  "lon": 151.2,
+  "utc": "UTC+10",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "taI7GiyvDxE",
+  "name": "サンフアン",
+  "en": "San Juan",
+  "side": "海外",
+  "lat": 18.45,
+  "lon": -66.04,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "V_I168MM-ik",
+  "name": "ジョスト・ヴァン・ダイク",
+  "en": "Jost Van Dyke",
+  "side": "海外",
+  "lat": 18.44,
+  "lon": -64.75,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "Zksbxgm6VHA",
+  "name": "タソス島",
+  "en": "Thassos",
+  "side": "海外",
+  "lat": 40.78,
+  "lon": 24.71,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "5uZa3-RMFos",
+  "name": "シドニー湾",
+  "en": "Sydney Harbour",
+  "side": "海外",
+  "lat": -33.86,
+  "lon": 151.21,
+  "utc": "UTC+10",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "Fw9hgttWzIg",
+  "name": "サムイ島 ラマイ",
+  "en": "Koh Samui Lamai",
+  "side": "海外",
+  "lat": 9.47,
+  "lon": 100.06,
+  "utc": "UTC+7",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "KAMCYVyB2Vw",
+  "name": "オークランド",
+  "en": "Auckland",
+  "side": "海外",
+  "lat": -36.86,
+  "lon": 174.74,
+  "utc": "UTC+12",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "pUZ_T-NwC2Q",
+  "name": "ミューゼンバーグ",
+  "en": "Muizenberg",
+  "side": "海外",
+  "lat": -34.11,
+  "lon": 18.47,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "CXYr04BWvmc",
+  "name": "ベイブリッジ（サンフランシスコ）",
+  "en": "SF–Oakland Bay Bridge",
+  "side": "海外",
+  "lat": 37.8,
+  "lon": -122.37,
+  "utc": "UTC-8",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "X7m2dN-wcbU",
+  "name": "デンバー スカイライン",
+  "en": "Denver Skyline",
+  "side": "海外",
+  "lat": 39.74,
+  "lon": -104.99,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "7xdHH9KMSVk",
+  "name": "フラッグスタッフ",
+  "en": "Flagstaff",
+  "side": "海外",
+  "lat": 35.2,
+  "lon": -111.65,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "4a-3iEM7bHk",
+  "name": "ブライトン（ユタ）",
+  "en": "Brighton, Utah",
+  "side": "海外",
+  "lat": 40.6,
+  "lon": -111.58,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "QO-hO_kwwmY",
+  "name": "サウサンプトン",
+  "en": "Southampton",
+  "side": "海外",
+  "lat": 50.88,
+  "lon": -1.4,
+  "utc": "UTC+0",
+  "approx": true,
+  "top": false
+ },
+ {
+  "id": "bEmFpjwMOvs",
+  "name": "レントーレ（ケニア）",
+  "en": "Lentorre, Kenya",
+  "side": "海外",
+  "lat": -1.9,
+  "lon": 36.2,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": false
  }
 ]
