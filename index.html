@@ -319,7 +319,9 @@ body:not(.geo) #mdist{display:none!important}
 #sleep .sb button{height:38px;padding:0 14px;border:0;border-radius:999px;color:#fff;font:inherit;font-size:13px;background:rgba(255,255,255,.10);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);cursor:pointer}
 #sleep .slz{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:30px;opacity:.25}#sleep.slept .slz{display:flex}
 
-@media (max-height:800px){#home .tag{display:none}#home .globe{min-height:160px}#home .hud{margin:2px 0 4px}#home .hud b{font-size:17px}#home .tg{grid-auto-rows:68px;gap:6px}#home .tg img{width:32px}#home .rec button{height:38px}#home .hact button{height:32px}#home .sec{margin-bottom:4px}}
+@media (max-height:800px){#home .tag{display:none}#home .globe{min-height:160px}#home .hud{margin:2px 0 4px}#home .hud b{font-size:17px}#home .tg{grid-auto-rows:68px;gap:6px}#home .tg img{width:32px}
+#home .tg img{width:38px}#home .tg .ic{position:relative;display:block;line-height:0}#home .tg button{gap:5px}
+#home .tg .ic small{position:absolute;top:-5px;right:-9px;min-width:17px;height:17px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:linear-gradient(#ff5a5f,#e8383f);color:#fff;font:600 10.5px/17px Inter,sans-serif;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.01em;box-shadow:0 1px 4px rgba(0,0,0,.35);display:block}#home .rec button{height:38px}#home .hact button{height:32px}#home .sec{margin-bottom:4px}}
 @media (max-height:700px){#home .scr{display:none}#home .globe{min-height:140px}}
 
 #home .xt .xr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -822,7 +824,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1792064509';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1792066072';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -1067,12 +1069,18 @@ function fxChip(){const m=document.getElementById('mfx'),s=fxSum();if(!m)return;
 
 /* ---- world extremes (not tied to cams) ---- */
 let XT=null;const flag=cc=>cc.replace(/./g,ch=>String.fromCodePoint(127397+ch.charCodeAt(0)));
-async function xtLoad(){try{const c=JSON.parse(localStorage.getItem('xt2')||'null');if(c&&Date.now()-c.at<9e5){XT=c.v;return XT;}}catch(_){}
+async function xtLoad(){let st=null;try{st=JSON.parse(localStorage.getItem('xt2')||'null');if(st&&Date.now()-st.at<9e5){XT=st.v;xtG().catch(()=>{});return XT;}}catch(_){}
+  let bx=null;try{bx=await fetch('xtnow.json?'+Math.floor(Date.now()/3e5),{cache:'no-store'}).then(r=>r.ok?r.json():null);}catch(_){}
+  if(bx&&bx.v&&bx.v.lo&&(!st||bx.at>st.at)){st=bx;try{localStorage.setItem('xt2',JSON.stringify(bx))}catch(_){}}
+  if(st&&st.v&&Date.now()-st.at<3*36e5){XT=st.v;try{await xtG()}catch(_){}return XT;}
+  const fb=async()=>{if(st&&st.v){XT=st.v;try{await xtG()}catch(_){}return XT;}XT={none:1};setTimeout(()=>xtLoad().then(xtPaint),9e4);return XT;};
+  const v=await xtLive();return v||fb();}
+async function xtLive(){
   try{const[G,P]=await Promise.all([fetch('grid.json').then(r=>r.json()),fetch('extremes.json').then(r=>r.json())]);XT_G=G;
     const pts=G.pts.map(p=>({lat:p[0],lon:p[1],ci:p[2],k:'g'})).concat(P.map(p=>({lat:p[1],lon:p[2],cur:p,k:'c'})),[{lat:90,lon:0,k:'np'},{lat:-90,lon:0,k:'sp'}]);
     const q=async a=>{const u='https://api.open-meteo.com/v1/forecast?latitude='+a.map(p=>p.lat.toFixed(2)).join(',')+'&longitude='+a.map(p=>p.lon.toFixed(2)).join(',')+'&current=temperature_2m&timezone=auto';
-      const r=await fetch(u);if(!r.ok)throw 0;let j=await r.json();if(!Array.isArray(j))j=[j];j.forEach((x,i)=>{if(x&&x.current){a[i].v=x.current.temperature_2m;a[i].off=x.utc_offset_seconds||0;}});};
-    const B=[];for(let i=0;i<pts.length;i+=300)B.push(pts.slice(i,i+300));await Promise.all(B.map(q));
+      let r;for(let t=0;;t++){try{r=await fetch(u);}catch(_){r=null}if(r&&r.ok)break;if(t>=3)throw 0;await new Promise(z=>setTimeout(z,1500*Math.pow(2,t)+Math.random()*800));}let j=await r.json();if(!Array.isArray(j))j=[j];j.forEach((x,i)=>{if(x&&x.current){a[i].v=x.current.temperature_2m;a[i].off=x.utc_offset_seconds||0;}});};
+    const B=[];for(let i=0;i<pts.length;i+=300)B.push(pts.slice(i,i+300));const R=await Promise.allSettled(B.map(q));if(R.filter(x=>x.status==='fulfilled').length<B.length*0.6)throw 0;
     const ok=pts.filter(p=>p.v!=null&&p.k!=='np'&&p.k!=='sp');let lo=ok.reduce((a,b)=>b.v<a.v?b:a),hi=ok.reduce((a,b)=>b.v>a.v?b:a);
     const sub=w=>{const a=[];for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){if(!dx&&!dy)continue;const la=w.lat+dy;if(la>89.5||la<-89.5)continue;a.push({lat:la,lon:((w.lon+dx+540)%360)-180,ci:w.ci,k:w.k==='c'?'gc':'g',cur:w.cur});}return a;};
     try{const s=sub(lo).concat(sub(hi));await q(s);s.forEach(p=>{if(p.v==null)return;if(p.v<lo.v)lo=p;if(p.v>hi.v)hi=p;});}catch(_){}
@@ -1100,7 +1108,7 @@ function ctTick(force){const el=HOMEEL&&HOMEEL.querySelector('#sftz');if(!el)ret
 setInterval(()=>{if(typeof HOMEEL!=='undefined'&&!HOMEEL.hidden&&!document.hidden)ctTick();},100);
 function sfXt(){const t=T(),w=HOMEEL.querySelector('#sfw'),c=HOMEEL.querySelector('#sfc');if(!w||!c)return;const ok=XT&&XT.hi&&XT.lo;
   const f=(o)=>{const L2=xtLab(o);return `${Math.round(o.v)}° ${L2.f} ${L2.n}`;};
-  w.innerHTML=`${t.gCold}<b>${ok?f(XT.lo):t.xWait}</b>`;c.innerHTML=`${t.gHot}<b>${ok?f(XT.hi):t.xWait}</b>`;
+  w.innerHTML=`${t.gCold}<b>${ok?f(XT.lo):XT&&XT.none?'—':t.xWait}</b>`;c.innerHTML=`${t.gHot}<b>${ok?f(XT.hi):XT&&XT.none?'—':t.xWait}</b>`;
   [[w,'lo'],[c,'hi']].forEach(([e,k])=>{e.style.pointerEvents=ok?'auto':'none';e.style.cursor='pointer';e.onclick=ev=>{ev.stopPropagation();if(XT&&XT[k])xtGo(XT[k]);};});}
 function xtName(o){return xtLab(o).n;}
 function xtTime(o){const d=new Date(Date.now()+(o.off||0)*1000);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
@@ -1245,7 +1253,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   <div class="hud"><div>${t.sfLive}<b class="cu" data-n="0" id="sfn2">0</b></div><div>${t.sfThemes}<b class="cu" data-n="${THEMES.filter(th=>th.id!=='mine').length}">0</b></div><div>${t.sfLangs}<b class="cu" data-n="16">0</b></div><div id="sfnr">${GEO.ok?`${t.sfNear}<b>—</b>`:`${t.sfNear}<button id="hgeo">📍 ${t.dOn}</button>`}</div></div>
   <div class="tick"><div>${sfClk()+sfClk()}</div></div><div class="hact"><button id="hrnd">🎲 ${t.rnd}</button><button id="hsl">🎞️ ${t.slT}</button></div>
   <div class="sec">${t.hRec}</div><div class="rec">${recIds().map(id=>`<button data-t="${id}"><img src="ti/${id}-192.png" alt=""><span>${tnm(id)}</span></button>`).join('')}</div>
-  <div class="tg">${THEMES.filter(th=>th.id!=='mine').map(th=>`<button data-t="${th.id}" class="${th.id===lt?'last':''}"><img src="ti/${th.id}-192.png" alt=""><b>${tnm(th.id)}</b><small><i></i>${camCount(th.id)}</small></button>`).join('')}</div>
+  <div class="tg">${THEMES.filter(th=>th.id!=='mine').map(th=>`<button data-t="${th.id}" class="${th.id===lt?'last':''}"><span class="ic"><img src="ti/${th.id}-192.png" alt="">${camCount(th.id)?`<small>${camCount(th.id)}</small>`:''}</span><b>${tnm(th.id)}</b></button>`).join('')}</div>
   <div class="scr">⌄ ${t.sfScroll}</div></div>
   <div class="sf2"><div class="sh">MY GLOBE</div><div class="sh2">⭐ ${t.mineSec}</div><div class="mine" id="mine">${mineHTML()}</div><div class="sh">WORLD EXTREMES</div><div class="xt" id="xt"></div><div class="sh">GOLDEN HOUR</div><div class="sh2">${t.gdT}</div><div class="gold" id="gold"></div><div class="sh">FUJI · ESTIMATE</div><div class="sh2">🗻 ${t.fxT}</div><div class="fxc" id="fxc"></div><button class="fxgo" id="fxgo">🗻 <span>${t.fxGo}</span><small>${camCount('fuji')}</small><i>›</i></button><div class="sh">LIVE FEED</div><div class="hero"></div><div class="hcap"><span class="dot"></span><span>${t.hFeat} · ${hero?tName(hero):''}</span></div>
   <div class="sh">FEATURES</div><div class="sh2">${t.sfFeatT}</div><div class="fc">${feats.map(([e,k],i)=>`<div><em>0${i+1} · ${e}</em><b>${t[k+'t']}</b><p>${t[k+'d']}</p></div>`).join('')}</div>
@@ -1259,7 +1267,7 @@ function renderHome(){if(HOMEEL.hidden)return;const t=T(),lt=lastTheme(),hero=CA
   HOMEEL.querySelector('#hrnd').onclick=e=>{e.stopPropagation();rndGo();};HOMEEL.querySelector('#hsl').onclick=e=>{e.stopPropagation();sleepOn();};HOMEEL.querySelector('#tutr').onclick=e=>{e.stopPropagation();tutShow(true);};
   const s=sfStats();HOMEEL.querySelector('#sfn2').dataset.n=s.live;const red=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now();
   const cu=[...HOMEEL.querySelectorAll('.cu')];(function st(n){const k=red?1:Math.min(1,(n-t0)/1400),e=1-Math.pow(1-k,3);cu.forEach(b=>b.textContent=Math.round(+b.dataset.n*e));if(k<1)requestAnimationFrame(st);})(t0);
-  goldPaint();fxPaint();xtPaint();if(!XT)xtLoad().then(xtPaint);if(!FX)fxLoad().then(fxPaint);sfHud();sfLoop();GL.sel=null;glBind();glStart();}
+  goldPaint();fxPaint();xtPaint();if(!XT)xtLoad().then(xtPaint).catch(()=>{XT={none:1};xtPaint();});setTimeout(()=>{if(!XT){XT={none:1};xtPaint();}},2e4);if(!FX)fxLoad().then(fxPaint);sfHud();sfLoop();GL.sel=null;glBind();glStart();}
 /* tutorial */
 const TUTS=[['sx','t1'],['edge','t2'],['v','t3'],['tap','t4']];let TI=0;window.TUTON=false;
 try{window.TUTPEND=!localStorage.getItem('tutDone')&&!new URLSearchParams(location.search).has('cam');}catch(_){window.TUTPEND=false}
