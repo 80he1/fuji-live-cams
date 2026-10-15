@@ -786,7 +786,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1791985988';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1792031142';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -1055,7 +1055,7 @@ function xtTime(o){const d=new Date(Date.now()+(o.off||0)*1000);return String(d.
 function xtPaint(){sfXt();const el=HOMEEL.querySelector('#xt');if(!el)return;const t=T();if(!XT||!XT.lo){el.innerHTML='';return;}if(!XT_G){xtG().then(xtPaint).catch(()=>{});}
   const card=(o,k,cl)=>{const L2=xtLab(o);return `<button class="${cl}" data-k="${k}"><small>${k==='lo'?t.xCold:t.xHot}</small><b>${Math.round(o.v)}°</b><span>${L2.f} ${L2.n}</span><em>${t.rndLocal} ${xtTime(o)}</em></button>`;};
   const pole=(o,k)=>o&&o.v!=null?`<button class="pl" data-k="${k}"><span>${xtLab(o).n}</span><b>${Math.round(o.v)}°</b></button>`:'';
-  el.innerHTML=`<div class="xr">${card(XT.lo,'lo','c')}${card(XT.hi,'hi','h')}</div><div class="xp">${pole(XT.np,'np')}${pole(XT.sp,'sp')}</div><p>ⓘ ${t.xNote}</p>`;
+  el.innerHTML=`<div class="xr">${card(XT.lo,'lo','c')}${card(XT.hi,'hi','h')}</div><div class="xp">${pole(XT.sp,'sp')}${pole(XT.np,'np')}</div><p>ⓘ ${t.xNote}</p>`;
   el.querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();xtGo(XT[b.dataset.k]);});}
 function xtGo(o){const L2=xtLab(o);GL.xpt={lat:o.lat,lon:o.lon,html:`<b>${L2.f} ${L2.n}</b><span>${Math.round(o.v)}° · ${xtTime(o)}</span>`};GL.sel=null;
   const spin=()=>{const L0=GL.lon,P0=GL.lat,Z0=GL.z,dL=((o.lon-L0)%360+540)%360-180,dP=Math.max(-70,Math.min(70,o.lat))-P0,t0=performance.now(),D=matchMedia('(prefers-reduced-motion: reduce)').matches?1:1100;GL.warp=true;
