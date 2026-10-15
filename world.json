@@ -229,5 +229,181 @@
   "utc": "UTC+11",
   "approx": true,
   "top": true
+ },
+ {
+  "id": "coOH1pFd-dA",
+  "name": "マッカ（メッカ）",
+  "en": "Makkah",
+  "side": "ヨーロッパ・中東",
+  "lat": 21.4225,
+  "lon": 39.8262,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "77akujLn4k8",
+  "name": "エルサレム 嘆きの壁",
+  "en": "Jerusalem Western Wall",
+  "side": "ヨーロッパ・中東",
+  "lat": 31.7767,
+  "lon": 35.2345,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Iu5zg5iqVmw",
+  "name": "英国 セント・アイヴス",
+  "en": "St Ives, Cornwall",
+  "side": "ヨーロッパ・中東",
+  "lat": 50.214,
+  "lon": -5.48,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "D38HQbFbMzs",
+  "name": "英国 ポート・アイザック",
+  "en": "Port Isaac, Cornwall",
+  "side": "ヨーロッパ・中東",
+  "lat": 50.593,
+  "lon": -4.83,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "c1-8Qg8bQec",
+  "name": "英国 ダートマス",
+  "en": "Dartmouth, Devon",
+  "side": "ヨーロッパ・中東",
+  "lat": 50.35,
+  "lon": -3.58,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "f6D3Zq6J5A8",
+  "name": "マデイラ フンシャル",
+  "en": "Funchal, Madeira",
+  "side": "ヨーロッパ・中東",
+  "lat": 32.646,
+  "lon": -16.91,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "qf0447nmvi0",
+  "name": "アゾレス ピコ島",
+  "en": "Pico, Azores",
+  "side": "ヨーロッパ・中東",
+  "lat": 38.46,
+  "lon": -28.32,
+  "utc": "UTC+0",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "tYgGEC-ESTw",
+  "name": "レイキャビク",
+  "en": "Reykjavik",
+  "side": "ヨーロッパ・中東",
+  "lat": 64.14,
+  "lon": -21.94,
+  "utc": "UTC+0",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "vOLCjL4kv-w",
+  "name": "ケープタウン テーブルマウンテン",
+  "en": "Cape Town Table Mountain",
+  "side": "ヨーロッパ・中東",
+  "lat": -33.8,
+  "lon": 18.46,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "PVvIVCkmQDY",
+  "name": "ネパール カトマンズ",
+  "en": "Kathmandu",
+  "side": "アジア・オセアニア",
+  "lat": 27.7,
+  "lon": 85.32,
+  "utc": "UTC+5:45",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "nLCMw_Fh0u0",
+  "name": "オークランド ハーバー",
+  "en": "Auckland Harbour",
+  "side": "アジア・オセアニア",
+  "lat": -36.843,
+  "lon": 174.757,
+  "utc": "UTC+13",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "AajdfhglWd8",
+  "name": "ウェリントン ライアル湾",
+  "en": "Wellington Lyall Bay",
+  "side": "アジア・オセアニア",
+  "lat": -41.33,
+  "lon": 174.8,
+  "utc": "UTC+13",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "GL_2CrLwSDA",
+  "name": "マウイ ワイレア",
+  "en": "Maui Wailea Beach",
+  "side": "アメリカ",
+  "lat": 20.68,
+  "lon": -156.44,
+  "utc": "UTC-10",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "rxyNjFKwzJA",
+  "name": "バンクーバー 港",
+  "en": "Vancouver Harbour",
+  "side": "アメリカ",
+  "lat": 49.288,
+  "lon": -123.11,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Q4qjOjdGNoc",
+  "name": "タウンズビル ブッシュランドビーチ",
+  "en": "Townsville Bushland Beach",
+  "side": "アジア・オセアニア",
+  "lat": -19.19,
+  "lon": 146.68,
+  "utc": "UTC+10",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "5uZa3-RMFos",
+  "name": "シドニー ハーバー",
+  "en": "Sydney Harbour",
+  "side": "アジア・オセアニア",
+  "lat": -33.857,
+  "lon": 151.215,
+  "utc": "UTC+11",
+  "approx": true,
+  "top": true
  }
 ]

@@ -1,0 +1,200 @@
+[
+ {
+  "id": "LQ_Cv4aFuq8",
+  "name": "ニセコ グラン・ヒラフ",
+  "en": "Niseko Grand Hirafu",
+  "side": "日本",
+  "lat": 42.86,
+  "lon": 140.7,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "iCetfeKzJFs",
+  "name": "ニセコアンヌプリ",
+  "en": "Niseko Annupuri",
+  "side": "日本",
+  "lat": 42.86,
+  "lon": 140.65,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2tE7w-Hstgs",
+  "name": "ニセコアンヌプリ ゴンドラ",
+  "en": "Niseko Annupuri Gondola",
+  "side": "日本",
+  "lat": 42.865,
+  "lon": 140.655,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TEC-hUC08oM",
+  "name": "白馬五竜",
+  "en": "Hakuba Goryu",
+  "side": "日本",
+  "lat": 36.67,
+  "lon": 137.83,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "YeaSn08yzdA",
+  "name": "白馬村",
+  "en": "Hakuba Village",
+  "side": "日本",
+  "lat": 36.7,
+  "lon": 137.85,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "rWO9PXZwahM",
+  "name": "立山 室堂",
+  "en": "Tateyama Murodo",
+  "side": "日本",
+  "lat": 36.577,
+  "lon": 137.597,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "gL7YgPM0Jvk",
+  "name": "草津 白根山",
+  "en": "Kusatsu Shirane",
+  "side": "日本",
+  "lat": 36.62,
+  "lon": 138.6,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "cqvEOhOzN2o",
+  "name": "丸沼高原",
+  "en": "Marunuma Kogen",
+  "side": "日本",
+  "lat": 36.81,
+  "lon": 139.33,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "fqgXBt2ZzpE",
+  "name": "軽井沢プリンス スキー場",
+  "en": "Karuizawa Prince Ski",
+  "side": "日本",
+  "lat": 36.336,
+  "lon": 138.632,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "i01hobM_hGA",
+  "name": "ドロミテ トレ・チーメ",
+  "en": "Tre Cime, Dolomites",
+  "side": "海外",
+  "lat": 46.618,
+  "lon": 12.3,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "NUN4Pgi0j9E",
+  "name": "アンナプルナ BC",
+  "en": "Annapurna Base Camp",
+  "side": "海外",
+  "lat": 28.53,
+  "lon": 83.88,
+  "utc": "UTC+5:45",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "LwihxyJ4V20",
+  "name": "レヴィ スキーリゾート",
+  "en": "Levi Ski Resort",
+  "side": "海外",
+  "lat": 67.8,
+  "lon": 24.81,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "eXDCi75TjM8",
+  "name": "レヴィ 山頂",
+  "en": "Levi Summit",
+  "side": "海外",
+  "lat": 67.81,
+  "lon": 24.8,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Cp4RRAEgpeU",
+  "name": "サンタクロース村",
+  "en": "Santa Claus Village",
+  "side": "海外",
+  "lat": 66.543,
+  "lon": 25.847,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2UJDLWcSADk",
+  "name": "スティームボート",
+  "en": "Steamboat, Colorado",
+  "side": "海外",
+  "lat": 40.457,
+  "lon": -106.8,
+  "utc": "UTC-6",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "TmtVbezZaqg",
+  "name": "レブンワース",
+  "en": "Leavenworth, WA",
+  "side": "海外",
+  "lat": 47.596,
+  "lon": -120.66,
+  "utc": "UTC-7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "tWNxInShxZI",
+  "name": "チリ バジェネバド",
+  "en": "Valle Nevado, Chile",
+  "side": "海外",
+  "lat": -33.36,
+  "lon": -70.25,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "tmS73xQ4zVc",
+  "name": "バジェネバド ホテル",
+  "en": "Valle Nevado Hotel",
+  "side": "海外",
+  "lat": -33.355,
+  "lon": -70.248,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true
+ }
+]

@@ -1,0 +1,200 @@
+[
+ {
+  "id": "AeMUdOPFcXI",
+  "name": "エトーシャ オカウクエホ",
+  "en": "Etosha Okaukuejo",
+  "side": "",
+  "lat": -19.18,
+  "lon": 15.92,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "qwvk5hbEJnY",
+  "name": "ナミビア サファリフック",
+  "en": "Safarihoek, Namibia",
+  "side": "",
+  "lat": -19.25,
+  "lon": 15.3,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "yuIm1V7Ne7I",
+  "name": "ナミビア オングマ",
+  "en": "Onguma, Namibia",
+  "side": "",
+  "lat": -18.8,
+  "lon": 17.05,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ydYDqZQpim8",
+  "name": "ナミブ砂漠",
+  "en": "Namib Desert",
+  "side": "",
+  "lat": -26.1,
+  "lon": 16.0,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "BaEFc79IMCA",
+  "name": "マサイマラ マラ川",
+  "en": "Masai Mara, Mara River",
+  "side": "",
+  "lat": -1.55,
+  "lon": 35.02,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "oORXfTviuCs",
+  "name": "ケニア ムパラ 水場",
+  "en": "Mpala, Kenya",
+  "side": "",
+  "lat": 0.29,
+  "lon": 36.9,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "gdrNUUf-cQw",
+  "name": "テンベ象公園",
+  "en": "Tembe Elephant Park",
+  "side": "",
+  "lat": -27.03,
+  "lon": 32.42,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "8J9USywkGmw",
+  "name": "マディクウェ タウ",
+  "en": "Madikwe, Tau Lodge",
+  "side": "",
+  "lat": -24.8,
+  "lon": 26.27,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "sQAhSkjRKGk",
+  "name": "サビサンド ンコロ",
+  "en": "Sabi Sand, Nkorho",
+  "side": "",
+  "lat": -24.8,
+  "lon": 31.45,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "iUdDKf9aDUU",
+  "name": "サビサンド ジュマ",
+  "en": "Sabi Sand, Djuma",
+  "side": "",
+  "lat": -24.85,
+  "lon": 31.52,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_AyumoafMOU",
+  "name": "ティンババティ キングスキャンプ",
+  "en": "Timbavati, Kings Camp",
+  "side": "",
+  "lat": -24.35,
+  "lon": 31.3,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "NapztoCaKFY",
+  "name": "クルーガー オリファンツ川",
+  "en": "Kruger, Olifants River",
+  "side": "",
+  "lat": -24.05,
+  "lon": 31.1,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "54Y7xlLrkuo",
+  "name": "ボツワナ ボテティ川",
+  "en": "Boteti River, Botswana",
+  "side": "",
+  "lat": -20.6,
+  "lon": 24.6,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "2EZavJUNdLI",
+  "name": "ボツワナ セリンダ",
+  "en": "Selinda, Botswana",
+  "side": "",
+  "lat": -18.55,
+  "lon": 23.5,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "EdDdTrahHjI",
+  "name": "ボツワナ センヤティ",
+  "en": "Senyati, Botswana",
+  "side": "",
+  "lat": -17.82,
+  "lon": 25.17,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "-rXriX4SiQk",
+  "name": "ワンゲ リンクワシャ",
+  "en": "Hwange, Linkwasha",
+  "side": "",
+  "lat": -19.13,
+  "lon": 27.1,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DhCfRI7XssU",
+  "name": "ワンゲ サファリロッジ",
+  "en": "Hwange Safari Lodge",
+  "side": "",
+  "lat": -18.73,
+  "lon": 26.95,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "f9uqHbXChno",
+  "name": "ビクトリアの滝 水場",
+  "en": "Victoria Falls Waterhole",
+  "side": "",
+  "lat": -17.92,
+  "lon": 25.83,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ }
+]

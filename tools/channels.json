@@ -1,0 +1,50 @@
+{
+ "_doc": "Channel registry for tools/check_live.py. Streams on these channels are auto-added to live.json 'add' only when the title matches a rule kw (rule gives theme/side/location/names) and no deny_kw/deny_ids match; each new one must be live + embeddable. Add rules to allow, deny_kw/deny_ids to block.",
+ "deny_kw": ["walking tour","walk ","music","lofi","bgm","piano","relax","asmr","archive","アーカイブ","replay","highlights","compilation","rolling cam","multi-cam","multi cam","24/7 live cameras","q&a","chat","predict"," test ","テスト配信"],
+ "deny_ids": [],
+ "channels": [
+  {"ch":"UCuoNAKa3P0QR1Lw9QdpmoVg","name":"Africam","theme":"safari","side":"","utc":"UTC+2","rules":[
+    {"kw":["elephant pan"],"name":"ボツワナ エレファントパン","en":"Elephant Pan, Botswana","lat":-19.0,"lon":24.1},
+    {"kw":["camelthorn"],"name":"ボツワナ キャメルソーン","en":"Camelthorn, Botswana","lat":-20.3,"lon":24.6},
+    {"kw":["meno a kwena"],"name":"ボツワナ メノアクウェナ","en":"Meno a Kwena, Botswana","lat":-20.15,"lon":24.85},
+    {"kw":["kalahari"],"name":"カラハリ","en":"Kalahari","lat":-25.5,"lon":20.5},
+    {"kw":["fig tree"],"name":"マサイマラ フィグツリー","en":"Masai Mara, Fig Tree","lat":-1.52,"lon":35.05,"utc":"UTC+3"},
+    {"kw":["mahali mzuri"],"name":"マサイマラ マハリムズリ","en":"Mahali Mzuri, Masai Mara","lat":-1.3,"lon":35.2,"utc":"UTC+3"},
+    {"kw":["kgalagadi"],"name":"カラハリ・トランスフロンティア","en":"Kgalagadi","lat":-25.8,"lon":20.6},
+    {"kw":["mashatu"],"name":"ボツワナ マシャトゥ","en":"Mashatu, Botswana","lat":-22.2,"lon":29.1},
+    {"kw":["pilanesberg","rosie"],"name":"ピラネスバーグ","en":"Pilanesberg","lat":-25.25,"lon":27.1}]},
+  {"ch":"UCiGOIXjFqy5_mUNxQNOMfHw","name":"Explore Africa","theme":"safari","side":"","utc":"UTC+2","rules":[
+    {"kw":["rosie"],"name":"ピラネスバーグ ロージーズパン","en":"Rosie's Pan, Pilanesberg","lat":-25.25,"lon":27.1}]},
+  {"ch":"UCMfjW-9aZnsR-Rq-Ngo4CpQ","name":"Explore African Wildlife","theme":"safari","side":"","utc":"UTC+3","rules":[
+    {"kw":["hippo"],"name":"ケニア ムパラ 川","en":"Mpala River, Kenya","lat":0.28,"lon":36.88}]},
+  {"ch":"UC9X6gGKDv2yhMoofoeS7-Gg","name":"NamibiaCam","theme":"safari","side":"","utc":"UTC+2","rules":[
+    {"kw":["kalahari"],"name":"ナミビア カラハリ","en":"Kalahari, Namibia","lat":-24.0,"lon":19.0}]},
+  {"ch":"UC-whuqv4HIi1O9hh9CHpPJg","name":"Starlapland","theme":"star","side":"","utc":"UTC+3","rules":[
+    {"kw":["rovaniemi"],"name":"フィンランド ロヴァニエミ","en":"Rovaniemi, Finland","lat":66.5,"lon":25.7},
+    {"kw":["inari"],"name":"フィンランド イナリ","en":"Inari, Finland","lat":68.9,"lon":27.0},
+    {"kw":["utsjoki"],"name":"フィンランド ウツヨキ","en":"Utsjoki, Finland","lat":69.9,"lon":27.0},
+    {"kw":["saariselk"],"name":"フィンランド サーリセルカ","en":"Saariselkä, Finland","lat":68.4,"lon":27.4}]},
+  {"ch":"UCiW5HaKJU6kwrs3G_LG0Geg","name":"Northumberland Astro","theme":"star","side":"","utc":"UTC+1","rules":[
+    {"kw":["kielder"],"name":"英国 キールダー","en":"Kielder, UK","lat":55.2,"lon":-2.6},
+    {"kw":["bamburgh"],"name":"英国 バンバラ","en":"Bamburgh, UK","lat":55.6,"lon":-1.7}]},
+  {"ch":"UCiN7OwV8g8dMm_E0xphBVig","name":"Asahi Astro LIVE","theme":"star","side":"","rules":[
+    {"kw":["木曽","kiso"],"name":"木曽観測所","en":"Kiso Observatory","lat":35.79,"lon":137.63,"utc":"UTC+9"},
+    {"kw":["石垣","ishigaki"],"name":"石垣島 天文台","en":"Ishigaki Observatory","lat":24.37,"lon":124.14,"utc":"UTC+9"},
+    {"kw":["乗鞍","norikura"],"name":"乗鞍 星空","en":"Norikura Night Sky","lat":36.11,"lon":137.55,"utc":"UTC+9"}]},
+  {"ch":"UCUtGnX65osNPQ98Y3-SSgpg","name":"Explore Northern Lights","theme":"star","side":"","rules":[
+    {"kw":["yellowknife"],"name":"カナダ イエローナイフ","en":"Yellowknife, Canada","lat":62.45,"lon":-114.37,"utc":"UTC-6"}]},
+  {"ch":"UC1HDQ1Q5nVHYF8e7dL4E-pw","name":"Levi Ski Resort","theme":"snow","side":"海外","utc":"UTC+3","rules":[
+    {"kw":["front slope","eturinne"],"name":"レヴィ 前斜面","en":"Levi Front Slopes","lat":67.80,"lon":24.81}]},
+  {"ch":"UC6qrG3W8SMK0jior2olka3g","name":"EarthCam","theme":"cross","side":"海外","rules":[
+    {"kw":["new orleans","bourbon"],"name":"ニューオーリンズ バーボン通り","en":"New Orleans Bourbon St","lat":29.958,"lon":-90.065,"utc":"UTC-5"},
+    {"kw":["nashville"],"name":"ナッシュビル ブロードウェイ","en":"Nashville Broadway","lat":36.161,"lon":-86.776,"utc":"UTC-5"},
+    {"kw":["key west","duval"],"name":"キーウェスト","en":"Key West","lat":24.556,"lon":-81.806,"utc":"UTC-4"},
+    {"kw":["las vegas"],"name":"ラスベガス","en":"Las Vegas","lat":36.114,"lon":-115.173,"utc":"UTC-7"},
+    {"kw":["hollywood"],"name":"ハリウッド","en":"Hollywood","lat":34.101,"lon":-118.34,"utc":"UTC-7"},
+    {"kw":["chicago"],"name":"シカゴ","en":"Chicago","lat":41.88,"lon":-87.63,"utc":"UTC-5"},
+    {"kw":["amsterdam"],"name":"アムステルダム","en":"Amsterdam","lat":52.373,"lon":4.893,"utc":"UTC+2"},
+    {"kw":["prague"],"name":"プラハ","en":"Prague","lat":50.087,"lon":14.421,"utc":"UTC+2"}]},
+  {"ch":"UCNsidkYpIAQ4QaufptQBPHQ","name":"Weathernews","theme":"star","side":"","rules":[
+    {"kw":["星空","starry"],"name":"星空（ウェザーニュース）","en":"Starry Sky (Weathernews)","lat":35.66,"lon":139.7,"utc":"UTC+9"}]}
+ ]
+}

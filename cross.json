@@ -1,0 +1,189 @@
+[
+ {
+  "id": "8H3nRCFVR6Y",
+  "name": "渋谷 スクランブル交差点",
+  "en": "Shibuya Scramble Crossing",
+  "side": "日本",
+  "lat": 35.6595,
+  "lon": 139.7005,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "d1JuNg7knNo",
+  "name": "渋谷センター街",
+  "en": "Shibuya Center-gai",
+  "side": "日本",
+  "lat": 35.66,
+  "lon": 139.6985,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "DjdUEyjx8GM",
+  "name": "新宿 歌舞伎町",
+  "en": "Shinjuku Kabukicho",
+  "side": "日本",
+  "lat": 35.695,
+  "lon": 139.703,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "KTJ1ImuT1Qo",
+  "name": "歌舞伎町 一番街",
+  "en": "Kabukicho Ichibangai",
+  "side": "日本",
+  "lat": 35.6938,
+  "lon": 139.7015,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "0HCO9fncu_4",
+  "name": "池袋 サンシャイン60通り",
+  "en": "Ikebukuro Sunshine 60 St.",
+  "side": "日本",
+  "lat": 35.7295,
+  "lon": 139.716,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "soT0yMSldwI",
+  "name": "大阪 道頓堀",
+  "en": "Osaka Dotonbori",
+  "side": "日本",
+  "lat": 34.6687,
+  "lon": 135.5013,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "KeXIblvDyd4",
+  "name": "亀戸 駅前",
+  "en": "Kameido Station",
+  "side": "日本",
+  "lat": 35.6975,
+  "lon": 139.8265,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "JQ_jwk_7OVE",
+  "name": "NY タイムズスクエア",
+  "en": "NYC Times Square",
+  "side": "海外",
+  "lat": 40.758,
+  "lon": -73.9855,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "QIIVxUJzJQw",
+  "name": "NY ブライアントパーク",
+  "en": "NYC Bryant Park",
+  "side": "海外",
+  "lat": 40.7536,
+  "lon": -73.9832,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "zMCea32gpmg",
+  "name": "ロンドン アビー・ロード",
+  "en": "London Abbey Road",
+  "side": "海外",
+  "lat": 51.532,
+  "lon": -0.1773,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "fu-O3LWRWBc",
+  "name": "ロンドン ノッティング・ヒル",
+  "en": "London Notting Hill Gate",
+  "side": "海外",
+  "lat": 51.509,
+  "lon": -0.196,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "3nyPER2kzqk",
+  "name": "ダブリン 市街",
+  "en": "Dublin",
+  "side": "海外",
+  "lat": 53.3455,
+  "lon": -6.264,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "C3hW1VrwmNc",
+  "name": "ソウル駅 広場",
+  "en": "Seoul Station Plaza",
+  "side": "海外",
+  "lat": 37.5547,
+  "lon": 126.9707,
+  "utc": "UTC+9",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "UemFRPrl1hk",
+  "name": "バンコク スクンビット",
+  "en": "Bangkok Sukhumvit",
+  "side": "海外",
+  "lat": 13.741,
+  "lon": 100.556,
+  "utc": "UTC+7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "a_bUVExv_Cg",
+  "name": "バンコク ペッチャブリー通り",
+  "en": "Bangkok Petchaburi Rd",
+  "side": "海外",
+  "lat": 13.751,
+  "lon": 100.54,
+  "utc": "UTC+7",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "vp-pIE3FhDw",
+  "name": "ダバオ 市街",
+  "en": "Davao City",
+  "side": "海外",
+  "lat": 7.0707,
+  "lon": 125.6087,
+  "utc": "UTC+8",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ac0v_QwqYfw",
+  "name": "モンテゴベイ 広場",
+  "en": "Montego Bay Square",
+  "side": "海外",
+  "lat": 18.4762,
+  "lon": -77.9189,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": true
+ }
+]

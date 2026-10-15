@@ -61,10 +61,40 @@ for ch,ks in need.items():
 for k in keys:
   if k not in res:res[k]={'v':cur(k),'s':'off','t':now}
 n=sum(r['s']=='live' for r in res.values())
-new={'updated':now,'cams':res}
+# ---- channel registry: auto-discover new 24/7 streams (tools/channels.json). Curated: a stream is added only if its
+# title matches a rule keyword (rule supplies theme/location/names) and no deny keyword/id matches; must be live+embeddable.
+add={};REG=os.path.join(os.path.dirname(os.path.abspath(__file__)),'channels.json')
+try:reg=json.load(open(REG))
+except Exception:reg={'channels':[]}
+known=set(IDX)|{r['v'] for r in res.values()}
+dk=[k.lower() for k in reg.get('deny_kw',[])];di=set(reg.get('deny_ids',[]))
+prevadd={}
+try:prevadd=json.load(open(OUT)).get('add',{})
+except Exception:pass
+for chn in reg.get('channels',[]):
+  try:L=lives(chn['ch'])
+  except Exception:continue
+  time.sleep(2)
+  for v,t in L:
+    tl=(t or '').lower()
+    if v in known or v in di or v in add or any(k in tl for k in dk+[x.lower() for x in chn.get('deny_kw',[])]):continue
+    for r in chn.get('rules',[]):
+      if any(k.lower() in tl for k in r['kw']):
+        if prevadd.get(v):ok=True
+        else:
+          p=probe(v);ok=p['ok']
+        if ok:
+          e={k:r[k] for k in('name','en','lat','lon','utc','side') if k in r};e['theme']=r.get('theme',chn.get('theme'));e.setdefault('side',chn.get('side',''));e['ch']=chn['ch']
+          if 'utc' not in e and 'utc' in chn:e['utc']=chn['utc']
+          nn=sum(1 for x in add.values() if x.get('_r')==id(r))
+          if nn:e['name']+=f' {nn+1}';e['en']=e.get('en','')+f' {nn+1}'
+          e['_r']=id(r);add[v]=e;known.add(v)
+        break
+for e in add.values():e.pop('_r',None)
+new={'updated':now,'cams':res,'add':add}
 old=None
 try:old=json.load(open(OUT))
 except Exception:pass
-same=old and {k:(v['v'],v['s']) for k,v in old['cams'].items()}=={k:(v['v'],v['s']) for k,v in res.items()}
+same=old and {k:(v['v'],v['s']) for k,v in old['cams'].items()}=={k:(v['v'],v['s']) for k,v in res.items()} and old.get('add',{})==add
 if not same or not old:json.dump(new,open(OUT,'w'),ensure_ascii=False,separators=(',',':'))
-print(f'live {n}/{len(keys)} replaced {rep} off {len(keys)-n} changed {not same}')
+print(f'live {n}/{len(keys)} replaced {rep} off {len(keys)-n} added {len(add)} changed {not same}')

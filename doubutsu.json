@@ -169,5 +169,16 @@
   "lon": null,
   "approx": true,
   "top": true
+ },
+ {
+  "id": "J7ZrIDvqlic",
+  "name": "アラスカ ブルックス滝のクマ",
+  "en": "Brooks Falls Bears, Alaska",
+  "side": "自然",
+  "lat": 58.555,
+  "lon": -155.79,
+  "utc": "UTC-8",
+  "approx": true,
+  "top": true
  }
 ]

@@ -80,5 +80,16 @@
   "approx": true,
   "top": true,
   "clock": true
+ },
+ {
+  "id": "AAlo3eCPVbk",
+  "name": "ランサローテ空港",
+  "en": "Lanzarote Airport",
+  "side": "海外",
+  "lat": 28.945,
+  "lon": -13.605,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
  }
 ]

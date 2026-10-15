@@ -1,0 +1,189 @@
+[
+ {
+  "id": "Kj5DjRYkzD8",
+  "name": "マウナケア 東（すばる）",
+  "en": "Maunakea East (Subaru)",
+  "side": "",
+  "lat": 19.825,
+  "lon": -155.476,
+  "utc": "UTC-10",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Q3UhCgsWDw8",
+  "name": "マウナケア 西（CFHT）",
+  "en": "Maunakea West (CFHT)",
+  "side": "",
+  "lat": 19.825,
+  "lon": -155.469,
+  "utc": "UTC-10",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "BVKRAzTSnB0",
+  "name": "チリ アルマ望遠鏡",
+  "en": "ALMA, Chile",
+  "side": "",
+  "lat": -23.03,
+  "lon": -67.75,
+  "utc": "UTC-3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "Wvq5vZj6SXw",
+  "name": "テキサス デルリオ",
+  "en": "Del Rio, Texas",
+  "side": "",
+  "lat": 29.36,
+  "lon": -100.9,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "11peQay2K8Q",
+  "name": "メイン州 ダークスカイ",
+  "en": "Dark Sky Maine",
+  "side": "",
+  "lat": 45.25,
+  "lon": -69.0,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "lzHbycN2CmY",
+  "name": "メイン州 カタディン山",
+  "en": "Mt Katahdin, Maine",
+  "side": "",
+  "lat": 45.9,
+  "lon": -68.92,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "-EADFk50fQ0",
+  "name": "カナダ バチャワナ湾",
+  "en": "Batchawana Bay, Canada",
+  "side": "",
+  "lat": 46.92,
+  "lon": -84.6,
+  "utc": "UTC-4",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "a0i1Kg6fROg",
+  "name": "カナダ チャーチル オーロラ",
+  "en": "Churchill Aurora, Canada",
+  "side": "",
+  "lat": 58.77,
+  "lon": -94.17,
+  "utc": "UTC-5",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "O52zDyxg5QI",
+  "name": "フェアバンクス オーロラ",
+  "en": "Fairbanks Aurora",
+  "side": "",
+  "lat": 64.84,
+  "lon": -147.72,
+  "utc": "UTC-8",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "_3T4NY_srKU",
+  "name": "フェアバンクス（ウェザーニュース）",
+  "en": "Fairbanks (Weathernews)",
+  "side": "",
+  "lat": 64.9,
+  "lon": -147.6,
+  "utc": "UTC-8",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "V3BIbEskVeQ",
+  "name": "英国 バドル湾",
+  "en": "Budle Bay, UK",
+  "side": "",
+  "lat": 55.61,
+  "lon": -1.77,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "MYeOK93smBw",
+  "name": "英国 クレスウェル",
+  "en": "Cresswell, UK",
+  "side": "",
+  "lat": 55.23,
+  "lon": -1.53,
+  "utc": "UTC+1",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "yXJtBJDEzJo",
+  "name": "ノルウェー リンゲン",
+  "en": "Lyngen, Norway",
+  "side": "",
+  "lat": 69.6,
+  "lon": 20.2,
+  "utc": "UTC+2",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "ccTVAhJU5lg",
+  "name": "フィンランド キルピスヤルヴィ",
+  "en": "Kilpisjärvi, Finland",
+  "side": "",
+  "lat": 69.05,
+  "lon": 20.79,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "rKfecmmzzw0",
+  "name": "フィンランド レヴィ",
+  "en": "Levi, Finland",
+  "side": "",
+  "lat": 67.8,
+  "lon": 24.8,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "dnlQtDad6Dk",
+  "name": "フィンランド ソダンキュラ",
+  "en": "Sodankylä, Finland",
+  "side": "",
+  "lat": 67.42,
+  "lon": 26.59,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ },
+ {
+  "id": "wT8Zhh9MBEE",
+  "name": "ロヴァニエミ アプッカ",
+  "en": "Apukka, Rovaniemi",
+  "side": "",
+  "lat": 66.57,
+  "lon": 25.85,
+  "utc": "UTC+3",
+  "approx": true,
+  "top": true
+ }
+]
