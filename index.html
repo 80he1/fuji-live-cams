@@ -453,14 +453,15 @@ function gwState(c,ms){const a=altAt(c,ms),H=((c.lon-subsolar(new Date(ms)).lon)
 const GW={};
 function gwNext(c,want,now){/* returns ms of next window start for side want ('rise'|'set'|null) within 26h */const k=c.id+want,o=GW[k];if(o&&o.t>now&&o.at>now-6e5)return o.t;
   let prev=gwState(c,now).inW;for(let m=now+3e5;m<now+26*36e5;m+=3e5){const s=gwState(c,m);if(s.inW&&!prev&&(!want||(want==='set')===s.set)){GW[k]={t:m,at:now};return m;}prev=s.inW;}GW[k]={t:1e15,at:now};return 1e15;}
-function gwList(th){const now=Date.now(),key=th+'|'+Math.floor(now/6e4);if(GW[key])return GW[key];const want=th==='yuhi'?'set':th==='asahi'?'rise':null,seen=new Set(),cur=[],up=[];
+function gwList(th){if(typeof subsolar!=='function')return[];const now=Date.now(),key=th+'|'+Math.floor(now/6e4);if(GW[key])return GW[key];const want=th==='yuhi'?'set':th==='asahi'?'rise':null,seen=new Set(),cur=[],up=[];
   tiles.forEach(x=>{const c=x.c;if((th&&x.c.theme!==th)||seen.has(c.id)||x.dead||c.lat==null||(c.lat===0&&c.lon===0))return;seen.add(c.id);const s=gwState(c,now);
     if(s.inW&&(!want||(want==='set')===s.set))cur.push({x,now:1,a:s.a,set:s.set});else up.push({x,now:0,t:gwNext(c,want,now),set:want?want==='set':null});});
   cur.sort((p,q)=>Math.abs(p.a-2)-Math.abs(q.a-2));up.sort((p,q)=>p.t-q.t);up.forEach(o=>{if(o.set==null)o.set=gwState(o.x.c,o.t).set;});
   const out=cur.concat(up.filter(o=>o.t<1e15).slice(0,Math.max(0,6-cur.length)));GW[key]=out;return out;}
 function fmtIn(ms){const m=Math.max(1,Math.round(ms/6e4)),h=m/60|0;return h?`${h}:${String(m%60).padStart(2,'0')}`:`${m}m`;}
-function gwBadges(){const P=PG[curP];document.querySelectorAll('.cam .gcd').forEach(e=>e.remove());if(!P||P.f!=='*now')return;const t=T(),now=Date.now();
+function gwBadges(){if(!window.LREADY||typeof subsolar!=='function')return;const P=PG[curP];document.querySelectorAll('.cam .gcd').forEach(e=>e.remove());if(!P||P.f!=='*now')return;const t=T(),now=Date.now();
   gwList(P.th).forEach(o=>{const e=document.createElement('span');e.className='gcd'+(o.now?' on':'');e.textContent=(o.set?'🌇 ':'🌅 ')+(o.now?t.gdNw:t.gdIn.replace('{t}',fmtIn(o.t-now)));o.x.v.appendChild(e);});}
+addEventListener('load',()=>{const P=PG[curP];if(P&&(P.th==='asahi'||P.th==='yuhi')){renderChips(P.th);setPage(curP);}});
 setInterval(()=>{if(PG[curP]&&PG[curP].f==='*now'&&(typeof HOMEEL==='undefined'||HOMEEL.hidden))gwBadges();},3e4);
 function setPage(p){
   const P=PG[p],thChange=P.th!==chipTh,from=curP;curP=p;{const tb=document.getElementById('thb');if(tb)tb.textContent=thOf(P.th).icon;}
@@ -805,7 +806,7 @@ wx();setInterval(wx,600000);
 <script>
 /* PWA: service worker + install hint */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update().catch(()=>{});document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update().catch(()=>{});});}).catch(()=>{}));
-const BUILD='1792054737';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
+const BUILD='1792055743';function verChk(){if(open)return;fetch('version.txt?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(v=>{v=v.trim();if(v&&BUILD.indexOf('__')<0&&v!==BUILD){try{if(sessionStorage.getItem('rv')===v)return;sessionStorage.setItem('rv',v)}catch(_){}location.reload();}}).catch(()=>{});}
 setTimeout(verChk,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)verChk();});
 if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||rl)return;rl=true;if(!open)location.reload();});}
 let PWAEV=null;const PSTD=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -845,7 +846,7 @@ function fmtDist(km){const l=LANG,mi=l==='en'&&/^en-(US|LR|MM)/i.test(navigator.
   if(km<1)return nf(Math.max(10,Math.round(km*100)*10),0)+'m';if(km<100)return nf(km,1)+'km';
   const man={ja:'万','zh-Hans':'万','zh-Hant':'萬',ko:'만'}[l];if(km>=10000&&man)return nf(km/10000,1)+man+'km';return nf(Math.round(km),0)+'km';}
 function distText(c){if(!GEO.ok||c.lat==null||(!c.lat&&!c.lon))return '';return fmtDist(hav(GEO.lat,GEO.lon,c.lat,c.lon));}
-function geoPaint(){document.body.classList.toggle('geo',GEO.ok);if(!GEO.ok){if(open)try{setMap(open.c)}catch(_){}return;}tiles.forEach(x=>{const s=x.el.querySelector('.dist');if(s){const d=distText(x.c);s.textContent=d;s.hidden=!d;}});
+function geoPaint(){document.body.classList.toggle('geo',GEO.ok);if(!GEO.ok){try{if(open)setMap(open.c)}catch(_){}return;}tiles.forEach(x=>{const s=x.el.querySelector('.dist');if(s){const d=distText(x.c);s.textContent=d;s.hidden=!d;}});
   if(open){const d=distText(open.c);$('#mdist').textContent=d?'📍 '+d:'';$('#mdist').hidden=!d;try{setMap(open.c)}catch(_){}}}
 function geoLoading(on){const g=document.getElementById('gload');if(!g)return;if(on)g.textContent='📍 '+T().gLoad;g.classList.toggle('on',!!on);}
 function nearPending(){if(!window.NEARWANT)return;window.NEARWANT=0;try{const s=sfStats();if(s.near&&!HOMEEL.hidden)nearGo(s.near.x);}catch(_){}}
