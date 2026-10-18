@@ -12,7 +12,13 @@ def log(*a):print('[disco]',*a,flush=True)
 import fcntl
 os.makedirs(D,exist_ok=True);LK=open(os.path.join(D,'.lock'),'w')
 try:fcntl.flock(LK,fcntl.LOCK_EX|fcntl.LOCK_NB)
-except OSError:log('another run in progress, skip');sys.exit(0)
+except OSError:
+  W=float(os.environ.get('DISCO_WAIT','0'));t0=time.time()
+  while time.time()-t0<W:
+    time.sleep(5)
+    try:fcntl.flock(LK,fcntl.LOCK_EX|fcntl.LOCK_NB);log('other run finished, catalog is fresh; skip');sys.exit(0)
+    except OSError:pass
+  log('another run in progress, skip');sys.exit(0)
 def left():return BUDGET-(time.time()-T0)
 try:S=json.load(open(ST))
 except Exception:S={}
