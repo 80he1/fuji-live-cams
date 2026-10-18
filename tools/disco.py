@@ -24,17 +24,24 @@ try:S=json.load(open(ST))
 except Exception:S={}
 S.setdefault('cams',{});S.setdefault('seen',{});S.setdefault('qi',0);S.setdefault('chs',{});S.setdefault('backoff',0);S.setdefault('stats',{})
 def save():json.dump(S,open(ST+'.tmp','w'),ensure_ascii=False,separators=(',',':'));os.replace(ST+'.tmp',ST)
-if time.time()<S['backoff']:log('backing off until',time.strftime('%H:%M',time.localtime(S['backoff'])));sys.exit(0)
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+import ytguard as G
+if time.time()<max(S['backoff'],G.backoff()):log('backing off (YouTube block) until',G.hm(max(S['backoff'],G.backoff())));sys.exit(0)
+if time.time()-G.last_block()<3*3600:log('block seen',G.hm(G.last_block()),'(<3h ago) -> skip');sys.exit(0)
+if G.live_recent(600):log('live check running / ran <10 min ago -> skip (check_live has priority)');sys.exit(0)
+def pause():
+  time.sleep(5+random.random()*7)
+  if not BLOCK[0] and G.live_recent(0):BLOCK[0]=True;log('live check started -> yield (stop this run)')
 BLOCK=[False];TO=[0]
 def run(args,to=120):
   try:r=subprocess.run(YT+args,capture_output=True,text=True,timeout=to)
   except subprocess.TimeoutExpired:
     TO[0]+=1
-    if TO[0]>=3:BLOCK[0]=True;S['backoff']=time.time()+3600;log('3 timeouts -> treat as throttled, back off 1h')
+    if TO[0]>=3:BLOCK[0]=True;S['backoff']=G.note_block('disco-timeouts');log('3 timeouts -> treat as throttled, back off until',G.hm(S['backoff']))
     return ''
   TO[0]=0;e=r.stderr
-  if 'Sign in to confirm' in e or 'HTTP Error 429' in e or 'rate-limit' in e.lower():
-    BLOCK[0]=True;S['backoff']=time.time()+2*3600;S['stats']['blocks']=S['stats'].get('blocks',0)+1;log('BLOCKED by YouTube -> back off 2h')
+  if G.is_block(e):
+    BLOCK[0]=True;S['backoff']=G.note_block('disco');S['stats']['blocks']=S['stats'].get('blocks',0)+1;log('BLOCKED by YouTube -> back off until',G.hm(S['backoff']))
   return r.stdout
 # ---------- queries ----------
 TH={'fuji':['富士山','mt fuji','mount fuji'],'koyo':['紅葉','autumn leaves'],'okinawa':['沖縄','okinawa','石垣','宮古'],'yakei':['夜景','night view','skyline'],
@@ -228,7 +235,7 @@ for _ in range(nq):
     if v in S['seen'] or v in known:continue
     S['seen'][v]={'t':p[3][:120],'ch':p[2],'q':q};n+=1
     if p[2] and p[2]!='NA':S['chs'].setdefault(p[2],{'last':0})
-  log('search',repr(q),'new',n);time.sleep(3+random.random()*3)
+  log('search',repr(q),'new',n);pause()
 save()
 # channel mining + recheck (cheap: /streams flat listing gives live status)
 byc={}
@@ -246,7 +253,7 @@ for ch,meta in chs:
   for v in byc.get(ch,[]):
     c=S['cams'][v];c['k']=c.get('k',1)+1
     if v in live:c['a']=c.get('a',1)+1;c['ls']=time.time()
-  time.sleep(2+random.random()*2)
+  pause()
 save()
 # probe a batch of unprobed ids
 todo=[v for v,s in S['seen'].items() if not s.get('p')]
@@ -256,7 +263,7 @@ for v in todo[:int(os.environ.get('DISCO_P','50'))]:
   if BLOCK[0] or left()<60:break
   s=S['seen'][v];pre=junk(s['t'],'',''if True else '')
   if pre=='kw':s['p']='junk';continue
-  r=probe(v);np_+=1;time.sleep(1.5+random.random()*2)
+  r=probe(v);np_+=1;pause()
   if BLOCK[0]:break
   if not r:s['p']='err';continue
   if not r['live'] or not r['emb']:s['p']='off' if not r['live'] else 'noemb';continue
@@ -268,7 +275,7 @@ for v in todo[:int(os.environ.get('DISCO_P','50'))]:
   if r['ch']:S['chs'].setdefault(r['ch'],{'last':time.time()})
   if acc%10==0:save()
 # thumbnail refresh for a slice (frozen detection)
-for v in sorted(S['cams'],key=lambda v:S['cams'][v].get('qt',0))[:30]:
+for v in sorted(S['cams'],key=lambda v:S['cams'][v].get('qt',0))[:15]:
   if left()<20:break
   c=S['cams'][v];q=thumb(v);c['qt']=time.time()
   if q:

@@ -2,21 +2,37 @@
 """Check every cam; replace dead stream IDs with the channel's current live (best title match); write live.json.
 Inputs: camidx.json {key:{ch,hint,name}}  (key = baked video id)
 Output: live.json {updated, cams:{key:{v,s,t}}}  s = live|off"""
-import json,re,subprocess,sys,time,difflib,concurrent.futures as cf,os
+import json,re,subprocess,sys,time,difflib,concurrent.futures as cf,os,random,threading
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+import ytguard as G
+if time.time()<G.backoff():print('BACKOFF (YouTube block) until',G.hm(G.backoff()),'- live.json untouched');sys.exit(0)
+G.live_start()
+ABORT=[False];NB=[0];LK=threading.Lock()
+def blockhit():
+  with LK:
+    NB[0]+=1
+    if NB[0]>=4 and not ABORT[0]:ABORT[0]=True
+def bail():
+  t=G.note_block('check_live');G.live_end();print('BLOCKED',NB[0],'-> back off until',G.hm(t),'- live.json untouched');sys.exit(3)
 IDX=json.load(open(sys.argv[1] if len(sys.argv)>1 else 'camidx.json'))
 OUT=sys.argv[2] if len(sys.argv)>2 else 'live.json'
 try:prev=json.load(open(OUT))['cams']
 except Exception:prev={}
 YT=['yt-dlp','--no-warnings','--skip-download','--socket-timeout','20']
 def probe(v):
+  if ABORT[0]:return {'ok':False,'blocked':True,'title':''}
+  time.sleep(0.5+random.random())
   r=subprocess.run(YT+['--print','%(live_status)s\t%(playable_in_embed)s\t%(title)s','https://www.youtube.com/watch?v='+v],capture_output=True,text=True,timeout=120)
   o=r.stdout.strip().split('\t')
   if len(o)<3:
-    e=r.stderr
-    return {'ok':False,'blocked':('Sign in to confirm' in e or 'HTTP Error 429' in e),'title':''}
+    b=G.is_block(r.stderr)
+    if b:blockhit()
+    return {'ok':False,'blocked':b,'title':''}
   return {'ok':o[0]=='is_live' and o[1]!='False','title':o[2],'blocked':False}
 def lives(ch):
+  if ABORT[0]:return []
   r=subprocess.run(YT+['--flat-playlist','--playlist-end','40','--print','%(id)s\t%(live_status)s\t%(title)s',(f'https://www.youtube.com/channel/{ch}' if ch.startswith('UC') else ch.rstrip('/'))+'/streams'],capture_output=True,text=True,timeout=180)
+  if G.is_block(r.stderr):blockhit()
   out=[]
   for l in r.stdout.splitlines():
     p=l.split('\t')
@@ -28,8 +44,9 @@ now=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())
 res={};blocked=0
 def cur(k):return (prev.get(k) or {}).get('v') or k
 keys=list(IDX)
-with cf.ThreadPoolExecutor(3) as ex:
+with cf.ThreadPoolExecutor(2) as ex:
   pr=dict(zip(keys,ex.map(lambda k:probe(cur(k)),keys)))
+  if ABORT[0]:bail()
   for k in [k for k in keys if pr[k]['blocked']]:
     time.sleep(3);pr[k]=probe(cur(k))
   # also try the baked id if override died
@@ -37,8 +54,7 @@ with cf.ThreadPoolExecutor(3) as ex:
   for k,p in zip(bad,ex.map(probe,bad)):
     if p['ok']:pr[k]=p;prev.setdefault(k,{})['v']=k
 blocked=sum(p['blocked'] for p in pr.values())
-if blocked>len(keys)*.3:
-  print('BLOCKED',blocked);sys.exit(3)
+if ABORT[0] or blocked:bail()
 for k in keys:
   if pr[k]['ok']:res[k]={'v':cur(k),'s':'live','t':now}
 need={}
@@ -58,6 +74,7 @@ for ch,ks in need.items():
     p=probe(v)
     if not p['ok']:continue
     res[k]={'v':v,'s':'live','t':now,'m':round(s,2)};used.add(v);done.add(k);rep+=1
+if ABORT[0]:bail()
 for k in keys:
   if k not in res:res[k]={'v':cur(k),'s':'off','t':now}
 n=sum(r['s']=='live' for r in res.values())
@@ -90,6 +107,7 @@ for chn in reg.get('channels',[]):
           if nn:e['name']+=f' {nn+1}';e['en']=e.get('en','')+f' {nn+1}'
           e['_r']=id(r);add[v]=e;known.add(v)
         break
+if ABORT[0]:bail()
 for e in add.values():e.pop('_r',None)
 new={'updated':now,'cams':res,'add':add}
 old=None
@@ -97,4 +115,5 @@ try:old=json.load(open(OUT))
 except Exception:pass
 same=old and {k:(v['v'],v['s']) for k,v in old['cams'].items()}=={k:(v['v'],v['s']) for k,v in res.items()} and old.get('add',{})==add
 if not same or not old:json.dump(new,open(OUT,'w'),ensure_ascii=False,separators=(',',':'))
+G.live_end()
 print(f'live {n}/{len(keys)} replaced {rep} off {len(keys)-n} added {len(add)} changed {not same}')
