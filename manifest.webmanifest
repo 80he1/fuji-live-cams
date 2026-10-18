@@ -34,5 +34,34 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "description": "世界と日本のライブカメラを、地球儀からひと目で。/ Live cams from around the world on a seeing globe.",
+  "categories": [
+    "travel",
+    "weather",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://80he1.github.io/fuji-live-cams/manifest.webmanifest"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "ss-1.webp",
+      "sizes": "780x1688",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "WorldSeer home"
+    },
+    {
+      "src": "ss-2.webp",
+      "sizes": "780x1688",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Search"
+    }
   ]
 }
