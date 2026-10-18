@@ -189,7 +189,7 @@ def clean(t):
   t=re.sub(r'【\s*】|\[\s*\]|\(\s*\)','',t);t=re.sub(r'\d{4}[/-]\d{1,2}[/-]\d{1,2}.*$|\s*[|｜/／–-]\s*$','',t);t=re.sub(r'\s+',' ',t).strip(' -|｜/:・')
   return t[:60]
 def classify(c):
-  rt=c.get('rt') or c['t'];rd=c.get('rd','');gz_ok=os.path.exists(os.path.join(D,'cities15000.txt'))
+  rt=c.get('rt') or c['t'];rd=c.get('rd','');c['t']=clean(rt) or c['t'];gz_ok=os.path.exists(os.path.join(D,'cities15000.txt'))
   if junk(rt,rd,c.get('chn','')):return False
   g=(geo(rt) or geo(c.get('chn','')+' '+rd,100000)) if gz_ok else None
   c['th']=theme(rt+' '+rd[:200]) or ''
