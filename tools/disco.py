@@ -25,10 +25,14 @@ except Exception:S={}
 S.setdefault('cams',{});S.setdefault('seen',{});S.setdefault('qi',0);S.setdefault('chs',{});S.setdefault('backoff',0);S.setdefault('stats',{})
 def save():json.dump(S,open(ST+'.tmp','w'),ensure_ascii=False,separators=(',',':'));os.replace(ST+'.tmp',ST)
 if time.time()<S['backoff']:log('backing off until',time.strftime('%H:%M',time.localtime(S['backoff'])));sys.exit(0)
-BLOCK=[False]
+BLOCK=[False];TO=[0]
 def run(args,to=120):
-  r=subprocess.run(YT+args,capture_output=True,text=True,timeout=to)
-  e=r.stderr
+  try:r=subprocess.run(YT+args,capture_output=True,text=True,timeout=to)
+  except subprocess.TimeoutExpired:
+    TO[0]+=1
+    if TO[0]>=3:BLOCK[0]=True;S['backoff']=time.time()+3600;log('3 timeouts -> treat as throttled, back off 1h')
+    return ''
+  TO[0]=0;e=r.stderr
   if 'Sign in to confirm' in e or 'HTTP Error 429' in e or 'rate-limit' in e.lower():
     BLOCK[0]=True;S['backoff']=time.time()+2*3600;S['stats']['blocks']=S['stats'].get('blocks',0)+1;log('BLOCKED by YouTube -> back off 2h')
   return r.stdout
@@ -275,7 +279,7 @@ save()
 # catalog
 now=time.time();rows=[]
 for v,c in S['cams'].items():
-  if now-c.get('ls',0)>2*86400:continue
+  if now-c.get('ls',0)>5*86400:continue
   if not classify(c):continue
   sc=score(c);c['s']=sc
   rows.append([v,c['t'],c.get('p',''),c.get('pj',''),c.get('la'),c.get('lo'),c.get('cc',''),c.get('th',''),tier(sc),c.get('h',0),c.get('chn',''),int(c.get('vw',0))])
