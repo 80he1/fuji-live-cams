@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# One check: refresh live.json and push if changed. Run every 30 min (every 10 min 05:00-07:59 JST).
+# One cycle, called by live_loop.sh every 30 min (10 min 05:00-07:59 JST). check_live.py itself runs at most
+# ~hourly (LIVE_MIN_GAP) on a rolling, budgeted subset and merges into live.json; xtnow runs every cycle.
 set -e
+# Log to live_loop.log ourselves: the loop's inherited stdout stopped reaching the file on 10/19 (lost writes).
+exec >> /workspace/fuji-pages/tools/live_loop.log 2>&1
+echo "== $(date '+%F %T %Z') cycle"
 cd /workspace/fuji-pages
 git pull -q --rebase --autostash || true
 python3 tools/check_live.py camidx.json live.json || echo "live check rc=$? (block/back-off: live.json untouched)"

@@ -29,11 +29,16 @@ import ytguard as G
 if time.time()<max(S['backoff'],G.backoff()):log('backing off (YouTube block) until',G.hm(max(S['backoff'],G.backoff())));sys.exit(0)
 if time.time()-G.last_block()<3*3600:log('block seen',G.hm(G.last_block()),'(<3h ago) -> skip');sys.exit(0)
 if G.live_recent(600):log('live check running / ran <10 min ago -> skip (check_live has priority)');sys.exit(0)
+if G.need_probe():log('YouTube back-off ended but live check has not probed yet -> discovery stays paused');sys.exit(0)
+if not G.allow('disco',2):log('hourly request budget: disco',G.used('disco'),'/',G.DISCO_BUDGET,'all',G.used(),'/',G.HOUR_BUDGET,'-> skip');sys.exit(0)
 def pause():
   time.sleep(5+random.random()*7)
   if not BLOCK[0] and G.live_recent(0):BLOCK[0]=True;log('live check started -> yield (stop this run)')
 BLOCK=[False];TO=[0]
 def run(args,to=120):
+  if BLOCK[0]:return ''
+  if not G.allow('disco',2):BLOCK[0]=True;log('request budget used / live check active / blocked -> stop this run');return ''
+  G.spend(2,'disco')                  # one yt-dlp call ~ 2 YouTube requests
   try:r=subprocess.run(YT+args,capture_output=True,text=True,timeout=to)
   except subprocess.TimeoutExpired:
     TO[0]+=1
