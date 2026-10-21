@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-{"at":1792577181391,"v":{"lo":{"lat":-76.5,"lon":95.5,"v":-50.6,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":11.5,"lon":32.5,"v":41.9,"off":7200,"k":"g","ci":46,"cur":null},"np":{"lat":90,"lon":0,"v":-14.6,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-35.4,"off":46800,"k":"sp","ci":null,"cur":null}}}
-=======
-{"at":1792580550462,"v":{"lo":{"lat":-76.5,"lon":95.5,"v":-51.4,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":11.5,"lon":32.5,"v":42.5,"off":7200,"k":"g","ci":46,"cur":null},"np":{"lat":90,"lon":0,"v":-14.6,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-35.4,"off":46800,"k":"sp","ci":null,"cur":null}}}
->>>>>>> Stashed changes
+{"at":1792580591257,"v":{"lo":{"lat":-76.5,"lon":95.5,"v":-51.4,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":11.5,"lon":32.5,"v":42.5,"off":7200,"k":"g","ci":46,"cur":null},"np":{"lat":90,"lon":0,"v":-14.4,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-35.5,"off":46800,"k":"sp","ci":null,"cur":null}}}
