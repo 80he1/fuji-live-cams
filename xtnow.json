@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-{"at":1792742892805,"v":{"lo":{"lat":-81.5,"lon":68.5,"v":-51.0,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":-17.5,"lon":36.5,"v":40.6,"off":7200,"k":"g","ci":12,"cur":null},"np":{"lat":90,"lon":0,"v":-13.0,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-39.2,"off":46800,"k":"sp","ci":null,"cur":null}}}
-=======
-{"at":1792745805975,"v":{"lo":{"lat":-81.5,"lon":69.5,"v":-50.9,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":-17.5,"lon":36.5,"v":41.9,"off":7200,"k":"g","ci":12,"cur":null},"np":{"lat":90,"lon":0,"v":-13.0,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-39.2,"off":46800,"k":"sp","ci":null,"cur":null}}}
->>>>>>> Stashed changes
+{"at":1792750375107,"v":{"lo":{"lat":-78.5,"lon":95.5,"v":-50.7,"off":18000,"k":"g","ci":0,"cur":null},"hi":{"lat":14.24,"lon":40.3,"v":41.7,"off":10800,"k":"c","ci":null,"cur":["ET",14.24,40.3,"ダナキル","Danakil Depression"]},"np":{"lat":90,"lon":0,"v":-13.5,"off":0,"k":"np","ci":null,"cur":null},"sp":{"lat":-90,"lon":0,"v":-39.8,"off":46800,"k":"sp","ci":null,"cur":null}}}
